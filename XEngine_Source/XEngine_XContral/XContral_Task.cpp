@@ -16,12 +16,28 @@ XHTHREAD XContral_Thread_HttpTask()
 		time_t nTimeEnd = time(NULL);
 		if ((nTimeEnd - nTimeStart) > 1)
 		{
-			std::this_thread::sleep_for(std::chrono::seconds(5));
+			std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
 		else
 		{
-			std::this_thread::sleep_for(std::chrono::seconds(1));
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		}
+	}
+	return 0;
+}
+XHTHREAD XContral_Thread_TcpTask()
+{
+	TCHAR tszMsgBuffer[4096];
+
+	while (bIsRun)
+	{
+		int nMsgLen = 4096;
+		memset(tszMsgBuffer, '\0', sizeof(tszMsgBuffer));
+		if (XClient_TCPSelect_RecvMsg(hSocket, tszMsgBuffer, &nMsgLen))
+		{
+			XContral_Task_ProtocolParse(tszMsgBuffer, nMsgLen);
+		}
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 	return 0;
 }

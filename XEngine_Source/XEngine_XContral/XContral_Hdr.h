@@ -26,6 +26,8 @@ using namespace std;
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Error.h>
 #include <XEngine_Include/XEngine_Core/OPenSsl_Define.h>
 #include <XEngine_Include/XEngine_Core/OPenSsl_Error.h>
+#include <XEngine_Include/XEngine_Client/XClient_Define.h>
+#include <XEngine_Include/XEngine_Client/XClient_Error.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Define.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Error.h>
 #include <XEngine_Include/XEngine_RfcComponents/EmailClient_Define.h>
@@ -48,6 +50,12 @@ typedef struct tag_ManageService_Config
     BOOL bCreateEmail;
     int nTaskTime;
     int nLogType;
+    struct  
+    {
+        TCHAR tszServiceAddr[64];
+        int nPort;
+        BOOL bEnable;
+    }st_Client;
     struct
     {
         RFCCOMPONENTS_EMAILSMTP st_EMailSmtp;
@@ -59,8 +67,10 @@ typedef struct tag_ManageService_Config
 
 extern BOOL bIsRun;
 extern XLOG xhLog;
+extern SOCKET hSocket;
 extern int m_nTaskSerial;
 extern shared_ptr<std::thread> pSTDThread_Http;
+extern shared_ptr<std::thread> pSTDThread_Tcp;
 extern MANAGESERVICE_CONFIG st_ServiceConfig;
 
 #include "XContral_Config.h"
@@ -72,6 +82,7 @@ extern MANAGESERVICE_CONFIG st_ServiceConfig;
 #pragma comment(lib,"../Debug/XContral_Infomation.lib")
 #pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
 #pragma comment(lib,"x86/XEngine_Core/XEngine_OPenSsl.lib")
+#pragma comment(lib,"x86/XEngine_Client/XClient_Socket.lib")
 #pragma comment(lib,"x86/XEngine_HelpComponents/HelpComponents_XLog.lib")
 #pragma comment(lib,"x86/XEngine_RfcComponents/RfcComponents_EmailClient.lib")
 #pragma comment(lib,"x86/XEngine_NetHelp/NetHelp_APIHelp.lib")

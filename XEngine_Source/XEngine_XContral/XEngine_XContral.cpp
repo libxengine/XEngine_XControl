@@ -2,8 +2,10 @@
 
 BOOL bIsRun = FALSE;
 XLOG xhLog = NULL;
+SOCKET hSocket = 0;
 int m_nTaskSerial = 0;
 shared_ptr<std::thread> pSTDThread_Http = NULL;
+shared_ptr<std::thread> pSTDThread_Tcp = NULL;
 MANAGESERVICE_CONFIG st_ServiceConfig;
 
 void ServiceApp_Stop(int signo)
@@ -13,7 +15,15 @@ void ServiceApp_Stop(int signo)
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("服务器退出..."));
 		bIsRun = FALSE;
 
-		pSTDThread_Http->join();
+		if (NULL != pSTDThread_Http)
+		{
+			pSTDThread_Http->join();
+		}
+		if (NULL != pSTDThread_Tcp)
+		{
+			pSTDThread_Tcp->join();
+		}
+		XClient_TCPSelect_Close(hSocket);
 		HelpComponents_XLog_Destroy(xhLog);
 		exit(0);
 	}
@@ -190,10 +200,31 @@ int main(int argc, char** argv)
 	pSTDThread_Http = make_shared<std::thread>(XContral_Thread_HttpTask);
 	if (!pSTDThread_Http->joinable())
 	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建HTTP任务线程失败,错误"));
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建HTTP任务线程失败"));
 		goto NETSERVICE_APPEXIT;
 	}
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建HTTP任务线程成功"));
+
+	if (st_ServiceConfig.st_Client.bEnable)
+	{
+		if (!XClient_TCPSelect_Create(st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort, &hSocket))
+		{
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建TCP连接失败,地址:%s,端口:%d,错误:%lX"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort, XClient_GetLastError());
+			goto NETSERVICE_APPEXIT;
+		}
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建TCP连接成功,地址:%s,端口:%d"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort);
+		pSTDThread_Tcp = make_shared<std::thread>(XContral_Thread_TcpTask);
+		if (!pSTDThread_Tcp->joinable())
+		{
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建TCP任务线程失败"));
+			goto NETSERVICE_APPEXIT;
+		}
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建TCP任务线程成功"));
+	}
+	else
+	{
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("启动服务中，TCP客户端被设置为不自动连接"));
+	}
 
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，所有服务已经启动完毕,程序运行中..."));
 	while (bIsRun)
@@ -207,7 +238,15 @@ NETSERVICE_APPEXIT:
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("后台控制服务关闭，服务器退出..."));
 		bIsRun = FALSE;
 
-		pSTDThread_Http->join();
+		if (NULL != pSTDThread_Http)
+		{
+			pSTDThread_Http->join();
+		}
+		if (NULL != pSTDThread_Tcp)
+		{
+			pSTDThread_Tcp->join();
+		}
+		XClient_TCPSelect_Close(hSocket);
 		HelpComponents_XLog_Destroy(xhLog);
 	}
 
