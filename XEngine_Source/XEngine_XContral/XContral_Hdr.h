@@ -78,7 +78,18 @@ extern MANAGESERVICE_CONFIG st_ServiceConfig;
 #include "XContral_Task.h"
 
 #ifdef _WINDOWS
-#ifdef _DEBUG
+#pragma comment(lib,"Ws2_32.lib")
+#ifdef _WIN64
+#pragma comment(lib,"../x64/Release/XContral_Infomation.lib")
+#pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
+#pragma comment(lib,"x64/XEngine_Core/XEngine_OPenSsl.lib")
+#pragma comment(lib,"x64/XEngine_Client/XClient_Socket.lib")
+#pragma comment(lib,"x64/XEngine_HelpComponents/HelpComponents_XLog.lib")
+#pragma comment(lib,"x64/XEngine_RfcComponents/RfcComponents_EmailClient.lib")
+#pragma comment(lib,"x64/XEngine_NetHelp/NetHelp_APIHelp.lib")
+#pragma comment(lib,"x64/XEngine_SystemSdk/XEngine_SystemApi.lib")
+#pragma comment(lib,"x64/XEngine_DownLoad/XEngine_DownLoad.lib")
+#else
 #pragma comment(lib,"../Debug/XContral_Infomation.lib")
 #pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
 #pragma comment(lib,"x86/XEngine_Core/XEngine_OPenSsl.lib")
@@ -88,15 +99,5 @@ extern MANAGESERVICE_CONFIG st_ServiceConfig;
 #pragma comment(lib,"x86/XEngine_NetHelp/NetHelp_APIHelp.lib")
 #pragma comment(lib,"x86/XEngine_SystemSdk/XEngine_SystemApi.lib")
 #pragma comment(lib,"x86/XEngine_DownLoad/XEngine_DownLoad.lib")
-#else
-#pragma comment(lib,"../Debug/XContral_Infomation.lib")
-#pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"x64/XEngine_Core/XEngine_OPenSsl.lib")
-#pragma comment(lib,"x64/XEngine_HelpComponents/HelpComponents_XLog.lib")
-#pragma comment(lib,"x64/XEngine_RfcComponents/RfcComponents_EmailClient.lib")
-#pragma comment(lib,"x64/XEngine_NetHelp/NetHelp_APIHelp.lib")
-#pragma comment(lib,"x64/XEngine_SystemSdk/XEngine_SystemApi.lib")
-#pragma comment(lib,"x64/XEngine_DownLoad/XEngine_DownLoad.lib")
 #endif
-#pragma comment(lib,"Ws2_32.lib")
 #endif
