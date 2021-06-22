@@ -2,17 +2,26 @@
 
 XHTHREAD XContral_Thread_HttpTask()
 {
+	time_t nTimeStart = time(NULL);
+
 	while (bIsRun)
 	{
 		tstring m_StrBody;
-		if (!APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, &m_StrBody))
+		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, &m_StrBody))
+		{
+			nTimeStart = time(NULL);//更新
+			XContral_Task_ProtocolParse(m_StrBody.c_str(), m_StrBody.length());
+		}
+		//通过一个简单的任务处理机制来延迟
+		time_t nTimeEnd = time(NULL);
+		if ((nTimeEnd - nTimeStart) > 1)
+		{
+			std::this_thread::sleep_for(std::chrono::seconds(5));
+		}
+		else
 		{
 			std::this_thread::sleep_for(std::chrono::seconds(1));
-			continue;
 		}
-		//自动处理
-		XContral_Task_ProtocolParse(m_StrBody.c_str(), m_StrBody.length());
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 	return 0;
 }

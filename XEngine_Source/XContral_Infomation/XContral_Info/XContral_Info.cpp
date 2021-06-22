@@ -51,7 +51,6 @@ BOOL CXContral_Info::XContral_Info_HardWare(TCHAR *ptszHWInfo,int *pInt_Len)
         return FALSE;
     }
     int nDiskNumber = 0;
-    LPCTSTR lpszDir = _T("/usr");
     TCHAR tszOSName[MAX_PATH];
     DWORD nOSVersion;
     DWORD nOSBuild;
@@ -75,7 +74,17 @@ BOOL CXContral_Info::XContral_Info_HardWare(TCHAR *ptszHWInfo,int *pInt_Len)
         BackManage_dwErrorCode = SystemApi_GetLastError();
         return FALSE;
     }
-    if (!SystemApi_HardWare_GetDiskInfomation(lpszDir,&st_DiskInfo, XENGINE_SYSTEMSDK_API_SYSTEM_SIZE_MB))
+    TCHAR tszDriveStr[MAX_PATH];
+    memset(tszDriveStr, '\0', MAX_PATH);
+    
+#ifdef _WINDOWS
+    GetLogicalDriveStrings(MAX_PATH, tszDriveStr);
+#else
+    LPCTSTR lpszDir = _T("/");
+    _tcscpy(tszDriveStr, lpszDir);
+#endif
+
+    if (!SystemApi_HardWare_GetDiskInfomation(tszDriveStr,&st_DiskInfo, XENGINE_SYSTEMSDK_API_SYSTEM_SIZE_MB))
     {
         BackManage_IsErrorOccur = TRUE;
         BackManage_dwErrorCode = SystemApi_GetLastError();
@@ -116,7 +125,7 @@ BOOL CXContral_Info::XContral_Info_HardWare(TCHAR *ptszHWInfo,int *pInt_Len)
     st_JsonDisk["DiskNumber"] = nDiskNumber;
     st_JsonDisk["DiskFree"] = (Json::UInt64)st_DiskInfo.dwDiskFree;
     st_JsonDisk["DiskTotal"] = (Json::UInt64)st_DiskInfo.dwDiskTotal;
-    st_JsonDisk["DiskName"] = lpszDir;
+    st_JsonDisk["DiskName"] = tszDriveStr;
 
     st_JsonCpu["CpuNumber"] = st_CPUInfo.nCpuNumber;
     st_JsonCpu["CpuSpeed"] = st_CPUInfo.nCpuSpeed;

@@ -27,8 +27,8 @@ int main(int argc, char** argv)
 	LPCTSTR lpszWndName = _T("XEngine_XContralApp");
 #endif
 	bIsRun = TRUE;
-	LPCTSTR lpszFile = _T("./XContral_Temp/PostFile");
-	LPCTSTR lpszLogFile = _T("./XContral_Log/ManageBack.Log");
+	LPCTSTR lpszFile = _T("./XContral_Temp/PostFile.tmp");
+	LPCTSTR lpszLogFile = _T("./XContral_Log/XContral.Log");
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 		printf("初始化日志服务失败,无法继续!\n");
 		goto NETSERVICE_APPEXIT;
 	}
-	HelpComponents_XLog_SetLogPriority(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO);
+	HelpComponents_XLog_SetLogPriority(xhLog, st_ServiceConfig.nLogType);
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，初始化日志系统成功"));
 
 	signal(SIGINT, ServiceApp_Stop);
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，初始化信号处理成功"));
 	if (st_ServiceConfig.bIsAutoStart)
 	{
-		if (!SystemApi_Process_AutoStart(_T("XEngine"), _T("XEngine_BackService")))
+		if (!SystemApi_Process_AutoStart(_T("XEngine"), _T("XEngine_XContral")))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，注册软件开机启动失败!错误:%lX"), SystemApi_GetLastError());
 			goto NETSERVICE_APPEXIT;
@@ -122,7 +122,6 @@ int main(int argc, char** argv)
 #endif
 	}
 
-	bIsRun = TRUE;
 	if (0 != _taccess(lpszFile, 0))
 	{
 		if (XContral_Parament_EMail(&st_ServiceConfig))
@@ -158,7 +157,7 @@ int main(int argc, char** argv)
 					goto NETSERVICE_APPEXIT;
 				}
 				_stprintf(tszRPInfo, _T("%s\r\n%s"), tszSWInfo, tszHWInfo);
-				if (!RfcComponents_EMailClient_SmtpSend(xhSmtp, lpszSendAddr, _T("血与荣誉后台服务信息报告"), tszRPInfo))
+				if (!RfcComponents_EMailClient_SmtpSend(xhSmtp, lpszSendAddr, _T("XEngine控制后台信息报告"), tszRPInfo))
 				{
 					XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，投递系统信息消息失败,错误:%lX"), EMailClient_GetLastError());
 					goto NETSERVICE_APPEXIT;
@@ -171,6 +170,7 @@ int main(int argc, char** argv)
 					XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，写入临时文件失败,错误:%d"), errno);
 					goto NETSERVICE_APPEXIT;
 				}
+				fwrite(_T("XEngine"), 1, 7, pSt_File);
 				fclose(pSt_File);
 				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，投递系统信息消息成功"));
 			}
