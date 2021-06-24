@@ -12,6 +12,7 @@ BOOL XContral_Parament(int argc, char **argv, MANAGESERVICE_CONFIG *pSt_StartlPa
 
     pSt_StartlParam->st_Client.bEnable = GetPrivateProfileInt(_T("ClientConfig"), _T("bEnable"), 0, lpszAuthCfg);
     pSt_StartlParam->st_Client.nPort = GetPrivateProfileInt(_T("ClientConfig"), _T("nPort"), 0, lpszAuthCfg);
+    pSt_StartlParam->st_Client.nIPType = GetPrivateProfileInt(_T("ClientConfig"), _T("nIPType"), 0, lpszAuthCfg);
     GetPrivateProfileString(_T("ClientConfig"), _T("bEnable"), NULL, pSt_StartlParam->st_Client.tszServiceAddr, sizeof(pSt_StartlParam->st_Client.tszServiceAddr), lpszAuthCfg);
 
     for (int i = 0;i < argc;i++)

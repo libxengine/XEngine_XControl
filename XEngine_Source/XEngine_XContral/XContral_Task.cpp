@@ -7,7 +7,7 @@ XHTHREAD XContral_Thread_HttpTask()
 	while (bIsRun)
 	{
 		tstring m_StrBody;
-		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, &m_StrBody))
+		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, NULL, &m_StrBody))
 		{
 			nTimeStart = time(NULL);//更新
 			XContral_Task_ProtocolParse(m_StrBody.c_str(), m_StrBody.length());
@@ -25,22 +25,7 @@ XHTHREAD XContral_Thread_HttpTask()
 	}
 	return 0;
 }
-XHTHREAD XContral_Thread_TcpTask()
-{
-	TCHAR tszMsgBuffer[4096];
 
-	while (bIsRun)
-	{
-		int nMsgLen = 4096;
-		memset(tszMsgBuffer, '\0', sizeof(tszMsgBuffer));
-		if (XClient_TCPSelect_RecvMsg(hSocket, tszMsgBuffer, &nMsgLen))
-		{
-			XContral_Task_ProtocolParse(tszMsgBuffer, nMsgLen);
-		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	}
-	return 0;
-}
 BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 {
 	Json::Value st_JsonRoot;
@@ -204,6 +189,18 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTP任务:请求执行命令失败,错误码:%lX"), SystemApi_GetLastError());
 			return FALSE;
+		}
+		break;
+	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_CONNECT:
+		if (IPPROTO_TCP == st_JsonRoot["nIPType"].asUInt())
+		{
+			XClient_TCPSelect_Close(hTCPSocket);
+			XClient_TCPSelect_Create(&hTCPSocket, st_JsonRoot["tszIPAddr"].asCString(), st_JsonRoot["nPort"].asInt());
+		}
+		else
+		{
+			XClient_UDPSelect_Close(hUDPSocket);
+			XClient_UDPSelect_Create(&hUDPSocket, st_JsonRoot["tszIPAddr"].asCString(), st_JsonRoot["nPort"].asInt());
 		}
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_USER:

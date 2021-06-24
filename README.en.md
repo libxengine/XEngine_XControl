@@ -13,6 +13,7 @@ Lightweight background service tool to control your computer with HTTP protocol
 3. Support a variety of task lists and custom tasks  
 4. Support some advanced features  
 5. Support HTTP task acceptance processing  
+6. support connect protocol for tcp and udp  
 
 #### Installation
 
@@ -66,16 +67,19 @@ make FLAGS=CleanAll clear
 6.  -c parament create a encrypto email info file  
 7.  run..  
 
-## api list
-POST Method used as api server  
-it is used as manage service.api format use to url,such as:POST /api/query/file  
-The three-segment format is fixed,first api is a fixed,second api of query is a type,third api of file is a name  
-support api list reference:apilist.txt  
-
-## second pass
-The Second pass is not realized by the server, it is by the client  
-upload file second pass is first check the HASH file is on the server, if has file on the server, it will directly prompt the upload is successful.  
-The realization of downloading second transmission is to first query the local file save path through HASH, and download it directly if it exists.
+## system task list
+nothing to do...   
+delete file  
+delete dir  
+upload a file to ftp  
+Request a list of files in the folder  
+execute program  
+pop message  
+terminal process  
+remote shutdown computre  
+execute command  
+connenct  
+user custom protocol start  
 
 ## directory struct
 - XEngine_Docment  docment directory

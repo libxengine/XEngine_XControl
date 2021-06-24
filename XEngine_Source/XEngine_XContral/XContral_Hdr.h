@@ -53,6 +53,7 @@ typedef struct tag_ManageService_Config
     struct  
     {
         TCHAR tszServiceAddr[64];
+        int nIPType;
         int nPort;
         BOOL bEnable;
     }st_Client;
@@ -67,15 +68,18 @@ typedef struct tag_ManageService_Config
 
 extern BOOL bIsRun;
 extern XLOG xhLog;
-extern SOCKET hSocket;
+extern SOCKET hTCPSocket;
+extern SOCKET hUDPSocket;
 extern int m_nTaskSerial;
 extern shared_ptr<std::thread> pSTDThread_Http;
-extern shared_ptr<std::thread> pSTDThread_Tcp;
+extern shared_ptr<std::thread> pSTDThread_TCP;
+extern shared_ptr<std::thread> pSTDThread_UDP;
 extern MANAGESERVICE_CONFIG st_ServiceConfig;
 
 #include "XContral_Config.h"
 #include "XContral_Handle.h"
 #include "XContral_Task.h"
+#include "XContral_Network.h"
 
 #ifdef _WINDOWS
 #pragma comment(lib,"Ws2_32.lib")
