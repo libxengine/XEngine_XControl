@@ -7,7 +7,7 @@ XHTHREAD XContral_Thread_HttpTask()
 	while (bIsRun)
 	{
 		tstring m_StrBody;
-		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, &m_StrBody))
+		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, NULL, &m_StrBody))
 		{
 			nTimeStart = time(NULL);//¸üÐÂ
 			XContral_Task_ProtocolParse(m_StrBody.c_str(), m_StrBody.length());
