@@ -27,6 +27,9 @@
     <ClCompile Include="XContral_Handle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="XContral_Network.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="XContral_Config.h">
@@ -39,6 +42,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="XContral_Handle.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XContral_Network.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

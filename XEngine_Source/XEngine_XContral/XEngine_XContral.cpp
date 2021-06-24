@@ -2,10 +2,12 @@
 
 BOOL bIsRun = FALSE;
 XLOG xhLog = NULL;
-SOCKET hSocket = 0;
+SOCKET hTCPSocket = 0;
+SOCKET hUDPSocket = 0;
 int m_nTaskSerial = 0;
 shared_ptr<std::thread> pSTDThread_Http = NULL;
-shared_ptr<std::thread> pSTDThread_Tcp = NULL;
+shared_ptr<std::thread> pSTDThread_TCP = NULL;
+shared_ptr<std::thread> pSTDThread_UDP = NULL;
 MANAGESERVICE_CONFIG st_ServiceConfig;
 
 void ServiceApp_Stop(int signo)
@@ -19,11 +21,16 @@ void ServiceApp_Stop(int signo)
 		{
 			pSTDThread_Http->join();
 		}
-		if (NULL != pSTDThread_Tcp)
+		if (NULL != pSTDThread_TCP)
 		{
-			pSTDThread_Tcp->join();
+			pSTDThread_TCP->join();
 		}
-		XClient_TCPSelect_Close(hSocket);
+		if (NULL != pSTDThread_UDP)
+		{
+			pSTDThread_UDP->join();
+		}
+		XClient_TCPSelect_Close(hTCPSocket);
+		XClient_TCPSelect_Close(hUDPSocket);
 		HelpComponents_XLog_Destroy(xhLog);
 		exit(0);
 	}
@@ -207,23 +214,42 @@ int main(int argc, char** argv)
 
 	if (st_ServiceConfig.st_Client.bEnable)
 	{
-		if (!XClient_TCPSelect_Create(st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort, &hSocket))
+		if (IPPROTO_TCP == st_ServiceConfig.st_Client.nIPType)
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建TCP连接失败,地址:%s,端口:%d,错误:%lX"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort, XClient_GetLastError());
-			goto NETSERVICE_APPEXIT;
+			if (!XClient_TCPSelect_Create(&hTCPSocket, st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort))
+			{
+				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建TCP连接失败,地址:%s,端口:%d,错误:%lX"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort, XClient_GetLastError());
+				goto NETSERVICE_APPEXIT;
+			}
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建TCP连接成功,地址:%s,端口:%d"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort);
+			pSTDThread_TCP = make_shared<std::thread>(XContral_Thread_TCPTask);
+			if (!pSTDThread_TCP->joinable())
+			{
+				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建TCP任务线程失败"));
+				goto NETSERVICE_APPEXIT;
+			}
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建TCP任务线程成功"));
 		}
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建TCP连接成功,地址:%s,端口:%d"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort);
-		pSTDThread_Tcp = make_shared<std::thread>(XContral_Thread_TcpTask);
-		if (!pSTDThread_Tcp->joinable())
+		else
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建TCP任务线程失败"));
-			goto NETSERVICE_APPEXIT;
+			if (!XClient_UDPSelect_Create(&hUDPSocket, st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort))
+			{
+				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建UDP连接失败,地址:%s,端口:%d,错误:%lX"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort, XClient_GetLastError());
+				goto NETSERVICE_APPEXIT;
+			}
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建UDP连接成功,地址:%s,端口:%d"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort);
+			pSTDThread_UDP = make_shared<std::thread>(XContral_Thread_UDPTask);
+			if (!pSTDThread_UDP->joinable())
+			{
+				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建UDP任务线程失败"));
+				goto NETSERVICE_APPEXIT;
+			}
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建UDP任务线程成功"));
 		}
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建TCP任务线程成功"));
 	}
 	else
 	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("启动服务中，TCP客户端被设置为不自动连接"));
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("启动服务中，客户端被设置为不自动连接"));
 	}
 
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，所有服务已经启动完毕,程序运行中..."));
@@ -242,11 +268,16 @@ NETSERVICE_APPEXIT:
 		{
 			pSTDThread_Http->join();
 		}
-		if (NULL != pSTDThread_Tcp)
+		if (NULL != pSTDThread_TCP)
 		{
-			pSTDThread_Tcp->join();
+			pSTDThread_TCP->join();
 		}
-		XClient_TCPSelect_Close(hSocket);
+		if (NULL != pSTDThread_UDP)
+		{
+			pSTDThread_UDP->join();
+		}
+		XClient_TCPSelect_Close(hTCPSocket);
+		XClient_TCPSelect_Close(hUDPSocket);
 		HelpComponents_XLog_Destroy(xhLog);
 	}
 
