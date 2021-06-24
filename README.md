@@ -13,6 +13,7 @@ c c++
 3.支持多种多样的任务列表和自定义任务  
 4.支持一些高级特性  
 5.支持HTTP任务接受处理  
+6.支持TCP,UDP连接协议控制  
 
 ## 安装教程
 
@@ -71,18 +72,19 @@ make FLAGS=CleanAll 清理编译
 - XEngine_Source   源代目录结构  
 
 ## 系统任务列表
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_DOWNFILE 0x5001          //下载并且运行一个程序  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_DELETEFILE 0x5002        //删除指定文件  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_DELETEDIR 0x5003         //删除指定目录  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_UPFILE 0x5004            //上传一个文件到指定FTP  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_GETLIST 0x5005           //请求获取文件夹中的文件列表  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_EXEC 0x5006              //执行指定程序  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_POPMESSAGE 0x5007        //弹出指定消息  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_STOPPROCESS 0x5008       //结束指定进程  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_SHUTDOWN 0x5009          //远程关闭计算机  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_ECMD 0x500A              //执行命令  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_USER 0x500E              //用户自定义  
-#define XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_NOTHINGTODO 0x500F       //没有需要执行的任务   
+没有需要执行的任务  
+下载并且运行一个程序  
+删除指定文件  
+删除指定目录  
+上传一个文件到指定FTP  
+请求获取文件夹中的文件列表  
+执行指定程序  
+弹出指定消息  
+结束指定进程  
+远程关闭计算机  
+执行命令  
+连接  
+用户自定义开始  
 
 ## 参与贡献
 
