@@ -39,6 +39,7 @@ using namespace std;
 #include <XEngine_Include/XEngine_SystemSdk/ProcFile_Define.h>
 #include <XEngine_Include/XEngine_SystemSdk/SystemApi_Define.h>
 #include <XEngine_Include/XEngine_SystemSdk/SystemApi_Error.h>
+#include "../XContral_Protocol.h"
 #include "../XContral_Infomation/XInfo_Define.h"
 #include "../XContral_Infomation/XInfo_Error.h"
 
