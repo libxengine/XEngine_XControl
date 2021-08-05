@@ -6,12 +6,14 @@ XHTHREAD XContral_Thread_HttpTask()
 
 	while (bIsRun)
 	{
-		tstring m_StrBody;
-		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, NULL, &m_StrBody))
+		int nBLen = 0;
+		TCHAR* ptszMsgBody = NULL;
+		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, NULL, &ptszMsgBody, &nBLen))
 		{
 			nTimeStart = time(NULL);//更新
-			XContral_Task_ProtocolParse(m_StrBody.c_str(), m_StrBody.length());
+			XContral_Task_ProtocolParse(ptszMsgBody, nBLen);
 		}
+		BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBody);
 		//通过一个简单的任务处理机制来延迟
 		time_t nTimeEnd = time(NULL);
 		if ((nTimeEnd - nTimeStart) > 1)

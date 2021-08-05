@@ -39,6 +39,7 @@ using namespace std;
 #include <XEngine_Include/XEngine_SystemSdk/ProcFile_Define.h>
 #include <XEngine_Include/XEngine_SystemSdk/SystemApi_Define.h>
 #include <XEngine_Include/XEngine_SystemSdk/SystemApi_Error.h>
+#include "../XContral_Protocol.h"
 #include "../XContral_Infomation/XInfo_Define.h"
 #include "../XContral_Infomation/XInfo_Error.h"
 
@@ -62,7 +63,7 @@ typedef struct tag_ManageService_Config
         RFCCOMPONENTS_EMAILSMTP st_EMailSmtp;
         BOOL bEnable;
 
-        list<tstring>* pStl_ListAddr;
+        list<string>* pStl_ListAddr;
     }st_EMail;
 }MANAGESERVICE_CONFIG;
 

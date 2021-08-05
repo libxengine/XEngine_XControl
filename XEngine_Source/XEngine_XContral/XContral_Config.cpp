@@ -56,7 +56,7 @@ BOOL XContral_Parament_EMail(MANAGESERVICE_CONFIG* pSt_StartlParam)
     memset(tszEnBuffer, '\0', sizeof(tszEnBuffer));
     memset(tszDeBuffer, '\0', sizeof(tszDeBuffer));
 
-    pSt_StartlParam->st_EMail.pStl_ListAddr = new list<tstring>;
+    pSt_StartlParam->st_EMail.pStl_ListAddr = new list<string>;
 
     FILE* pSt_EnFile = _tfopen(lpszSrcFile, _T("rb"));
     FILE* pSt_DeFile = _tfopen(lpszDstFile, _T("wb"));
