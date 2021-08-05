@@ -63,7 +63,7 @@ typedef struct tag_ManageService_Config
         RFCCOMPONENTS_EMAILSMTP st_EMailSmtp;
         BOOL bEnable;
 
-        list<tstring>* pStl_ListAddr;
+        list<string>* pStl_ListAddr;
     }st_EMail;
 }MANAGESERVICE_CONFIG;
 
