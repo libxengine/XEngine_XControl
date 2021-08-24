@@ -41,11 +41,11 @@ int main(int argc, char** argv)
 	WSADATA st_WSAData;
 	WSAStartup(MAKEWORD(2, 2), &st_WSAData);
 
-	LPCTSTR lpszWndName = _T("XEngine_XContralApp");
+	LPCSTR lpszWndName = _T("XEngine_XContralApp");
 #endif
 	bIsRun = TRUE;
-	LPCTSTR lpszFile = _T("./XContral_Temp/PostFile.tmp");
-	LPCTSTR lpszLogFile = _T("./XContral_Log/XContral.Log");
+	LPCSTR lpszFile = _T("./XContral_Temp/PostFile.tmp");
+	LPCSTR lpszLogFile = _T("./XContral_Log/XContral.Log");
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 
 	st_XLogConfig.XLog_MaxBackupFile = 10;
 	st_XLogConfig.XLog_MaxSize = 102400;
-	_tcscpy(st_XLogConfig.tszFileName, lpszLogFile);
+	strcpy(st_XLogConfig.tszFileName, lpszLogFile);
 
 	XContral_Parament(argc, argv, &st_ServiceConfig);
 	xhLog = HelpComponents_XLog_Init(HELPCOMPONENTS_XLOG_OUTTYPE_FILE | HELPCOMPONENTS_XLOG_OUTTYPE_STD, &st_XLogConfig);
@@ -72,15 +72,15 @@ int main(int argc, char** argv)
 	if (st_ServiceConfig.bCreateEmail)
 	{
 		UCHAR tszEnBuffer[4096];
-		TCHAR tszDeBuffer[4096];
-		LPCTSTR lpszSrcFile = _T("./XContral_Config/Manage_EMail.ini");
-		LPCTSTR lpszDstFile = _T("./XContral_Config/Manage_EMail.ini.dat");
+		CHAR tszDeBuffer[4096];
+		LPCSTR lpszSrcFile = _T("./XContral_Config/Manage_EMail.ini");
+		LPCSTR lpszDstFile = _T("./XContral_Config/Manage_EMail.ini.dat");
 
 		memset(tszEnBuffer, '\0', sizeof(tszEnBuffer));
 		memset(tszDeBuffer, '\0', sizeof(tszDeBuffer));
 
-		FILE* pSt_DeFile = _tfopen(lpszSrcFile, _T("rb"));
-		FILE* pSt_EnFile = _tfopen(lpszDstFile, _T("wb"));
+		FILE* pSt_DeFile = fopen(lpszSrcFile, _T("rb"));
+		FILE* pSt_EnFile = fopen(lpszDstFile, _T("wb"));
 
 		if (NULL == pSt_EnFile || NULL == pSt_DeFile)
 		{
@@ -120,7 +120,7 @@ int main(int argc, char** argv)
 		SetConsoleTitle(lpszWndName);
 		HWND hWnd = GetDesktopWindow();
 		hWnd = GetWindow(hWnd, GW_CHILD);
-		TCHAR tszTitle[MAX_PATH];
+		CHAR tszTitle[MAX_PATH];
 		while (NULL != hWnd)
 		{
 			memset(tszTitle, '\0', MAX_PATH);
@@ -147,15 +147,15 @@ int main(int argc, char** argv)
 			{
 				int nSWLen = 2048;
 				int nHWLen = 2048;
-				TCHAR tszSWInfo[2048];
-				TCHAR tszHWInfo[2048];
-				TCHAR tszRPInfo[8192];
+				CHAR tszSWInfo[2048];
+				CHAR tszHWInfo[2048];
+				CHAR tszRPInfo[8192];
 
 				memset(tszSWInfo, '\0', sizeof(tszSWInfo));
 				memset(tszHWInfo, '\0', sizeof(tszHWInfo));
 				memset(tszRPInfo, '\0', sizeof(tszRPInfo));
 
-				LPCTSTR lpszSendAddr = _T("<486179@qq.com>");
+				LPCSTR lpszSendAddr = _T("<486179@qq.com>");
 
 				XNETHANDLE xhSmtp;
 				if (!RfcComponents_EMailClient_SmtpInit(&xhSmtp, &st_ServiceConfig.st_EMail.st_EMailSmtp))
@@ -181,7 +181,7 @@ int main(int argc, char** argv)
 				}
 				RfcComponents_EMailClient_SmtpClose(xhSmtp);
 
-				FILE* pSt_File = _tfopen(lpszFile, "wb");
+				FILE* pSt_File = fopen(lpszFile, "wb");
 				if (NULL == pSt_File)
 				{
 					XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，写入临时文件失败,错误:%d"), errno);

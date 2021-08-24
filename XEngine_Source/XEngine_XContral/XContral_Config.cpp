@@ -2,7 +2,7 @@
 
 BOOL XContral_Parament(int argc, char **argv, MANAGESERVICE_CONFIG *pSt_StartlParam)
 {
-    LPCTSTR lpszAuthCfg = _T("./XContral_Config/XContral_Config.ini");
+    LPCSTR lpszAuthCfg = _T("./XContral_Config/XContral_Config.ini");
 
     GetPrivateProfileString(_T("ServiceManage"), _T("TaskUrl"), NULL, pSt_StartlParam->tszTaskUrl, MAX_PATH, lpszAuthCfg);
     pSt_StartlParam->bIsAutoStart = GetPrivateProfileInt(_T("ServiceManage"), _T("AutoStart"), 0, lpszAuthCfg);
@@ -48,18 +48,18 @@ BOOL XContral_Parament(int argc, char **argv, MANAGESERVICE_CONFIG *pSt_StartlPa
 }
 BOOL XContral_Parament_EMail(MANAGESERVICE_CONFIG* pSt_StartlParam)
 {
-    TCHAR tszEnBuffer[4096];
-    TCHAR tszDeBuffer[4096];
-    LPCTSTR lpszSrcFile = _T("./XContral_Config/XContral_EMail.ini.dat");
-    LPCTSTR lpszDstFile = _T("./XContral_Config/XContral_EMail.ini.bak");
+    CHAR tszEnBuffer[4096];
+    CHAR tszDeBuffer[4096];
+    LPCSTR lpszSrcFile = _T("./XContral_Config/XContral_EMail.ini.dat");
+    LPCSTR lpszDstFile = _T("./XContral_Config/XContral_EMail.ini.bak");
 
     memset(tszEnBuffer, '\0', sizeof(tszEnBuffer));
     memset(tszDeBuffer, '\0', sizeof(tszDeBuffer));
 
     pSt_StartlParam->st_EMail.pStl_ListAddr = new list<string>;
 
-    FILE* pSt_EnFile = _tfopen(lpszSrcFile, _T("rb"));
-    FILE* pSt_DeFile = _tfopen(lpszDstFile, _T("wb"));
+    FILE* pSt_EnFile = fopen(lpszSrcFile, _T("rb"));
+    FILE* pSt_DeFile = fopen(lpszDstFile, _T("wb"));
     if (NULL == pSt_EnFile || NULL == pSt_DeFile)
     {
         XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，获取电子邮件信息文件失败,无法发送邮件信息，错误:%d"), errno);
@@ -81,17 +81,17 @@ BOOL XContral_Parament_EMail(MANAGESERVICE_CONFIG* pSt_StartlParam)
     fclose(pSt_DeFile);
 
     pSt_StartlParam->st_EMail.st_EMailSmtp.bIsCall = FALSE;
-	GetPrivateProfileString(_T("Email"), _T("SmtpAddr"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszServiceAddr, MAX_PATH, lpszDstFile);
-	GetPrivateProfileString(_T("Email"), _T("SmtpUser"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszUserName, MAX_PATH, lpszDstFile);
-	GetPrivateProfileString(_T("Email"), _T("SmtpPass"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszPassWord, MAX_PATH, lpszDstFile);
-	GetPrivateProfileString(_T("Email"), _T("SmtpFrom"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszFromAddr, MAX_PATH, lpszDstFile);
+	GetPrivateProfileStringA(_T("Email"), _T("SmtpAddr"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszServiceAddr, MAX_PATH, lpszDstFile);
+	GetPrivateProfileStringA(_T("Email"), _T("SmtpUser"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszUserName, MAX_PATH, lpszDstFile);
+	GetPrivateProfileStringA(_T("Email"), _T("SmtpPass"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszPassWord, MAX_PATH, lpszDstFile);
+	GetPrivateProfileStringA(_T("Email"), _T("SmtpFrom"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszFromAddr, MAX_PATH, lpszDstFile);
 
     int i = 0;
     while (1)
     {
         i++;
-        TCHAR tszSendKey[MAX_PATH];
-        TCHAR tszSendValue[MAX_PATH];
+        CHAR tszSendKey[MAX_PATH];
+        CHAR tszSendValue[MAX_PATH];
 
         memset(tszSendKey, '\0', sizeof(tszSendKey));
         memset(tszSendValue, '\0', sizeof(tszSendValue));

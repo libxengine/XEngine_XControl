@@ -35,7 +35,7 @@ extern "C" DWORD XInfo_GetLastError(int *pInt_SysError = NULL);
   意思：是否成功
 备注：
 *********************************************************************/
-extern "C" BOOL XContral_Info_HardWare(TCHAR* ptszHWInfo, int* pInt_Len);
+extern "C" BOOL XContral_Info_HardWare(CHAR* ptszHWInfo, int* pInt_Len);
 /********************************************************************
 函数名称：XContral_Info_SoftWare
 函数功能：获取软件系统信息
@@ -54,4 +54,4 @@ extern "C" BOOL XContral_Info_HardWare(TCHAR* ptszHWInfo, int* pInt_Len);
   意思：是否成功
 备注：
 *********************************************************************/
-extern "C" BOOL XContral_Info_SoftWare(TCHAR* ptszSWInfo, int* pInt_Len);
+extern "C" BOOL XContral_Info_SoftWare(CHAR* ptszSWInfo, int* pInt_Len);

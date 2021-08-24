@@ -2,7 +2,7 @@
 
 XHTHREAD XContral_Thread_TCPTask()
 {
-	TCHAR tszMsgBuffer[4096];
+	CHAR tszMsgBuffer[4096];
 
 	while (bIsRun)
 	{
@@ -18,7 +18,7 @@ XHTHREAD XContral_Thread_TCPTask()
 }
 XHTHREAD XContral_Thread_UDPTask()
 {
-	TCHAR tszMsgBuffer[4096];
+	CHAR tszMsgBuffer[4096];
 
 	while (bIsRun)
 	{

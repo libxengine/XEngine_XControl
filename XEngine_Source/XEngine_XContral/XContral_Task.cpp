@@ -7,7 +7,7 @@ XHTHREAD XContral_Thread_HttpTask()
 	while (bIsRun)
 	{
 		int nBLen = 0;
-		TCHAR* ptszMsgBody = NULL;
+		CHAR* ptszMsgBody = NULL;
 		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, NULL, &ptszMsgBody, &nBLen))
 		{
 			nTimeStart = time(NULL);//更新
@@ -28,7 +28,7 @@ XHTHREAD XContral_Thread_HttpTask()
 	return 0;
 }
 
-BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
+BOOL XContral_Task_ProtocolParse(LPCSTR lpszMsgBuffer, int nMsgLen)
 {
 	Json::Value st_JsonRoot;
 	Json::CharReaderBuilder st_JsonBuild;
@@ -56,13 +56,13 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_DOWNFILE:
 	{
 		XNETHANDLE xhTask;
-		TCHAR tszFileUrl[MAX_PATH];
-		TCHAR tszSaveUrl[MAX_PATH];
+		CHAR tszFileUrl[MAX_PATH];
+		CHAR tszSaveUrl[MAX_PATH];
 
 		memset(tszFileUrl, '\0', MAX_PATH);
 		memset(tszSaveUrl, '\0', MAX_PATH);
-		_tcscpy(tszFileUrl, st_JsonRoot["DownloadUrl"].asCString());
-		_tcscpy(tszSaveUrl, st_JsonRoot["SaveUrl"].asCString());
+		strcpy(tszFileUrl, st_JsonRoot["DownloadUrl"].asCString());
+		strcpy(tszSaveUrl, st_JsonRoot["SaveUrl"].asCString());
 
 		if (!DownLoad_Http_Create(&xhTask, tszFileUrl, tszSaveUrl))
 		{
@@ -86,10 +86,10 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 	}
 	break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_DELETEFILE:
-		TCHAR tszDelFile[MAX_PATH];
+		CHAR tszDelFile[MAX_PATH];
 		memset(tszDelFile, '\0', MAX_PATH);
 
-		_tcscpy(tszDelFile, st_JsonRoot["DeleteFile"].asCString());
+		strcpy(tszDelFile, st_JsonRoot["DeleteFile"].asCString());
 		if (-1 == _tremove(tszDelFile))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTP任务:删除文件任务处理失败,错误码:%d"), errno);
@@ -97,10 +97,10 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 		}
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_DELETEDIR:
-		TCHAR tszDelDir[MAX_PATH];
+		CHAR tszDelDir[MAX_PATH];
 		memset(tszDelDir, '\0', MAX_PATH);
 
-		_tcscpy(tszDelDir, st_JsonRoot["DeleteDir"].asCString());
+		strcpy(tszDelDir, st_JsonRoot["DeleteDir"].asCString());
 		if (!SystemApi_File_DeleteMutilFolder(tszDelDir))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTP任务:删除文件夹任务处理失败,错误码:%lX"), SystemApi_GetLastError());
@@ -110,13 +110,13 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_UPFILE:
 	{
 		XNETHANDLE xhTask;
-		TCHAR tszUPFile[MAX_PATH];
-		TCHAR tszUPUrl[MAX_PATH];
+		CHAR tszUPFile[MAX_PATH];
+		CHAR tszUPUrl[MAX_PATH];
 
 		memset(tszUPFile, '\0', MAX_PATH);
 		memset(tszUPUrl, '\0', MAX_PATH);
-		_tcscpy(tszUPFile, st_JsonRoot["UPLoadFile"].asCString());
-		_tcscpy(tszUPUrl, st_JsonRoot["UPLoadUrl"].asCString());
+		strcpy(tszUPFile, st_JsonRoot["UPLoadFile"].asCString());
+		strcpy(tszUPUrl, st_JsonRoot["UPLoadUrl"].asCString());
 
 		if (!DownLoad_Ftp_Create(&xhTask, tszUPFile, tszUPUrl, FALSE, FALSE))
 		{
@@ -157,10 +157,10 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_POPMESSAGE:
 	{
 		DWORD dwProcessId;
-		TCHAR tszExeFile[MAX_PATH];
+		CHAR tszExeFile[MAX_PATH];
 		memset(tszExeFile, '\0', MAX_PATH);
 
-		_tcscpy(tszExeFile, st_JsonRoot["ExecFile"].asCString());
+		strcpy(tszExeFile, st_JsonRoot["ExecFile"].asCString());
 
 		if (!SystemApi_Process_CreateProcess(&dwProcessId, tszExeFile))
 		{
@@ -170,9 +170,9 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 	}
 	break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_STOPPROCESS:
-		TCHAR tszProcessName[64];
+		CHAR tszProcessName[64];
 		memset(tszProcessName, '\0', sizeof(tszProcessName));
-		_stprintf_s(tszProcessName, _T("%s"), st_JsonRoot["tszProcessName"].asCString());
+		sprintf(tszProcessName, _T("%s"), st_JsonRoot["tszProcessName"].asCString());
 		if (!SystemApi_Process_Stop(tszProcessName))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTP任务:请求停止进程失败,错误码:%lX"), SystemApi_GetLastError());

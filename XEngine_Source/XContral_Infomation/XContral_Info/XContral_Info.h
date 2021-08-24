@@ -17,7 +17,7 @@ public:
     CXContral_Info();
     ~CXContral_Info();
 public:
-    BOOL XContral_Info_HardWare(TCHAR *ptszHWInfo, int *pInt_Len);
-    BOOL XContral_Info_SoftWare(TCHAR *ptszSWInfo, int *pInt_Len);
+    BOOL XContral_Info_HardWare(CHAR *ptszHWInfo, int *pInt_Len);
+    BOOL XContral_Info_SoftWare(CHAR *ptszSWInfo, int *pInt_Len);
 private:
 };

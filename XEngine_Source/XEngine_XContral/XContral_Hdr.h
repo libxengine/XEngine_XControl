@@ -45,7 +45,7 @@ using namespace std;
 
 typedef struct tag_ManageService_Config
 {
-    TCHAR tszTaskUrl[MAX_PATH];
+    CHAR tszTaskUrl[MAX_PATH];
     BOOL bIsAutoStart;
     BOOL bIsHideWnd;
     BOOL bCreateEmail;
@@ -53,7 +53,7 @@ typedef struct tag_ManageService_Config
     int nLogType;
     struct  
     {
-        TCHAR tszServiceAddr[64];
+        CHAR tszServiceAddr[64];
         int nIPType;
         int nPort;
         BOOL bEnable;
