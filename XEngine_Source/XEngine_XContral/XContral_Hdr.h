@@ -62,6 +62,7 @@ extern int m_nTaskSerial;
 extern shared_ptr<std::thread> pSTDThread_Http;
 extern shared_ptr<std::thread> pSTDThread_TCP;
 extern shared_ptr<std::thread> pSTDThread_UDP;
+extern shared_ptr<std::thread> pSTDThread_App;
 extern XENGINE_SERVERCONFIG st_ServiceConfig;
 extern XENGINE_CONFIGAPP st_APPConfig;
 extern XENGIEN_EMAILCONFIG st_EMailConfig;
@@ -70,6 +71,7 @@ extern XENGIEN_EMAILCONFIG st_EMailConfig;
 #include "XContral_Handle.h"
 #include "XContral_Task.h"
 #include "XContral_Network.h"
+#include "XContral_Process.h"
 
 #ifdef _WINDOWS
 #pragma comment(lib,"Ws2_32.lib")

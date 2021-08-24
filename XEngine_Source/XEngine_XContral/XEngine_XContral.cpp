@@ -8,6 +8,7 @@ int m_nTaskSerial = 0;
 shared_ptr<std::thread> pSTDThread_Http = NULL;
 shared_ptr<std::thread> pSTDThread_TCP = NULL;
 shared_ptr<std::thread> pSTDThread_UDP = NULL;
+shared_ptr<std::thread> pSTDThread_App = NULL;
 XENGINE_SERVERCONFIG st_ServiceConfig;
 XENGINE_CONFIGAPP st_APPConfig;
 XENGIEN_EMAILCONFIG st_EMailConfig;
@@ -30,6 +31,10 @@ void ServiceApp_Stop(int signo)
 		if (NULL != pSTDThread_UDP)
 		{
 			pSTDThread_UDP->join();
+		}
+		if (NULL != pSTDThread_App)
+		{
+			pSTDThread_App->join();
 		}
 		XClient_TCPSelect_Close(hTCPSocket);
 		XClient_TCPSelect_Close(hUDPSocket);
@@ -59,7 +64,11 @@ int main(int argc, char** argv)
 	st_XLogConfig.XLog_MaxSize = st_ServiceConfig.st_XLog.nMaxSize;
 	strcpy(st_XLogConfig.tszFileName, st_ServiceConfig.st_XLog.tszLogFile);
 
-	XContral_Parament(argc, argv);
+	if (!XContral_Parament(argc, argv))
+	{
+		printf("初始化参数失败!\n");
+		goto NETSERVICE_APPEXIT;
+	}
 	xhLog = HelpComponents_XLog_Init(HELPCOMPONENTS_XLOG_OUTTYPE_FILE | HELPCOMPONENTS_XLOG_OUTTYPE_STD, &st_XLogConfig);
 	if (NULL == xhLog)
 	{
@@ -256,6 +265,14 @@ int main(int argc, char** argv)
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("启动服务中，客户端被设置为不自动连接"));
 	}
 
+	pSTDThread_App = make_shared<std::thread>(APPManage_Thread_Process);
+	if (!pSTDThread_App->joinable())
+	{
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务器，启动进程守护线程失败，无法继续..."));
+		goto NETSERVICE_APPEXIT;
+	}
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，初始化进程的守护线程成功"));
+
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，所有服务已经启动完毕,程序运行中..."));
 	while (bIsRun)
 	{
@@ -279,6 +296,10 @@ NETSERVICE_APPEXIT:
 		if (NULL != pSTDThread_UDP)
 		{
 			pSTDThread_UDP->join();
+		}
+		if (NULL != pSTDThread_App)
+		{
+			pSTDThread_App->join();
 		}
 		XClient_TCPSelect_Close(hTCPSocket);
 		XClient_TCPSelect_Close(hUDPSocket);
