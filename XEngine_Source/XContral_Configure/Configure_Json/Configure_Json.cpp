@@ -84,8 +84,8 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 
 	strcpy(pSt_FileConfig->tszTaskUrl, st_JsonRoot["tszTaskUrl"].asCString());
 	pSt_FileConfig->nPort = st_JsonRoot["nPort"].asInt();
-	pSt_FileConfig->nAutoStart = st_JsonRoot["nAutoStart"].asInt();
-	pSt_FileConfig->nHideWnd = st_JsonRoot["nHideWnd"].asInt();
+	pSt_FileConfig->bAutoStart = st_JsonRoot["bAutoStart"].asInt();
+	pSt_FileConfig->bHideWnd = st_JsonRoot["bHideWnd"].asInt();
 
 	if (st_JsonRoot["ClientTime"].empty() || (3 != st_JsonRoot["ClientTime"].size()))
 	{

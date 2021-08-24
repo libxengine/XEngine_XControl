@@ -16,9 +16,9 @@
 typedef struct tag_XEngine_ServerConfig
 {
 	CHAR tszTaskUrl[MAX_PATH];
+	BOOL bAutoStart;
+	BOOL bHideWnd;
 	int nPort;
-	int nAutoStart;
-	int nHideWnd;
 	struct
 	{
 		int nTaskTime;

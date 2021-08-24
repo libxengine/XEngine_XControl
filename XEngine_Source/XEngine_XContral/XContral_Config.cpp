@@ -1,19 +1,18 @@
 ﻿#include "XContral_Hdr.h"
 
-BOOL XContral_Parament(int argc, char **argv, MANAGESERVICE_CONFIG *pSt_StartlParam)
+BOOL XContral_Parament(int argc, char **argv)
 {
-    LPCSTR lpszAuthCfg = _T("./XContral_Config/XContral_Config.ini");
+    LPCSTR lpszBaseCfg = _T("./XContral_Config/XContral_Config.ini");
+    LPCSTR lpszListCfg = _T("./XContral_Config/XContral_Config.ini");
 
-    GetPrivateProfileString(_T("ServiceManage"), _T("TaskUrl"), NULL, pSt_StartlParam->tszTaskUrl, MAX_PATH, lpszAuthCfg);
-    pSt_StartlParam->bIsAutoStart = GetPrivateProfileInt(_T("ServiceManage"), _T("AutoStart"), 0, lpszAuthCfg);
-    pSt_StartlParam->bIsHideWnd = GetPrivateProfileInt(_T("ServiceManage"), _T("HideWnd"), 0, lpszAuthCfg);
-    pSt_StartlParam->nTaskTime = GetPrivateProfileInt(_T("ServiceManage"), _T("TaskTime"), 0, lpszAuthCfg);
-    pSt_StartlParam->nLogType = GetPrivateProfileInt(_T("LogConfig"), _T("LogType"), 0, lpszAuthCfg);
-
-    pSt_StartlParam->st_Client.bEnable = GetPrivateProfileInt(_T("ClientConfig"), _T("bEnable"), 0, lpszAuthCfg);
-    pSt_StartlParam->st_Client.nPort = GetPrivateProfileInt(_T("ClientConfig"), _T("nPort"), 0, lpszAuthCfg);
-    pSt_StartlParam->st_Client.nIPType = GetPrivateProfileInt(_T("ClientConfig"), _T("nIPType"), 0, lpszAuthCfg);
-    GetPrivateProfileString(_T("ClientConfig"), _T("bEnable"), NULL, pSt_StartlParam->st_Client.tszServiceAddr, sizeof(pSt_StartlParam->st_Client.tszServiceAddr), lpszAuthCfg);
+    if (!Config_Json_File(lpszBaseCfg, &st_ServiceConfig))
+    {
+        return FALSE;
+    }
+    if (!Config_Json_LoadList(lpszListCfg, &st_APPConfig))
+    {
+        return FALSE;
+    }
 
     for (int i = 0;i < argc;i++)
     {
@@ -24,29 +23,25 @@ BOOL XContral_Parament(int argc, char **argv, MANAGESERVICE_CONFIG *pSt_StartlPa
         }
         if ((0 == _tcscmp("-v", argv[i])) || (0 == _tcscmp("-V", argv[i])))
         {
-            printf("Version：V2.0.0\n");
+            printf("Version：%s\n", st_ServiceConfig.st_Version.pStl_ListVer->front().c_str());
             return FALSE;
         }
         else if (0 == _tcscmp("-a", argv[i]))
         {
-            pSt_StartlParam->bIsAutoStart = 1;
+            st_ServiceConfig.bAutoStart = TRUE;
         }
         else if (0 == _tcscmp("-w", argv[i]))
         {
-            pSt_StartlParam->bIsHideWnd = 1;
-        }
-        else if (0 == _tcscmp("-l", argv[i]))
-        {
-            pSt_StartlParam->nLogType = _ttoi(argv[i] + 1);
+            st_ServiceConfig.bHideWnd = TRUE;
         }
         else if (0 == _tcscmp("-c", argv[i]))
         {
-            pSt_StartlParam->bCreateEmail = 1;
+            st_EMailConfig.bCreateEmail = TRUE;
         }
     }
     return TRUE;
 }
-BOOL XContral_Parament_EMail(MANAGESERVICE_CONFIG* pSt_StartlParam)
+BOOL XContral_Parament_EMail()
 {
     CHAR tszEnBuffer[4096];
     CHAR tszDeBuffer[4096];
@@ -56,7 +51,7 @@ BOOL XContral_Parament_EMail(MANAGESERVICE_CONFIG* pSt_StartlParam)
     memset(tszEnBuffer, '\0', sizeof(tszEnBuffer));
     memset(tszDeBuffer, '\0', sizeof(tszDeBuffer));
 
-    pSt_StartlParam->st_EMail.pStl_ListAddr = new list<string>;
+    st_EMailConfig.pStl_ListAddr = new list<string>;
 
     FILE* pSt_EnFile = fopen(lpszSrcFile, _T("rb"));
     FILE* pSt_DeFile = fopen(lpszDstFile, _T("wb"));
@@ -80,11 +75,11 @@ BOOL XContral_Parament_EMail(MANAGESERVICE_CONFIG* pSt_StartlParam)
     fclose(pSt_EnFile);
     fclose(pSt_DeFile);
 
-    pSt_StartlParam->st_EMail.st_EMailSmtp.bIsCall = FALSE;
-	GetPrivateProfileStringA(_T("Email"), _T("SmtpAddr"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszServiceAddr, MAX_PATH, lpszDstFile);
-	GetPrivateProfileStringA(_T("Email"), _T("SmtpUser"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszUserName, MAX_PATH, lpszDstFile);
-	GetPrivateProfileStringA(_T("Email"), _T("SmtpPass"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszPassWord, MAX_PATH, lpszDstFile);
-	GetPrivateProfileStringA(_T("Email"), _T("SmtpFrom"), NULL, pSt_StartlParam->st_EMail.st_EMailSmtp.tszFromAddr, MAX_PATH, lpszDstFile);
+    st_EMailConfig.st_EMailSmtp.bIsCall = FALSE;
+	GetPrivateProfileString(_T("Email"), _T("SmtpAddr"), NULL, st_EMailConfig.st_EMailSmtp.tszServiceAddr, MAX_PATH, lpszDstFile);
+	GetPrivateProfileString(_T("Email"), _T("SmtpUser"), NULL, st_EMailConfig.st_EMailSmtp.tszUserName, MAX_PATH, lpszDstFile);
+	GetPrivateProfileString(_T("Email"), _T("SmtpPass"), NULL, st_EMailConfig.st_EMailSmtp.tszPassWord, MAX_PATH, lpszDstFile);
+	GetPrivateProfileString(_T("Email"), _T("SmtpFrom"), NULL, st_EMailConfig.st_EMailSmtp.tszFromAddr, MAX_PATH, lpszDstFile);
 
     int i = 0;
     while (1)
@@ -101,11 +96,11 @@ BOOL XContral_Parament_EMail(MANAGESERVICE_CONFIG* pSt_StartlParam)
         {
             break;
         }
-        pSt_StartlParam->st_EMail.pStl_ListAddr->push_back(tszSendValue);
+        st_EMailConfig.pStl_ListAddr->push_back(tszSendValue);
     }
     XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，获得电子邮件配置信息,将发送数据"));
 
-    pSt_StartlParam->st_EMail.bEnable = TRUE;
+    st_EMailConfig.bEnable = TRUE;
     _tremove(lpszDstFile);
     return TRUE;
 }
@@ -116,7 +111,6 @@ void XContral_ParamentHelp()
     printf(_T("-h or -H：启动参数帮助提示信息\n"));
     printf(_T("-a：设置服务跟随机器一起启动\n"));
     printf(_T("-w：设置窗口隐藏启动\n"));
-    printf(_T("-l：设置日志模式,0 文件 1 控制台 2全部\n"));
     printf(_T("-c：加密邮件配置,无参数.待加密文件:./Manage_Config/Manage_EMail.ini 加密后的文件:./Manage_Config/Manage_EMail.ini.dat\n"));
     printf(_T("    如果你需要把信息发送到自己的电子邮箱,可以使用此功能,注意:你必须按照格式放置文件.加密完成后可以删除Manage_EMail.ini而保留Manage_EMail.ini.dat\n"));
     printf(_T("--------------------------启动参数帮助结束--------------------------\n"));

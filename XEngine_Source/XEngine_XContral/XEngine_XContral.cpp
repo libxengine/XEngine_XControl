@@ -8,7 +8,9 @@ int m_nTaskSerial = 0;
 shared_ptr<std::thread> pSTDThread_Http = NULL;
 shared_ptr<std::thread> pSTDThread_TCP = NULL;
 shared_ptr<std::thread> pSTDThread_UDP = NULL;
-MANAGESERVICE_CONFIG st_ServiceConfig;
+XENGINE_SERVERCONFIG st_ServiceConfig;
+XENGINE_CONFIGAPP st_APPConfig;
+XENGIEN_EMAILCONFIG st_EMailConfig;
 
 void ServiceApp_Stop(int signo)
 {
@@ -49,27 +51,29 @@ int main(int argc, char** argv)
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
-	memset(&st_ServiceConfig, '\0', sizeof(MANAGESERVICE_CONFIG));
+	memset(&st_ServiceConfig, '\0', sizeof(XENGINE_SERVERCONFIG));
+	memset(&st_APPConfig, '\0', sizeof(XENGINE_CONFIGAPP));
+	memset(&st_EMailConfig, '\0', sizeof(XENGIEN_EMAILCONFIG));
 
-	st_XLogConfig.XLog_MaxBackupFile = 10;
-	st_XLogConfig.XLog_MaxSize = 102400;
-	strcpy(st_XLogConfig.tszFileName, lpszLogFile);
+	st_XLogConfig.XLog_MaxBackupFile = st_ServiceConfig.st_XLog.nMaxCount;
+	st_XLogConfig.XLog_MaxSize = st_ServiceConfig.st_XLog.nMaxSize;
+	strcpy(st_XLogConfig.tszFileName, st_ServiceConfig.st_XLog.tszLogFile);
 
-	XContral_Parament(argc, argv, &st_ServiceConfig);
+	XContral_Parament(argc, argv);
 	xhLog = HelpComponents_XLog_Init(HELPCOMPONENTS_XLOG_OUTTYPE_FILE | HELPCOMPONENTS_XLOG_OUTTYPE_STD, &st_XLogConfig);
 	if (NULL == xhLog)
 	{
 		printf("初始化日志服务失败,无法继续!\n");
 		goto NETSERVICE_APPEXIT;
 	}
-	HelpComponents_XLog_SetLogPriority(xhLog, st_ServiceConfig.nLogType);
+	HelpComponents_XLog_SetLogPriority(xhLog, st_ServiceConfig.st_XLog.nLogLeave);
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，初始化日志系统成功"));
 
 	signal(SIGINT, ServiceApp_Stop);
 	signal(SIGTERM, ServiceApp_Stop);
 	signal(SIGABRT, ServiceApp_Stop);
 
-	if (st_ServiceConfig.bCreateEmail)
+	if (st_EMailConfig.bCreateEmail)
 	{
 		UCHAR tszEnBuffer[4096];
 		CHAR tszDeBuffer[4096];
@@ -104,7 +108,7 @@ int main(int argc, char** argv)
 	}
 
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，初始化信号处理成功"));
-	if (st_ServiceConfig.bIsAutoStart)
+	if (st_ServiceConfig.bAutoStart)
 	{
 		if (!SystemApi_Process_AutoStart(_T("XEngine"), _T("XEngine_XContral")))
 		{
@@ -113,7 +117,7 @@ int main(int argc, char** argv)
 		}
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，注册软件开机启动成功"));
 	}
-	if (st_ServiceConfig.bIsHideWnd)
+	if (st_ServiceConfig.bHideWnd)
 	{
 #ifdef _WINDOWS
 		BOOL bIsFound = FALSE;
@@ -141,9 +145,9 @@ int main(int argc, char** argv)
 
 	if (0 != _taccess(lpszFile, 0))
 	{
-		if (XContral_Parament_EMail(&st_ServiceConfig))
+		if (XContral_Parament_EMail())
 		{
-			if (st_ServiceConfig.st_EMail.bEnable)
+			if (st_EMailConfig.bEnable)
 			{
 				int nSWLen = 2048;
 				int nHWLen = 2048;
@@ -158,7 +162,7 @@ int main(int argc, char** argv)
 				LPCSTR lpszSendAddr = _T("<486179@qq.com>");
 
 				XNETHANDLE xhSmtp;
-				if (!RfcComponents_EMailClient_SmtpInit(&xhSmtp, &st_ServiceConfig.st_EMail.st_EMailSmtp))
+				if (!RfcComponents_EMailClient_SmtpInit(&xhSmtp, &st_EMailConfig.st_EMailSmtp))
 				{
 					XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，初始化SMTP服务失败,错误:%lX"), EMailClient_GetLastError());
 					goto NETSERVICE_APPEXIT;
@@ -216,12 +220,12 @@ int main(int argc, char** argv)
 	{
 		if (IPPROTO_TCP == st_ServiceConfig.st_Client.nIPType)
 		{
-			if (!XClient_TCPSelect_Create(&hTCPSocket, st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort))
+			if (!XClient_TCPSelect_Create(&hTCPSocket, st_ServiceConfig.st_Client.tszIPAddr, st_ServiceConfig.st_Client.nPort))
 			{
-				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建TCP连接失败,地址:%s,端口:%d,错误:%lX"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort, XClient_GetLastError());
+				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建TCP连接失败,地址:%s,端口:%d,错误:%lX"), st_ServiceConfig.st_Client.tszIPAddr, st_ServiceConfig.st_Client.nPort, XClient_GetLastError());
 				goto NETSERVICE_APPEXIT;
 			}
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建TCP连接成功,地址:%s,端口:%d"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort);
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建TCP连接成功,地址:%s,端口:%d"), st_ServiceConfig.st_Client.tszIPAddr, st_ServiceConfig.st_Client.nPort);
 			pSTDThread_TCP = make_shared<std::thread>(XContral_Thread_TCPTask);
 			if (!pSTDThread_TCP->joinable())
 			{
@@ -232,12 +236,12 @@ int main(int argc, char** argv)
 		}
 		else
 		{
-			if (!XClient_UDPSelect_Create(&hUDPSocket, st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort))
+			if (!XClient_UDPSelect_Create(&hUDPSocket, st_ServiceConfig.st_Client.tszIPAddr, st_ServiceConfig.st_Client.nPort))
 			{
-				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建UDP连接失败,地址:%s,端口:%d,错误:%lX"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort, XClient_GetLastError());
+				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建UDP连接失败,地址:%s,端口:%d,错误:%lX"), st_ServiceConfig.st_Client.tszIPAddr, st_ServiceConfig.st_Client.nPort, XClient_GetLastError());
 				goto NETSERVICE_APPEXIT;
 			}
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建UDP连接成功,地址:%s,端口:%d"), st_ServiceConfig.st_Client.tszServiceAddr, st_ServiceConfig.st_Client.nPort);
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建UDP连接成功,地址:%s,端口:%d"), st_ServiceConfig.st_Client.tszIPAddr, st_ServiceConfig.st_Client.nPort);
 			pSTDThread_UDP = make_shared<std::thread>(XContral_Thread_UDPTask);
 			if (!pSTDThread_UDP->joinable())
 			{

@@ -40,32 +40,19 @@ using namespace std;
 #include <XEngine_Include/XEngine_SystemSdk/SystemApi_Define.h>
 #include <XEngine_Include/XEngine_SystemSdk/SystemApi_Error.h>
 #include "../XContral_Protocol.h"
+#include "../XContral_Configure/Config_Define.h"
+#include "../XContral_Configure/Config_Error.h"
 #include "../XContral_Infomation/XInfo_Define.h"
 #include "../XContral_Infomation/XInfo_Error.h"
 
-typedef struct tag_ManageService_Config
+//” º˛≈‰÷√
+typedef struct
 {
-    CHAR tszTaskUrl[MAX_PATH];
-    BOOL bIsAutoStart;
-    BOOL bIsHideWnd;
-    BOOL bCreateEmail;
-    int nTaskTime;
-    int nLogType;
-    struct  
-    {
-        CHAR tszServiceAddr[64];
-        int nIPType;
-        int nPort;
-        BOOL bEnable;
-    }st_Client;
-    struct
-    {
-        RFCCOMPONENTS_EMAILSMTP st_EMailSmtp;
-        BOOL bEnable;
-
-        list<string>* pStl_ListAddr;
-    }st_EMail;
-}MANAGESERVICE_CONFIG;
+	RFCCOMPONENTS_EMAILSMTP st_EMailSmtp;
+	BOOL bEnable;
+	BOOL bCreateEmail;
+	list<string>* pStl_ListAddr;
+}XENGIEN_EMAILCONFIG;
 
 extern BOOL bIsRun;
 extern XLOG xhLog;
@@ -75,7 +62,9 @@ extern int m_nTaskSerial;
 extern shared_ptr<std::thread> pSTDThread_Http;
 extern shared_ptr<std::thread> pSTDThread_TCP;
 extern shared_ptr<std::thread> pSTDThread_UDP;
-extern MANAGESERVICE_CONFIG st_ServiceConfig;
+extern XENGINE_SERVERCONFIG st_ServiceConfig;
+extern XENGINE_CONFIGAPP st_APPConfig;
+extern XENGIEN_EMAILCONFIG st_EMailConfig;
 
 #include "XContral_Config.h"
 #include "XContral_Handle.h"
@@ -85,6 +74,7 @@ extern MANAGESERVICE_CONFIG st_ServiceConfig;
 #ifdef _WINDOWS
 #pragma comment(lib,"Ws2_32.lib")
 #ifdef _WIN64
+#pragma comment(lib,"../x64/Release/XContral_Configure.lib")
 #pragma comment(lib,"../x64/Release/XContral_Infomation.lib")
 #pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
 #pragma comment(lib,"x64/XEngine_Core/XEngine_OPenSsl.lib")
@@ -95,6 +85,7 @@ extern MANAGESERVICE_CONFIG st_ServiceConfig;
 #pragma comment(lib,"x64/XEngine_SystemSdk/XEngine_SystemApi.lib")
 #pragma comment(lib,"x64/XEngine_DownLoad/XEngine_DownLoad.lib")
 #else
+#pragma comment(lib,"../Debug/XContral_Configure.lib")
 #pragma comment(lib,"../Debug/XContral_Infomation.lib")
 #pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
 #pragma comment(lib,"x86/XEngine_Core/XEngine_OPenSsl.lib")
