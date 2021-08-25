@@ -16,6 +16,7 @@
 typedef struct tag_XEngine_ServerConfig
 {
 	CHAR tszTaskUrl[MAX_PATH];
+	CHAR tszTmpFile[MAX_PATH];
 	BOOL bAutoStart;
 	BOOL bHideWnd;
 	int nPort;
@@ -54,7 +55,6 @@ typedef struct
 	BOOL bService;                      //是否为服务启动
 	int nReTime;                        //是否自动重启
 	//自定义
-	BOOL bStart;
 	int nErrorTime;
 	__int64x nStartTime;
 }XENGINE_APPINFO;

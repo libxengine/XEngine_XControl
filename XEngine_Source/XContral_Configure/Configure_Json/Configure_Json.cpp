@@ -83,6 +83,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	}
 
 	strcpy(pSt_FileConfig->tszTaskUrl, st_JsonRoot["tszTaskUrl"].asCString());
+	strcpy(pSt_FileConfig->tszTmpFile, st_JsonRoot["tszTmpFile"].asCString());
 	pSt_FileConfig->nPort = st_JsonRoot["nPort"].asInt();
 	pSt_FileConfig->bAutoStart = st_JsonRoot["bAutoStart"].asInt();
 	pSt_FileConfig->bHideWnd = st_JsonRoot["bHideWnd"].asInt();
@@ -120,7 +121,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	pSt_FileConfig->st_XLog.nMaxSize = st_JsonXLog["nMaxSize"].asInt();
 	pSt_FileConfig->st_XLog.nMaxCount = st_JsonXLog["nMaxCount"].asInt();
 	pSt_FileConfig->st_XLog.nLogLeave = st_JsonXLog["nLogLeave"].asInt();
-	strcpy(pSt_FileConfig->st_XLog.tszLogFile, st_JsonClient["tszLogFile"].asCString());
+	strcpy(pSt_FileConfig->st_XLog.tszLogFile, st_JsonXLog["tszLogFile"].asCString());
 
 	if (st_JsonRoot["VersionList"].empty() || (1 != st_JsonRoot["VersionList"].size()))
 	{
@@ -131,9 +132,9 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	Json::Value st_JsonVersion = st_JsonRoot["VersionList"];
 
 	pSt_FileConfig->st_Version.pStl_ListVer = new list<string>;
-	for (unsigned int i = 0; i < st_JsonVersion["VersionList"].size(); i++)
+	for (unsigned int i = 0; i < st_JsonVersion.size(); i++)
 	{
-		pSt_FileConfig->st_Version.pStl_ListVer->push_back(st_JsonVersion["VersionList"][i].asCString());
+		pSt_FileConfig->st_Version.pStl_ListVer->push_back(st_JsonVersion[i].asCString());
 	}
 	return TRUE;
 }
@@ -205,12 +206,12 @@ BOOL CConfigure_Json::Config_Json_LoadList(LPCSTR lpszConfigFile, XENGINE_CONFIG
 		XENGINE_APPINFO st_APPInfo;
 		memset(&st_APPInfo, '\0', sizeof(XENGINE_APPINFO));
 
-		strcpy(st_APPInfo.tszAPPName, st_JsonRoot["APPName"].asCString());
-		strcpy(st_APPInfo.tszAPPPath, st_JsonRoot["APPPath"].asCString());
-		st_APPInfo.bAutoStart = st_JsonRoot["APPAutoStart"].asInt();
-		st_APPInfo.bService = st_JsonRoot["APPService"].asInt();
-		st_APPInfo.nReTime = st_JsonRoot["APPReTime"].asInt();
-		st_APPInfo.bEnable = st_JsonRoot["APPEnable"].asInt();
+		strcpy(st_APPInfo.tszAPPName, st_JsonArray[i]["APPName"].asCString());
+		strcpy(st_APPInfo.tszAPPPath, st_JsonArray[i]["APPPath"].asCString());
+		st_APPInfo.bAutoStart = st_JsonArray[i]["APPAutoStart"].asInt();
+		st_APPInfo.bService = st_JsonArray[i]["APPService"].asInt();
+		st_APPInfo.nReTime = st_JsonArray[i]["APPReTime"].asInt();
+		st_APPInfo.bEnable = st_JsonArray[i]["APPEnable"].asInt();
 
 		pSt_AppConfig->pStl_ListApp->push_back(st_APPInfo);
 	}
