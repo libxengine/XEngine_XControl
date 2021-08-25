@@ -1,5 +1,43 @@
 #include "XContral_Hdr.h"
 
+BOOL APPManage_CreateService(XENGINE_APPINFO *pSt_APPInfo)
+{
+	TCHAR tszCmdExe[1024];
+	memset(tszCmdExe, '\0', sizeof(tszCmdExe));
+
+#ifdef _WINDOWS
+	_stprintf_s(tszCmdExe, _T("sc stop %s"), pSt_APPInfo->tszAPPName);
+#else
+	_stprintf_s(tszCmdExe, _T("systemctl restart %s"), pSt_APPInfo->tszAPPName);
+#endif
+	if (-1 == system(tszCmdExe))
+	{
+		return FALSE;
+	}
+#ifdef _WINDOWS
+	memset(tszCmdExe, '\0', sizeof(tszCmdExe));
+	_stprintf_s(tszCmdExe, _T("sc start %s"), pSt_APPInfo->tszAPPName);
+	if (-1 == system(tszCmdExe))
+	{
+		return FALSE;
+	}
+#endif
+	return TRUE;
+}
+BOOL APPManage_CreateProcess(XENGINE_APPINFO* pSt_APPInfo, DWORD* pdwProcessID)
+{
+	TCHAR tszCmdExe[1024];
+	memset(tszCmdExe, '\0', sizeof(tszCmdExe));
+
+	SystemApi_Process_Stop(pSt_APPInfo->tszAPPName);
+	_stprintf_s(tszCmdExe, _T("%s%s"), pSt_APPInfo->tszAPPPath, pSt_APPInfo->tszAPPName);
+	if (!SystemApi_Process_CreateProcess(pdwProcessID, tszCmdExe))
+	{
+		return FALSE;
+	}
+	return TRUE;
+}
+
 XHTHREAD APPManage_Thread_Process()
 {
 	while (bIsRun)
@@ -9,169 +47,118 @@ XHTHREAD APPManage_Thread_Process()
 		for (; stl_ListIterator != st_APPConfig.pStl_ListApp->end(); stl_ListIterator++)
 		{
 			//是否启用
-			if (stl_ListIterator->bEnable)
+			if (!stl_ListIterator->bEnable)
 			{
-				if (stl_ListIterator->nErrorTime > st_ServiceConfig.st_Time.nErrorTime)
+				continue;
+			}
+			//重试次数判断
+			if (stl_ListIterator->nErrorTime > st_ServiceConfig.st_Time.nErrorTime)
+			{
+				stl_ListIterator->bEnable = FALSE;
+				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("服务名：%s，由于超过指定启动失败次数：%d，这个服务检测功能被关闭..."), stl_ListIterator->tszAPPName, st_ServiceConfig.st_Time.nErrorTime);
+				continue;
+			}
+			TCHAR tszCmdExe[1024];
+			memset(tszCmdExe, '\0', sizeof(tszCmdExe));
+			XENGINE_APPINFO st_APPInfo = *stl_ListIterator;
+
+			if (stl_ListIterator->nReTime > 0)
+			{
+				//进程自动重启
+				__int64x nNowTime = time(NULL);
+				if ((nNowTime - stl_ListIterator->nStartTime) > stl_ListIterator->nReTime)
 				{
-					stl_ListIterator->bEnable = FALSE;
-					XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("服务名：%s，由于超过指定启动失败次数：%d，这个服务检测功能被关闭..."), stl_ListIterator->tszAPPName, st_ServiceConfig.st_Time.nErrorTime);
-					continue;
-				}
-				TCHAR tszCmdExe[1024];
-				memset(tszCmdExe, '\0', sizeof(tszCmdExe));
-				//判断是否设置了进程重新启动
-				if (stl_ListIterator->nReTime > 0)
-				{
-					//如果设置了重新启动，判断时间
-					__int64x nNowTime = time(NULL);
-					if ((nNowTime - stl_ListIterator->nStartTime) > stl_ListIterator->nReTime)
+					if (stl_ListIterator->bService)
 					{
-						if (stl_ListIterator->bService)
+						if (APPManage_CreateService(&st_APPInfo))
 						{
-#ifdef _WINDOWS
-							_stprintf_s(tszCmdExe, _T("sc stop %s"), stl_ListIterator->tszAPPName);
-#else
-							_stprintf_s(tszCmdExe, _T("systemctl restart %s"), stl_ListIterator->tszAPPName);
-#endif
-							if (-1 == system(tszCmdExe))
-							{
-								stl_ListIterator->nErrorTime++;
-								XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("重新启动服务：%s 失败，错误码：%d..."), tszCmdExe, errno);
-							}
-							else
-							{
-#ifdef _WINDOWS
-								memset(tszCmdExe, '\0', sizeof(tszCmdExe));
-								_stprintf_s(tszCmdExe, _T("sc start %s"), stl_ListIterator->tszAPPName);
-								if (-1 == system(tszCmdExe))
-								{
-									stl_ListIterator->nErrorTime++;
-									XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务：%s 失败，错误码：%d..."), tszCmdExe, GetLastError());
-								}
-								else
-								{
-									XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("重启服务：%s 成功..."), stl_ListIterator->tszAPPName);
-								}
-#else
-								XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("重启服务：%s 成功..."), stl_ListIterator->tszAPPName);
-#endif
-							}
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("检查到服务不存在,启动服务：%s 成功..."), stl_ListIterator->tszAPPName);
 						}
 						else
 						{
-							if (SystemApi_Process_Stop(stl_ListIterator->tszAPPName))
-							{
-								DWORD dwProcessId = 0;
-								_stprintf_s(tszCmdExe, _T("%s%s"), stl_ListIterator->tszAPPPath, stl_ListIterator->tszAPPName);
-								if (!SystemApi_Process_CreateProcess(&dwProcessId, tszCmdExe))
-								{
-									stl_ListIterator->nErrorTime++;
-									XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("执行重启程序命令：%s 失败，错误码：%lX..."), tszCmdExe, SystemApi_GetLastError());
-								}
-								else
-								{
-									XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("重启进程：%s 成功，进程ID：%d..."), stl_ListIterator->tszAPPName, dwProcessId);
-								}
-							}
-							else
-							{
-								stl_ListIterator->nErrorTime++;
-								XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("执行杀死进程：%s 失败，错误码：%lX..."), stl_ListIterator->tszAPPName, SystemApi_GetLastError());
-							}
-						}
-						stl_ListIterator->nStartTime = time(NULL);
-						continue;      //如果被重启过的进程，那么将不需要在继续检测是否需要重启了
-					}
-				}
-				//大于0的内容，表示存在，否者不存在
-				if (SystemApi_Process_IsExist(stl_ListIterator->tszAPPName))
-				{
-					continue;      //存在就继续下一条检测
-				}
-				//如果设置了自动启动，那么必须每次都启动他。
-				if (stl_ListIterator->bAutoStart)
-				{
-					//判断是否是服务命令模式
-					if (stl_ListIterator->bService)
-					{
-#ifdef _WINDOWS
-						_stprintf_s(tszCmdExe, _T("sc stop %s"), stl_ListIterator->tszAPPName);
-#else
-						_stprintf_s(tszCmdExe, _T("systemctl restart %s"), stl_ListIterator->tszAPPName);
-#endif
-						if (-1 == system(tszCmdExe))
-						{
 							stl_ListIterator->nErrorTime++;
 							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("执行服务命令：%s 失败，错误码：%d..."), tszCmdExe, errno);
-							continue;
 						}
-#ifdef _WINDOWS
-						memset(tszCmdExe, '\0', sizeof(tszCmdExe));
-						_stprintf_s(tszCmdExe, _T("sc start %s"), stl_ListIterator->tszAPPName);
-						if (-1 == system(tszCmdExe))
-						{
-							stl_ListIterator->nErrorTime++;
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务：%s 失败，错误码：%d..."), tszCmdExe, GetLastError());
-							continue;
-						}
-#endif
-						XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("检查到服务部存在,启动服务：%s 成功..."), stl_ListIterator->tszAPPName);
 					}
 					else
 					{
 						DWORD dwProcessId = 0;
-						_stprintf_s(tszCmdExe, _T("%s%s"), stl_ListIterator->tszAPPPath, stl_ListIterator->tszAPPName);
-						if (!SystemApi_Process_CreateProcess(&dwProcessId, tszCmdExe))
+						if (APPManage_CreateProcess(&st_APPInfo, &dwProcessId))
+						{
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("重启进程：%s 成功，进程ID：%d..."), stl_ListIterator->tszAPPName, dwProcessId);
+						}
+						else
+						{
+							stl_ListIterator->nErrorTime++;
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("执行杀死进程：%s 失败，错误码：%lX..."), stl_ListIterator->tszAPPName, SystemApi_GetLastError());
+						}
+					}
+					stl_ListIterator->nStartTime = time(NULL);
+				}
+			}
+			else if (stl_ListIterator->bAutoStart)
+			{
+				//崩溃自动启动
+				XENGINE_APPINFO st_APPInfo = *stl_ListIterator;
+				//进程不存在才启动
+				if (!SystemApi_Process_IsExist(st_APPInfo.tszAPPName))
+				{
+					if (stl_ListIterator->bService)
+					{
+						if (APPManage_CreateService(&st_APPInfo))
+						{
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("检查到服务不存在,启动服务：%s 成功..."), stl_ListIterator->tszAPPName);
+						}
+						else
+						{
+							stl_ListIterator->nErrorTime++;
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("执行服务命令：%s 失败，错误码：%d..."), tszCmdExe, errno);
+						}
+					}
+					else
+					{
+						DWORD dwProcessId = 0;
+						if (APPManage_CreateProcess(&st_APPInfo, &dwProcessId))
+						{
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("检查到进程不存在,启动进程：%s 成功，进程ID：%d..."), stl_ListIterator->tszAPPName, dwProcessId);
+						}
+						else
 						{
 							stl_ListIterator->nErrorTime++;
 							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("执行自动启动命令：%s 失败，错误码：%lX..."), tszCmdExe, SystemApi_GetLastError());
-							continue;
 						}
-						XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("检查到进程不存在,启动进程：%s 成功，进程ID：%d..."), stl_ListIterator->tszAPPName, dwProcessId);
 					}
 				}
-				else
+			}
+			else
+			{
+				//如果没设置，那么表示启动一次就不用管了
+				if (!SystemApi_Process_IsExist(st_APPInfo.tszAPPName))
 				{
-					//如果没设置，那么表示启动一次就不用管了
-					if (!stl_ListIterator->bStart)
+					stl_ListIterator->bEnable = FALSE; //设置为已经执行，不在执行此命令
+					if (stl_ListIterator->bService)
 					{
-						stl_ListIterator->bStart = TRUE; //设置为已经执行，不在执行此命令
-						if (stl_ListIterator->bService)
+						if (APPManage_CreateService(&st_APPInfo))
 						{
-#ifdef _WINDOWS
-							_stprintf_s(tszCmdExe, _T("sc stop %s"), stl_ListIterator->tszAPPName);
-#else
-							_stprintf_s(tszCmdExe, _T("systemctl restart %s"), stl_ListIterator->tszAPPName);
-#endif
-							if (-1 == system(tszCmdExe))
-							{
-								stl_ListIterator->nErrorTime++;
-								XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("执行服务启动命令：%s 失败，错误码：%d..."), tszCmdExe, errno);
-								continue;
-							}
-#ifdef _WINDOWS
-							memset(tszCmdExe, '\0', sizeof(tszCmdExe));
-							_stprintf_s(tszCmdExe, _T("sc start %s"), stl_ListIterator->tszAPPName);
-							if (-1 == system(tszCmdExe))
-							{
-								stl_ListIterator->nErrorTime++;
-								XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务：%s 失败，错误码：%d..."), tszCmdExe, GetLastError());
-								continue;
-							}
-#endif
 							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("检查到服务部存在,启动服务一次：%s 成功..."), stl_ListIterator->tszAPPName);
 						}
 						else
 						{
-							DWORD dwProcessId = 0;
-							_stprintf_s(tszCmdExe, _T("%s%s"), stl_ListIterator->tszAPPPath, stl_ListIterator->tszAPPName);
-							if (!SystemApi_Process_CreateProcess(&dwProcessId, tszCmdExe))
-							{
-								stl_ListIterator->nErrorTime++;
-								XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("执行启动命令：%s 失败，错误码：%lX..."), tszCmdExe, SystemApi_GetLastError());
-								continue;
-							}
+							stl_ListIterator->nErrorTime++;
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("执行服务启动命令：%s 失败，错误码：%d..."), tszCmdExe, errno);
+						}
+					}
+					else
+					{
+						DWORD dwProcessId = 0;
+						if (APPManage_CreateProcess(&st_APPInfo, &dwProcessId))
+						{
 							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("检查到进程不存在,启动进程一次：%s 成功，进程ID：%d..."), stl_ListIterator->tszAPPName, dwProcessId);
+						}
+						else
+						{
+							stl_ListIterator->nErrorTime++;
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("执行启动命令：%s 失败，错误码：%lX..."), tszCmdExe, SystemApi_GetLastError());
 						}
 					}
 				}
