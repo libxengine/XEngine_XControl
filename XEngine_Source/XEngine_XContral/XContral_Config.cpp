@@ -2,8 +2,8 @@
 
 BOOL XContral_Parament(int argc, char **argv)
 {
-    LPCSTR lpszBaseCfg = _T("./XContral_Config/XContral_Config.ini");
-    LPCSTR lpszListCfg = _T("./XContral_Config/XContral_Config.ini");
+    LPCSTR lpszBaseCfg = _T("./XContral_Config/XEngine_Config.json");
+    LPCSTR lpszListCfg = _T("./XContral_Config/XEngine_ConfigList.json");
 
     if (!Config_Json_File(lpszBaseCfg, &st_ServiceConfig))
     {

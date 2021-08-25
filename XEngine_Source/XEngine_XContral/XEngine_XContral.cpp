@@ -51,8 +51,6 @@ int main(int argc, char** argv)
 	LPCSTR lpszWndName = _T("XEngine_XContralApp");
 #endif
 	bIsRun = TRUE;
-	LPCSTR lpszFile = _T("./XContral_Temp/PostFile.tmp");
-	LPCSTR lpszLogFile = _T("./XContral_Log/XContral.Log");
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
@@ -60,15 +58,14 @@ int main(int argc, char** argv)
 	memset(&st_APPConfig, '\0', sizeof(XENGINE_CONFIGAPP));
 	memset(&st_EMailConfig, '\0', sizeof(XENGIEN_EMAILCONFIG));
 
-	st_XLogConfig.XLog_MaxBackupFile = st_ServiceConfig.st_XLog.nMaxCount;
-	st_XLogConfig.XLog_MaxSize = st_ServiceConfig.st_XLog.nMaxSize;
-	strcpy(st_XLogConfig.tszFileName, st_ServiceConfig.st_XLog.tszLogFile);
-
 	if (!XContral_Parament(argc, argv))
 	{
 		printf("初始化参数失败!\n");
 		goto NETSERVICE_APPEXIT;
 	}
+	st_XLogConfig.XLog_MaxBackupFile = st_ServiceConfig.st_XLog.nMaxCount;
+	st_XLogConfig.XLog_MaxSize = st_ServiceConfig.st_XLog.nMaxSize;
+	strcpy(st_XLogConfig.tszFileName, st_ServiceConfig.st_XLog.tszLogFile);
 	xhLog = HelpComponents_XLog_Init(HELPCOMPONENTS_XLOG_OUTTYPE_FILE | HELPCOMPONENTS_XLOG_OUTTYPE_STD, &st_XLogConfig);
 	if (NULL == xhLog)
 	{
@@ -152,7 +149,7 @@ int main(int argc, char** argv)
 #endif
 	}
 
-	if (0 != _taccess(lpszFile, 0))
+	if (0 != _taccess(st_ServiceConfig.tszTmpFile, 0))
 	{
 		if (XContral_Parament_EMail())
 		{
@@ -194,7 +191,7 @@ int main(int argc, char** argv)
 				}
 				RfcComponents_EMailClient_SmtpClose(xhSmtp);
 
-				FILE* pSt_File = fopen(lpszFile, "wb");
+				FILE* pSt_File = fopen(st_ServiceConfig.tszTmpFile, "wb");
 				if (NULL == pSt_File)
 				{
 					XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，写入临时文件失败,错误:%d"), errno);
@@ -214,17 +211,7 @@ int main(int argc, char** argv)
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，检测到信息已经投递,不需要再次投递!"));
 	}
-
-	bIsRun = TRUE;
-	//创建HTTP请求任务线程
-	pSTDThread_Http = make_shared<std::thread>(XContral_Thread_HttpTask);
-	if (!pSTDThread_Http->joinable())
-	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建HTTP任务线程失败"));
-		goto NETSERVICE_APPEXIT;
-	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建HTTP任务线程成功"));
-
+	//是否启用了客户端
 	if (st_ServiceConfig.st_Client.bEnable)
 	{
 		if (IPPROTO_TCP == st_ServiceConfig.st_Client.nIPType)
@@ -264,6 +251,15 @@ int main(int argc, char** argv)
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("启动服务中，客户端被设置为不自动连接"));
 	}
+	//创建任务线程
+	bIsRun = TRUE;
+	pSTDThread_Http = make_shared<std::thread>(XContral_Thread_HttpTask);
+	if (!pSTDThread_Http->joinable())
+	{
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，创建HTTP任务线程失败"));
+		goto NETSERVICE_APPEXIT;
+	}
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("启动服务中，创建HTTP任务线程成功"));
 
 	pSTDThread_App = make_shared<std::thread>(APPManage_Thread_Process);
 	if (!pSTDThread_App->joinable())
