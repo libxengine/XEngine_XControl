@@ -1,4 +1,4 @@
-#include "XContral_Hdr.h"
+ï»¿#include "XContral_Hdr.h"
 
 BOOL APPManage_CreateService(XENGINE_APPINFO *pSt_APPInfo)
 {
@@ -42,29 +42,27 @@ XHTHREAD APPManage_Thread_Process()
 {
 	while (bIsRun)
 	{
-		//ÂÖÑ¯¼ì²â½ø³ÌÁĞ±í
+		//è½®è¯¢æ£€æµ‹è¿›ç¨‹åˆ—è¡¨
 		list<XENGINE_APPINFO>::iterator stl_ListIterator = st_APPConfig.pStl_ListApp->begin();
 		for (; stl_ListIterator != st_APPConfig.pStl_ListApp->end(); stl_ListIterator++)
 		{
-			//ÊÇ·ñÆôÓÃ
+			//æ˜¯å¦å¯ç”¨
 			if (!stl_ListIterator->bEnable)
 			{
 				continue;
 			}
-			//ÖØÊÔ´ÎÊıÅĞ¶Ï
+			//é‡è¯•æ¬¡æ•°åˆ¤æ–­
 			if (stl_ListIterator->nErrorTime > st_ServiceConfig.st_Time.nErrorTime)
 			{
 				stl_ListIterator->bEnable = FALSE;
-				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("·şÎñÃû£º%s£¬ÓÉÓÚ³¬¹ıÖ¸¶¨Æô¶¯Ê§°Ü´ÎÊı£º%d£¬Õâ¸ö·şÎñ¼ì²â¹¦ÄÜ±»¹Ø±Õ..."), stl_ListIterator->tszAPPName, st_ServiceConfig.st_Time.nErrorTime);
+				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("æœåŠ¡åï¼š%sï¼Œç”±äºè¶…è¿‡æŒ‡å®šå¯åŠ¨å¤±è´¥æ¬¡æ•°ï¼š%dï¼Œè¿™ä¸ªæœåŠ¡æ£€æµ‹åŠŸèƒ½è¢«å…³é—­..."), stl_ListIterator->tszAPPName, st_ServiceConfig.st_Time.nErrorTime);
 				continue;
 			}
-			TCHAR tszCmdExe[1024];
-			memset(tszCmdExe, '\0', sizeof(tszCmdExe));
 			XENGINE_APPINFO st_APPInfo = *stl_ListIterator;
 
 			if (stl_ListIterator->nReTime > 0)
 			{
-				//½ø³Ì×Ô¶¯ÖØÆô
+				//è¿›ç¨‹è‡ªåŠ¨é‡å¯
 				__int64x nNowTime = time(NULL);
 				if ((nNowTime - stl_ListIterator->nStartTime) > stl_ListIterator->nReTime)
 				{
@@ -72,12 +70,12 @@ XHTHREAD APPManage_Thread_Process()
 					{
 						if (APPManage_CreateService(&st_APPInfo))
 						{
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("¼ì²éµ½·şÎñ²»´æÔÚ,Æô¶¯·şÎñ£º%s ³É¹¦..."), stl_ListIterator->tszAPPName);
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("è‡ªåŠ¨é‡å¯,é‡å¯æœåŠ¡ï¼š%s æˆåŠŸ..."), stl_ListIterator->tszAPPName);
 						}
 						else
 						{
 							stl_ListIterator->nErrorTime++;
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("Ö´ĞĞ·şÎñÃüÁî£º%s Ê§°Ü£¬´íÎóÂë£º%d..."), tszCmdExe, errno);
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("è‡ªåŠ¨é‡å¯,é‡å¯æœåŠ¡ï¼š%s å¤±è´¥ï¼Œé”™è¯¯ç ï¼š%d..."), stl_ListIterator->tszAPPName, errno);
 						}
 					}
 					else
@@ -85,12 +83,12 @@ XHTHREAD APPManage_Thread_Process()
 						DWORD dwProcessId = 0;
 						if (APPManage_CreateProcess(&st_APPInfo, &dwProcessId))
 						{
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("ÖØÆô½ø³Ì£º%s ³É¹¦£¬½ø³ÌID£º%d..."), stl_ListIterator->tszAPPName, dwProcessId);
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("è‡ªåŠ¨é‡å¯,é‡å¯è¿›ç¨‹ï¼š%s æˆåŠŸï¼Œè¿›ç¨‹IDï¼š%d..."), stl_ListIterator->tszAPPName, dwProcessId);
 						}
 						else
 						{
 							stl_ListIterator->nErrorTime++;
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("Ö´ĞĞÉ±ËÀ½ø³Ì£º%s Ê§°Ü£¬´íÎóÂë£º%lX..."), stl_ListIterator->tszAPPName, SystemApi_GetLastError());
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("è‡ªåŠ¨é‡å¯,é‡å¯è¿›ç¨‹ï¼š%s å¤±è´¥ï¼Œé”™è¯¯ç ï¼š%lX..."), stl_ListIterator->tszAPPName, SystemApi_GetLastError());
 						}
 					}
 					stl_ListIterator->nStartTime = time(NULL);
@@ -98,21 +96,19 @@ XHTHREAD APPManage_Thread_Process()
 			}
 			else if (stl_ListIterator->bAutoStart)
 			{
-				//±ÀÀ£×Ô¶¯Æô¶¯
-				XENGINE_APPINFO st_APPInfo = *stl_ListIterator;
-				//½ø³Ì²»´æÔÚ²ÅÆô¶¯
+				//è¿›ç¨‹ä¸å­˜åœ¨æ‰å¯åŠ¨
 				if (!SystemApi_Process_IsExist(st_APPInfo.tszAPPName))
 				{
 					if (stl_ListIterator->bService)
 					{
 						if (APPManage_CreateService(&st_APPInfo))
 						{
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("¼ì²éµ½·şÎñ²»´æÔÚ,Æô¶¯·şÎñ£º%s ³É¹¦..."), stl_ListIterator->tszAPPName);
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("å´©æºƒé‡å¯,æ£€æŸ¥åˆ°æœåŠ¡ä¸å­˜åœ¨,å¯åŠ¨æœåŠ¡ï¼š%s æˆåŠŸ..."), stl_ListIterator->tszAPPName);
 						}
 						else
 						{
 							stl_ListIterator->nErrorTime++;
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("Ö´ĞĞ·şÎñÃüÁî£º%s Ê§°Ü£¬´íÎóÂë£º%d..."), tszCmdExe, errno);
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("å´©æºƒé‡å¯,æ£€æŸ¥åˆ°æœåŠ¡ä¸å­˜åœ¨,å¯åŠ¨æœåŠ¡ï¼š%s å¤±è´¥ï¼Œé”™è¯¯ç ï¼š%d..."), stl_ListIterator->tszAPPName, errno);
 						}
 					}
 					else
@@ -120,32 +116,32 @@ XHTHREAD APPManage_Thread_Process()
 						DWORD dwProcessId = 0;
 						if (APPManage_CreateProcess(&st_APPInfo, &dwProcessId))
 						{
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("¼ì²éµ½½ø³Ì²»´æÔÚ,Æô¶¯½ø³Ì£º%s ³É¹¦£¬½ø³ÌID£º%d..."), stl_ListIterator->tszAPPName, dwProcessId);
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("å´©æºƒé‡å¯,æ£€æŸ¥åˆ°è¿›ç¨‹ä¸å­˜åœ¨,å¯åŠ¨è¿›ç¨‹ï¼š%s æˆåŠŸï¼Œè¿›ç¨‹IDï¼š%d..."), stl_ListIterator->tszAPPName, dwProcessId);
 						}
 						else
 						{
 							stl_ListIterator->nErrorTime++;
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("Ö´ĞĞ×Ô¶¯Æô¶¯ÃüÁî£º%s Ê§°Ü£¬´íÎóÂë£º%lX..."), tszCmdExe, SystemApi_GetLastError());
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("å´©æºƒé‡å¯,æ£€æŸ¥åˆ°è¿›ç¨‹ä¸å­˜åœ¨,å¯åŠ¨è¿›ç¨‹ï¼š%s å¤±è´¥ï¼Œé”™è¯¯ç ï¼š%lX..."), stl_ListIterator->tszAPPName, SystemApi_GetLastError());
 						}
 					}
 				}
 			}
 			else
 			{
-				//Èç¹ûÃ»ÉèÖÃ£¬ÄÇÃ´±íÊ¾Æô¶¯Ò»´Î¾Í²»ÓÃ¹ÜÁË
+				//å¦‚æœæ²¡è®¾ç½®ï¼Œé‚£ä¹ˆè¡¨ç¤ºå¯åŠ¨ä¸€æ¬¡å°±ä¸ç”¨ç®¡äº†
 				if (!SystemApi_Process_IsExist(st_APPInfo.tszAPPName))
 				{
-					stl_ListIterator->bEnable = FALSE; //ÉèÖÃÎªÒÑ¾­Ö´ĞĞ£¬²»ÔÚÖ´ĞĞ´ËÃüÁî
+					stl_ListIterator->bEnable = FALSE; //è®¾ç½®ä¸ºå·²ç»æ‰§è¡Œï¼Œä¸åœ¨æ‰§è¡Œæ­¤å‘½ä»¤
 					if (stl_ListIterator->bService)
 					{
 						if (APPManage_CreateService(&st_APPInfo))
 						{
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("¼ì²éµ½·şÎñ²¿´æÔÚ,Æô¶¯·şÎñÒ»´Î£º%s ³É¹¦..."), stl_ListIterator->tszAPPName);
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("å…¶ä»–æ£€æŸ¥,æ£€æŸ¥åˆ°æœåŠ¡ä¸å­˜åœ¨,å¯åŠ¨æœåŠ¡ï¼š%s æˆåŠŸ..."), stl_ListIterator->tszAPPName);
 						}
 						else
 						{
 							stl_ListIterator->nErrorTime++;
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("Ö´ĞĞ·şÎñÆô¶¯ÃüÁî£º%s Ê§°Ü£¬´íÎóÂë£º%d..."), tszCmdExe, errno);
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("å…¶ä»–æ£€æŸ¥,æ£€æŸ¥åˆ°æœåŠ¡ä¸å­˜åœ¨,å¯åŠ¨æœåŠ¡ï¼š%s å¤±è´¥ï¼Œé”™è¯¯ç ï¼š%d..."), stl_ListIterator->tszAPPName, errno);
 						}
 					}
 					else
@@ -153,18 +149,18 @@ XHTHREAD APPManage_Thread_Process()
 						DWORD dwProcessId = 0;
 						if (APPManage_CreateProcess(&st_APPInfo, &dwProcessId))
 						{
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("¼ì²éµ½½ø³Ì²»´æÔÚ,Æô¶¯½ø³ÌÒ»´Î£º%s ³É¹¦£¬½ø³ÌID£º%d..."), stl_ListIterator->tszAPPName, dwProcessId);
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("å…¶ä»–æ£€æŸ¥,æ£€æŸ¥åˆ°è¿›ç¨‹ä¸å­˜åœ¨,å¯åŠ¨è¿›ç¨‹ï¼š%s æˆåŠŸï¼Œè¿›ç¨‹IDï¼š%d..."), stl_ListIterator->tszAPPName, dwProcessId);
 						}
 						else
 						{
 							stl_ListIterator->nErrorTime++;
-							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("Ö´ĞĞÆô¶¯ÃüÁî£º%s Ê§°Ü£¬´íÎóÂë£º%lX..."), tszCmdExe, SystemApi_GetLastError());
+							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("å…¶ä»–æ£€æŸ¥,æ£€æŸ¥åˆ°è¿›ç¨‹ä¸å­˜åœ¨,å¯åŠ¨è¿›ç¨‹ï¼š%s å¤±è´¥ï¼Œé”™è¯¯ç ï¼š%lX..."), stl_ListIterator->tszAPPName, SystemApi_GetLastError());
 						}
 					}
 				}
 			}
 		}
-		//ĞİÃßÓÃ»§ÅäÖÃµÄÊ±¼ä
+		//ä¼‘çœ ç”¨æˆ·é…ç½®çš„æ—¶é—´
 		std::this_thread::sleep_for(std::chrono::seconds(st_ServiceConfig.st_Time.nCheckTime));
 	}
 	return 0;

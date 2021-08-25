@@ -13,11 +13,17 @@
 #include <tchar.h>
 #include <json/json.h>
 #else
+#ifdef _CENTOS
+#include <json/json.h>
+#else
+#include <jsoncpp/json/json.h>
 #endif
-
+#endif
 #endif //PCH_H
 #include <list>
 #include <string>
+#include <memory>
+#include <string.h>
 #include <XEngine_Include/XEngine_CommHdr.h>
 #include <XEngine_Include/XEngine_Types.h>
 using namespace std;

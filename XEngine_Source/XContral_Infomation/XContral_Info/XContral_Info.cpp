@@ -160,7 +160,7 @@ BOOL CXContral_Info::XContral_Info_HardWare(CHAR *ptszHWInfo,int *pInt_Len)
     st_JsonRoot["Serial"] = st_JsonSerial;
     st_JsonRoot["NetCard"] = st_JsonNetCard;
 
-    sprintf_s(tszOSInfo, "%s %lu %lu %lu", tszOSName, nOSVersion, nOSBuild, nOSPro);
+    sprintf(tszOSInfo, "%s %lu %lu %lu", tszOSName, nOSVersion, nOSBuild, nOSPro);
     st_JsonRoot["Platfrom"] = tszOSInfo;
 
     if (*pInt_Len < (int)st_JsonRoot.toStyledString().length())
@@ -256,7 +256,7 @@ BOOL CXContral_Info::XContral_Info_SoftWare(CHAR *ptszSWInfo,int *pInt_Len)
         BackManage_dwErrorCode = SystemApi_GetLastError();
         return FALSE;
     }
-    sprintf_s(tszUPTime, "%04d-%02d-%02d %02d:%02d:%02d", st_LibTimer.wYear, st_LibTimer.wMonth, st_LibTimer.wDay, st_LibTimer.wHour, st_LibTimer.wMinute, st_LibTimer.wSecond);
+    sprintf(tszUPTime, "%04d-%02d-%02d %02d:%02d:%02d", st_LibTimer.wYear, st_LibTimer.wMonth, st_LibTimer.wDay, st_LibTimer.wHour, st_LibTimer.wMinute, st_LibTimer.wSecond);
 
     Json::Value st_JsonRoot;
     Json::Value st_JsonSystem;
