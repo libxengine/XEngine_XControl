@@ -1,16 +1,12 @@
-copy /y "%XEngine_Library%\x86\XEngine_BaseLib\XEngine_BaseLib.dll" "./"
-copy /y "%XEngine_Library%\x86\XEngine_Core\XEngine_OPenSsl.dll" "./"
+copy /y "D:\XEngine\XEngine_SourceCode\Debug\XEngine_BaseLib.dll" "./"
+copy /y "D:\XEngine\XEngine_SourceCode\Debug\XEngine_OPenSsl.dll" "./"
 
-copy /y "%XEngine_Library%\x86\XEngine_Client\XClient_Socket.dll" "./"
+copy /y "D:\XEngine\XEngine_SourceCode\Debug\XClient_Socket.dll" "./"
 
-copy /y "%XEngine_Library%\x86\XEngine_SystemSdk\XEngine_SystemApi.dll" "./"
-copy /y "%XEngine_Library%\x86\XEngine_DownLoad\XEngine_DownLoad.dll" "./"
+copy /y "D:\XEngine\XEngine_SourceCode\Debug\XEngine_SystemApi.dll" "./"
+copy /y "D:\XEngine\XEngine_SourceCode\Debug\XEngine_DownLoad.dll" "./"
 
-copy /y "%XEngine_Library%\x86\XEngine_HelpComponents\HelpComponents_XLog.dll" "./"
-copy /y "%XEngine_Library%\x86\XEngine_RfcComponents\RfcComponents_EmailClient.dll" "./"
+copy /y "D:\XEngine\XEngine_SourceCode\Debug\HelpComponents_XLog.dll" "./"
+copy /y "D:\XEngine\XEngine_SourceCode\Debug\RfcComponents_EmailClient.dll" "./"
 
-copy /y "%XEngine_Library%\x86\XEngine_NetHelp\NetHelp_APIHelp.dll" "./"
-
-copy /y "%XEngine_Library%\x86\XEngine_LibEx\libcrypto-1_1.dll" "./"
-copy /y "%XEngine_Library%\x86\XEngine_LibEx\libssl-1_1.dll" "./"
-copy /y "%XEngine_Library%\x86\XEngine_LibEx\libcurl.dll" "./"
+copy /y "D:\XEngine\XEngine_SourceCode\Debug\NetHelp_APIHelp.dll" "./"

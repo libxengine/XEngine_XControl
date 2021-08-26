@@ -44,11 +44,6 @@ void ServiceApp_Stop(int signo)
 }
 int main(int argc, char** argv)
 {
-#if ((XENGINE_VERSION_KERNEL < 7) || (XENGINE_VERSION_MAIN < 20))
-{
-	printf("xengine version is not match\n");
-}
-#endif
 #ifdef _WINDOWS
 	WSADATA st_WSAData;
 	WSAStartup(MAKEWORD(2, 2), &st_WSAData);
@@ -84,6 +79,10 @@ int main(int argc, char** argv)
 	signal(SIGTERM, ServiceApp_Stop);
 	signal(SIGABRT, ServiceApp_Stop);
 
+	if ((XENGINE_VERSION_KERNEL < 7) || (XENGINE_VERSION_MAIN < 20))
+	{
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("启动服务中，检查到XENGINE版本号不正确，可能会造成无法预料的错误"));
+	}
 	if (st_EMailConfig.bCreateEmail)
 	{
 		UCHAR tszEnBuffer[4096];
@@ -100,18 +99,18 @@ int main(int argc, char** argv)
 		if (NULL == pSt_EnFile || NULL == pSt_DeFile)
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，检测到加密脚本失败，读取文件失败，错误:%d"), errno);
-			return FALSE;
+			goto NETSERVICE_APPEXIT;
 		}
 		int nDRet = fread(tszDeBuffer, 1, sizeof(tszDeBuffer), pSt_DeFile);
 		if (nDRet <= 0)
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，检测到加密脚本失败，读取数据失败，错误:%d"), errno);
-			return FALSE;
+			goto NETSERVICE_APPEXIT;
 		}
 		if (!OPenSsl_XCrypto_Encoder(tszDeBuffer, &nDRet, tszEnBuffer, _T("xengineemail")))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("启动服务中，解密电子邮件信息失败,无法发送邮件信息，错误:%lX"), OPenSsl_GetLastError());
-			return FALSE;
+			goto NETSERVICE_APPEXIT;
 		}
 		fwrite(tszEnBuffer, 1, nDRet, pSt_EnFile);
 		fclose(pSt_EnFile);
@@ -280,6 +279,7 @@ int main(int argc, char** argv)
 	}
 
 NETSERVICE_APPEXIT:
+
 	if (bIsRun)
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("后台控制服务关闭，服务器退出..."));
