@@ -22,7 +22,7 @@ XHTHREAD XContral_Thread_HttpTask()
 		}
 		else
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
 		}
 	}
 	return 0;

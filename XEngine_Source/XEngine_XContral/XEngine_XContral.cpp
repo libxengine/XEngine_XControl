@@ -257,7 +257,6 @@ int main(int argc, char** argv)
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, _T("启动服务中，客户端被设置为不自动连接"));
 	}
 	//创建任务线程
-	bIsRun = TRUE;
 	pSTDThread_Http = make_shared<std::thread>(XContral_Thread_HttpTask);
 	if (!pSTDThread_Http->joinable())
 	{

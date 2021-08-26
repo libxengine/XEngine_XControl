@@ -29,7 +29,6 @@ BOOL APPManage_CreateProcess(XENGINE_APPINFO* pSt_APPInfo, DWORD* pdwProcessID)
 	TCHAR tszCmdExe[1024];
 	memset(tszCmdExe, '\0', sizeof(tszCmdExe));
 
-	SystemApi_Process_Stop(pSt_APPInfo->tszAPPName);
 	_stprintf_s(tszCmdExe, _T("%s%s"), pSt_APPInfo->tszAPPPath, pSt_APPInfo->tszAPPName);
 	if (!SystemApi_Process_CreateProcess(pdwProcessID, tszCmdExe))
 	{
@@ -81,6 +80,7 @@ XHTHREAD APPManage_Thread_Process()
 					else
 					{
 						DWORD dwProcessId = 0;
+						SystemApi_Process_Stop(stl_ListIterator->tszAPPName);
 						if (APPManage_CreateProcess(&st_APPInfo, &dwProcessId))
 						{
 							XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, _T("自动重启,重启进程：%s 成功，进程ID：%d..."), stl_ListIterator->tszAPPName, dwProcessId);
@@ -148,7 +148,15 @@ XHTHREAD APPManage_Thread_Process()
 				memset(&st_ProcessInfo, '\0', sizeof(SYSTEMAPI_PROCESS_INFOMATION));
 				if (SystemApi_Process_GetProcessInfo(stl_ListIterator->tszAPPName, 0, &st_ProcessInfo))
 				{
-					if (ENUM_SYSTEMSDK_PROCFILE_PROCFILE_PROCESS_STATE_ZOMBIE != st_ProcessInfo.en_ProcessState)
+					if (ENUM_SYSTEMSDK_PROCFILE_PROCFILE_PROCESS_STATE_ZOMBIE == st_ProcessInfo.en_ProcessState)
+					{
+#ifndef _WINDOWS
+						//僵尸进程必须使用waitpid退出
+						int nStatus = 0;
+						waitpid(st_ProcessInfo.nPid, &nStatus, 0);
+#endif
+					}
+					else
 					{
 						continue;
 					}
