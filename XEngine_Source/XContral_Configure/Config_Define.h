@@ -19,10 +19,8 @@ typedef struct tag_XEngine_ServerConfig
 	CHAR tszTmpFile[MAX_PATH];
 	BOOL bAutoStart;
 	BOOL bHideWnd;
-	int nPort;
 	struct
 	{
-		int nTaskTime;
 		int nCheckTime;
 		int nErrorTime;
 	}st_Time;

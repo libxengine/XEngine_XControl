@@ -84,18 +84,16 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 
 	strcpy(pSt_FileConfig->tszTaskUrl, st_JsonRoot["tszTaskUrl"].asCString());
 	strcpy(pSt_FileConfig->tszTmpFile, st_JsonRoot["tszTmpFile"].asCString());
-	pSt_FileConfig->nPort = st_JsonRoot["nPort"].asInt();
 	pSt_FileConfig->bAutoStart = st_JsonRoot["bAutoStart"].asInt();
 	pSt_FileConfig->bHideWnd = st_JsonRoot["bHideWnd"].asInt();
 
-	if (st_JsonRoot["ClientTime"].empty() || (3 != st_JsonRoot["ClientTime"].size()))
+	if (st_JsonRoot["ClientTime"].empty() || (2 != st_JsonRoot["ClientTime"].size()))
 	{
 		Config_IsErrorOccur = TRUE;
 		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_TIME;
 		return FALSE;
 	}
 	Json::Value st_JsonTime = st_JsonRoot["ClientTime"];
-	pSt_FileConfig->st_Time.nTaskTime = st_JsonTime["nTaskTime"].asInt();
 	pSt_FileConfig->st_Time.nCheckTime = st_JsonTime["nCheckTime"].asInt();
 	pSt_FileConfig->st_Time.nErrorTime = st_JsonTime["nErrorTime"].asInt();
 

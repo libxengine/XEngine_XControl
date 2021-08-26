@@ -1,6 +1,7 @@
 ﻿#include "XContral_Hdr.h"
 
 BOOL bIsRun = FALSE;
+BOOL bExist = FALSE;
 XLOG xhLog = NULL;
 SOCKET hTCPSocket = 0;
 SOCKET hUDPSocket = 0;
@@ -39,6 +40,7 @@ void ServiceApp_Stop(int signo)
 		XClient_TCPSelect_Close(hTCPSocket);
 		XClient_TCPSelect_Close(hUDPSocket);
 		HelpComponents_XLog_Destroy(xhLog);
+		bExist = TRUE;
 		exit(0);
 	}
 }
@@ -273,13 +275,16 @@ int main(int argc, char** argv)
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，初始化进程的守护线程成功");
 
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，所有服务已经启动完毕,程序运行中...");
-	while (bIsRun)
+
+	while (TRUE)
 	{
+		if (bExist)
+		{
+			break;
+		}
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
-
 NETSERVICE_APPEXIT:
-
 	if (bIsRun)
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, "后台控制服务关闭，服务器退出...");

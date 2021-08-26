@@ -58,6 +58,7 @@ typedef struct
 }XENGIEN_EMAILCONFIG;
 
 extern BOOL bIsRun;
+extern BOOL bExist;
 extern XLOG xhLog;
 extern SOCKET hTCPSocket;
 extern SOCKET hUDPSocket;
