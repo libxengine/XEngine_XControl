@@ -44,6 +44,11 @@ void ServiceApp_Stop(int signo)
 }
 int main(int argc, char** argv)
 {
+#if ((XENGINE_VERSION_KERNEL < 7) || (XENGINE_VERSION_MAIN < 20))
+{
+	printf("xengine version is not match\n");
+}
+#endif
 #ifdef _WINDOWS
 	WSADATA st_WSAData;
 	WSAStartup(MAKEWORD(2, 2), &st_WSAData);

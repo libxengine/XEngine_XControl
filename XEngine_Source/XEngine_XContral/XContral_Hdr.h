@@ -5,6 +5,8 @@
 #include <json/json.h>
 #else
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 #include <netinet/in.h>
 #ifdef _CENTOS
 #include <json/json.h>
