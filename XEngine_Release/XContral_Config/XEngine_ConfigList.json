@@ -1,0 +1,21 @@
+{
+  "ListCount": 2,
+  "ListArray": [
+    {
+      "APPName": "MFCApplication1.exe",
+      "APPPath": "D:\\XEngine_XContral\\XEngine_Source\\Debug\\",
+      "APPAutoStart": 1,
+      "APPService": 0,
+      "APPReTime": 0,
+      "APPEnable": 0
+    },
+    {
+      "APPName": "ifconfig",
+      "APPPath": "/usr/sbin/",
+      "APPAutoStart": 1,
+      "APPService": 0,
+      "APPReTime": 0,
+      "APPEnable": 0
+    }
+  ]
+}

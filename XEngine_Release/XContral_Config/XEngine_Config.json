@@ -1,0 +1,25 @@
+{
+  "tszTaskUrl": "http://127.0.0.1:5580/Api/task/GetTask",
+  "tszTmpFile": "./XContral_Temp/XEngine_File.dat",
+  "bAutoStart": 0,
+  "bHideWnd": 0,
+  "ClientTime": {
+    "nCheckTime": 10,
+    "nErrorTime": 3
+  },
+  "ClientConfig": {
+    "bEnable": 0,
+    "nIPType": 6,
+    "nPort": 5001,
+    "tszIPAddr": "127.0.0.1"
+  },
+  "LogConfig": {
+    "nMaxSize": 1024000,
+    "nMaxCount": 10,
+    "nLogLeave": 32,
+    "tszLogFile": "./XContral_Log/XEngien_Contral.log"
+  },
+  "VersionList": [
+    "3.0.0.1001"
+  ]
+}
