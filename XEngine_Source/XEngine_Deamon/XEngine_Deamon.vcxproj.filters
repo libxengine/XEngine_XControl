@@ -21,12 +21,18 @@
     <ClCompile Include="XEngine_APPEvents.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="XEngine_Service.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="XEngine_APPEvents.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="XEngine_Hdr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="XEngine_Service.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
