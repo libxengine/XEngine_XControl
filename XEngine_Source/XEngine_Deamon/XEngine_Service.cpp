@@ -4,7 +4,6 @@
 */
 void APPManageDeamon_Init()
 {
-	hServiceStatus = NULL;
 	st_Status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
 	st_Status.dwCurrentState = SERVICE_STOPPED;
 	st_Status.dwControlsAccepted = SERVICE_ACCEPT_STOP;
@@ -63,7 +62,6 @@ BOOL APPManageDeamon_Install()
 	// Get the executable file path
 	TCHAR szFilePath[MAX_PATH];
 	GetModuleFileName(NULL, szFilePath, MAX_PATH);
-
 	//创建服务
 	SC_HANDLE hService = CreateService(hSCM, tszServiceName, tszServiceName, SERVICE_ALL_ACCESS, SERVICE_WIN32_OWN_PROCESS | SERVICE_INTERACTIVE_PROCESS, SERVICE_DEMAND_START, SERVICE_ERROR_NORMAL, szFilePath, NULL, NULL, _T(""), NULL, NULL);
 	if (hService == NULL)
@@ -125,8 +123,8 @@ BOOL APPManageDeamon_Uninstall()
 		MessageBox(NULL, _T("Couldn't open service"), tszServiceName, MB_OK);
 		return FALSE;
 	}
-	SERVICE_STATUS status;
-	ControlService(hService, SERVICE_CONTROL_STOP, &status);
+	SERVICE_STATUS st_Status;
+	ControlService(hService, SERVICE_CONTROL_STOP, &st_Status);
 	//删除服务
 	BOOL bDelete = DeleteService(hService);
 	CloseServiceHandle(hService);

@@ -84,6 +84,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 
 	strcpy(pSt_FileConfig->tszTaskUrl, st_JsonRoot["tszTaskUrl"].asCString());
 	strcpy(pSt_FileConfig->tszTmpFile, st_JsonRoot["tszTmpFile"].asCString());
+	strcpy(pSt_FileConfig->tszAPPDeamon, st_JsonRoot["tszAPPDeamon"].asCString());
 	pSt_FileConfig->bAutoStart = st_JsonRoot["bAutoStart"].asInt();
 	pSt_FileConfig->bHideWnd = st_JsonRoot["bHideWnd"].asInt();
 

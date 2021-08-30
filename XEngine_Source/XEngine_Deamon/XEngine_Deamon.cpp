@@ -32,7 +32,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	}
 	else
 	{
-		//bRet = StartServerWork();
 		StartServiceCtrlDispatcher(st);
 	}
 	return 0;
@@ -46,7 +45,6 @@ void WINAPI ServiceMain()
 	hServiceStatus = RegisterServiceCtrlHandler(tszServiceName, ServiceStrl);
 	if (hServiceStatus == NULL)
 	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，注册服务控制程序失败,错误:%d", GetLastError());
 		return;
 	}
 	SetServiceStatus(hServiceStatus, &st_Status);
@@ -80,7 +78,7 @@ void WINAPI ServiceMain()
 		return;
 	}
 	HelpComponents_XLog_SetLogPriority(xhLog, st_ServiceConfig.st_XLog.nLogLeave);
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，初始化日志系统成功");
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务完成");
 
 	st_Status.dwWin32ExitCode = S_OK;
 	st_Status.dwCheckPoint = 0;
@@ -92,11 +90,13 @@ void WINAPI ServiceMain()
 	{
 		if (st_Status.dwCurrentState == SERVICE_PAUSED || st_Status.dwCurrentState == SERVICE_PAUSE_PENDING)
 		{
-			Sleep(500);
+			Sleep(1000);
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "服务暂停中...");
 			continue;
 		}
 		else if (st_Status.dwCurrentState == SERVICE_STOPPED || st_Status.dwCurrentState == SERVICE_STOP_PENDING)
 		{
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "关闭服务");
 			XEngine_APPManage_StopService();
 			break;
 		}
@@ -105,6 +105,7 @@ void WINAPI ServiceMain()
 		{
 			USES_CONVERSION;
 			XEngine_APPManage_RunService(A2W(st_ServiceConfig.tszAPPDeamon));
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "检查到程序不存在,启动程序");
 		}
 		Sleep(1000);
 	}
