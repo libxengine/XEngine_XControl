@@ -207,6 +207,7 @@ BOOL CConfigure_Json::Config_Json_LoadList(LPCSTR lpszConfigFile, XENGINE_CONFIG
 
 		strcpy(st_APPInfo.tszAPPName, st_JsonArray[i]["APPName"].asCString());
 		strcpy(st_APPInfo.tszAPPPath, st_JsonArray[i]["APPPath"].asCString());
+		st_APPInfo.bShow = st_JsonArray[i]["APPShow"].asInt();
 		st_APPInfo.bAutoStart = st_JsonArray[i]["APPAutoStart"].asInt();
 		st_APPInfo.bService = st_JsonArray[i]["APPService"].asInt();
 		st_APPInfo.nReTime = st_JsonArray[i]["APPReTime"].asInt();

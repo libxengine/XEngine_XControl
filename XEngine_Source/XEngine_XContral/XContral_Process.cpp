@@ -30,7 +30,7 @@ BOOL APPManage_CreateProcess(XENGINE_APPINFO* pSt_APPInfo, DWORD* pdwProcessID)
 	memset(tszCmdExe, '\0', sizeof(tszCmdExe));
 
 	sprintf(tszCmdExe, "%s%s", pSt_APPInfo->tszAPPPath, pSt_APPInfo->tszAPPName);
-	if (!SystemApi_Process_CreateProcess(pdwProcessID, tszCmdExe))
+	if (!SystemApi_Process_CreateProcess(pdwProcessID, tszCmdExe, NULL, pSt_APPInfo->bShow))
 	{
 		return FALSE;
 	}
