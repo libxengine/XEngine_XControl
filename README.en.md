@@ -4,8 +4,8 @@
 c c++  
 
 #### Description
-Computer background control service. Remote control software  
-Lightweight background service tool to control your computer with HTTP or TCP protocol  
+Computer process deamon service. Remote control software  
+Lightweight background service management tool,control your computer with HTTP or TCP protocol  
 
 #### Software feature
 1. Support the collection of computer information and send it to your email  
