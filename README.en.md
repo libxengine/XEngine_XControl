@@ -34,7 +34,7 @@ vcpkg integrate install
 you can not use vcpkg and config jsoncpp development for youself   
 
 ##### XEngine
-you can directly run XEngine_WINEnv.sh to configure system environment  
+download xengine through git.read xengine project readme file to configure your env
 
 #### Linux
 Linux use Makefile to complie  
@@ -84,6 +84,10 @@ user custom protocol start
 - XEngine_Docment  docment directory
 - XEngine_Release  install directory
 - XEngine_Source   code    directory
+
+## Clean up statement
+the software will not generate any files to other directories in your system.  
+the software can achieve complete cleanup by directly delete the directory.  
 
 ## Participate in contribution
 

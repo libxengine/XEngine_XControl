@@ -35,7 +35,7 @@ vcpkg 需要2021.05.11以上版本
 vcpkg 主要为了方便安装jsoncpp,如果你想自己配置jsoncpp的环境,可以不使用vcpkg...  
 
 ##### XEngine环境
-可以直接运行XEngine_WINEnv.sh配置系统环境
+XEngine通过GIT下载,参考XEngine项目的readme配置环境  
 
 #### Linux
 Linux使用Makefile编译  
@@ -84,6 +84,10 @@ make FLAGS=CleanAll 清理编译
 执行命令  
 连接  
 用户自定义开始  
+
+## 绿色声明
+此软件不会产生任何文件到你的系统的其他目录中.  
+此软件可通过直接删除主目录而达到完全清理目的.  
 
 ## 参与贡献
 
