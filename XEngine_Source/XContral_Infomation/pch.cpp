@@ -29,11 +29,11 @@ extern "C" DWORD XInfo_GetLastError(int* pInt_SysError)
 /************************************************************************/
 /*                    导出的系统信息获取函数                            */
 /************************************************************************/
-extern "C" BOOL XContral_Info_HardWare(TCHAR * ptszHWInfo, int* pInt_Len)
+extern "C" BOOL XContral_Info_HardWare(CHAR * ptszHWInfo, int* pInt_Len)
 {
 	return m_XInfo.XContral_Info_HardWare(ptszHWInfo, pInt_Len);
 }
-extern "C" BOOL XContral_Info_SoftWare(TCHAR * ptszSWInfo, int* pInt_Len)
+extern "C" BOOL XContral_Info_SoftWare(CHAR * ptszSWInfo, int* pInt_Len)
 {
 	return m_XInfo.XContral_Info_SoftWare(ptszSWInfo, pInt_Len);
 }

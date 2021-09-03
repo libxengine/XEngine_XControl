@@ -4,8 +4,8 @@
 c c++  
 
 #### Description
-Computer background control service. Remote control software  
-Lightweight background service tool to control your computer with HTTP protocol  
+Computer process deamon service. Remote control software  
+Lightweight background service management tool,control your computer with HTTP or TCP protocol  
 
 #### Software feature
 1. Support the collection of computer information and send it to your email  
@@ -14,12 +14,13 @@ Lightweight background service tool to control your computer with HTTP protocol
 4. Support some advanced features  
 5. Support HTTP task acceptance processing  
 6. support connect protocol for tcp and udp  
+7. support deamon local service and process and Strategy control
 
 #### Installation
 
 #### Requirements  
 support system above windows 7sp1 and linux(ubuntu20.04,centos8)  
-XEngine need V7.13 or above  
+XEngine need V7.20 or above  
 vcpkg need 2021.05.11 or above  
 
 #### Windows
@@ -33,9 +34,7 @@ vcpkg integrate install
 you can not use vcpkg and config jsoncpp development for youself   
 
 ##### XEngine
-XEngine can be download with mine repository,whe you downloaded xengine,you have to add value to you user environment  
-- XEngine_Include header file path
-- XEngine_Library library file path
+download xengine through git.read xengine project readme file to configure your env
 
 #### Linux
 Linux use Makefile to complie  
@@ -50,7 +49,7 @@ sudo dnf install jsoncpp-devel
 
 ##### XEngine Install
 you can install xengine env to your system by shell   
-like this:sudo XEngine_RunEnv.sh -c 3  
+like this:sudo XEngine_LINEnv.sh -i 3  
 ##### complie
 execute command in XEngine_Source path
 make complie  
@@ -85,6 +84,10 @@ user custom protocol start
 - XEngine_Docment  docment directory
 - XEngine_Release  install directory
 - XEngine_Source   code    directory
+
+## Clean up statement
+the software will not generate any files to other directories in your system.  
+the software can achieve complete cleanup by directly delete the directory.  
 
 ## Participate in contribution
 

@@ -1,4 +1,4 @@
-#include "XContral_Hdr.h"
+ï»¿#include "XContral_Hdr.h"
 
 XHTHREAD XContral_Thread_HttpTask()
 {
@@ -7,14 +7,14 @@ XHTHREAD XContral_Thread_HttpTask()
 	while (bIsRun)
 	{
 		int nBLen = 0;
-		TCHAR* ptszMsgBody = NULL;
+		CHAR* ptszMsgBody = NULL;
 		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, NULL, &ptszMsgBody, &nBLen))
 		{
-			nTimeStart = time(NULL);//¸üĞÂ
+			nTimeStart = time(NULL);//æ›´æ–°
 			XContral_Task_ProtocolParse(ptszMsgBody, nBLen);
 		}
 		BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBody);
-		//Í¨¹ıÒ»¸ö¼òµ¥µÄÈÎÎñ´¦Àí»úÖÆÀ´ÑÓ³Ù
+		//é€šè¿‡ä¸€ä¸ªç®€å•çš„ä»»åŠ¡å¤„ç†æœºåˆ¶æ¥å»¶è¿Ÿ
 		time_t nTimeEnd = time(NULL);
 		if ((nTimeEnd - nTimeStart) > 1)
 		{
@@ -22,13 +22,13 @@ XHTHREAD XContral_Thread_HttpTask()
 		}
 		else
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(10));
+			std::this_thread::sleep_for(std::chrono::milliseconds(5));
 		}
 	}
 	return 0;
 }
 
-BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
+BOOL XContral_Task_ProtocolParse(LPCSTR lpszMsgBuffer, int nMsgLen)
 {
 	Json::Value st_JsonRoot;
 	Json::CharReaderBuilder st_JsonBuild;
@@ -37,36 +37,36 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 
 	if (!pSt_JsonReader->parse(lpszMsgBuffer, lpszMsgBuffer + nMsgLen, &st_JsonRoot, &st_JsonError))
 	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:JSON½âÎö´íÎó"));
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:JSONè§£æé”™è¯¯");
 		return FALSE;
 	}
 	delete pSt_JsonReader;
 	pSt_JsonReader = NULL;
-	//»ñµÃÈÎÎñĞòÁĞºÅ
+	//è·å¾—ä»»åŠ¡åºåˆ—å·
 	int nTaskSerial = st_JsonRoot["nTaskSerial"].asUInt();
 	if (nTaskSerial <= m_nTaskSerial)
 	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:ÈÎÎñĞòÁĞºÅ²»ÕıÈ·"));
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:ä»»åŠ¡åºåˆ—å·ä¸æ­£ç¡®");
 		return FALSE;
 	}
 	m_nTaskSerial = nTaskSerial;
-	//Ö´ĞĞÈÎÎñ
+	//æ‰§è¡Œä»»åŠ¡
 	switch (st_JsonRoot["unOperatorCode"].asUInt())
 	{
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_DOWNFILE:
 	{
 		XNETHANDLE xhTask;
-		TCHAR tszFileUrl[MAX_PATH];
-		TCHAR tszSaveUrl[MAX_PATH];
+		CHAR tszFileUrl[MAX_PATH];
+		CHAR tszSaveUrl[MAX_PATH];
 
 		memset(tszFileUrl, '\0', MAX_PATH);
 		memset(tszSaveUrl, '\0', MAX_PATH);
-		_tcscpy(tszFileUrl, st_JsonRoot["DownloadUrl"].asCString());
-		_tcscpy(tszSaveUrl, st_JsonRoot["SaveUrl"].asCString());
+		strcpy(tszFileUrl, st_JsonRoot["DownloadUrl"].asCString());
+		strcpy(tszSaveUrl, st_JsonRoot["SaveUrl"].asCString());
 
 		if (!DownLoad_Http_Create(&xhTask, tszFileUrl, tszSaveUrl))
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:ÏÂÔØÈÎÎñ´¦ÀíÊ§°Ü,´íÎóÂë:%lX"), Download_GetLastError());
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:ä¸‹è½½ä»»åŠ¡å¤„ç†å¤±è´¥,é”™è¯¯ç :%lX", Download_GetLastError());
 			return FALSE;
 		}
 		while (TRUE)
@@ -86,41 +86,41 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 	}
 	break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_DELETEFILE:
-		TCHAR tszDelFile[MAX_PATH];
+		CHAR tszDelFile[MAX_PATH];
 		memset(tszDelFile, '\0', MAX_PATH);
 
-		_tcscpy(tszDelFile, st_JsonRoot["DeleteFile"].asCString());
-		if (-1 == _tremove(tszDelFile))
+		strcpy(tszDelFile, st_JsonRoot["DeleteFile"].asCString());
+		if (-1 == remove(tszDelFile))
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:É¾³ıÎÄ¼şÈÎÎñ´¦ÀíÊ§°Ü,´íÎóÂë:%d"), errno);
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:åˆ é™¤æ–‡ä»¶ä»»åŠ¡å¤„ç†å¤±è´¥,é”™è¯¯ç :%d", errno);
 			return FALSE;
 		}
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_DELETEDIR:
-		TCHAR tszDelDir[MAX_PATH];
+		CHAR tszDelDir[MAX_PATH];
 		memset(tszDelDir, '\0', MAX_PATH);
 
-		_tcscpy(tszDelDir, st_JsonRoot["DeleteDir"].asCString());
+		strcpy(tszDelDir, st_JsonRoot["DeleteDir"].asCString());
 		if (!SystemApi_File_DeleteMutilFolder(tszDelDir))
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:É¾³ıÎÄ¼ş¼ĞÈÎÎñ´¦ÀíÊ§°Ü,´íÎóÂë:%lX"), SystemApi_GetLastError());
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:åˆ é™¤æ–‡ä»¶å¤¹ä»»åŠ¡å¤„ç†å¤±è´¥,é”™è¯¯ç :%lX", SystemApi_GetLastError());
 			return FALSE;
 		}
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_UPFILE:
 	{
 		XNETHANDLE xhTask;
-		TCHAR tszUPFile[MAX_PATH];
-		TCHAR tszUPUrl[MAX_PATH];
+		CHAR tszUPFile[MAX_PATH];
+		CHAR tszUPUrl[MAX_PATH];
 
 		memset(tszUPFile, '\0', MAX_PATH);
 		memset(tszUPUrl, '\0', MAX_PATH);
-		_tcscpy(tszUPFile, st_JsonRoot["UPLoadFile"].asCString());
-		_tcscpy(tszUPUrl, st_JsonRoot["UPLoadUrl"].asCString());
+		strcpy(tszUPFile, st_JsonRoot["UPLoadFile"].asCString());
+		strcpy(tszUPUrl, st_JsonRoot["UPLoadUrl"].asCString());
 
 		if (!DownLoad_Ftp_Create(&xhTask, tszUPFile, tszUPUrl, FALSE, FALSE))
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:FTPÉÏ´«ÈÎÎñ´¦ÀíÊ§°Ü,´íÎóÂë:%lX"), Download_GetLastError());
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:FTPä¸Šä¼ ä»»åŠ¡å¤„ç†å¤±è´¥,é”™è¯¯ç :%lX", Download_GetLastError());
 			return FALSE;
 		}
 		while (TRUE)
@@ -145,7 +145,7 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 		CHAR** ppszFileList;
 		if (!SystemApi_File_EnumFile(st_JsonRoot["FindPath"].asCString(), &ppszFileList, &nListCount))
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:ÇëÇóÎÄ¼şÁĞ±íÊ§°Ü,´íÎóÂë:%lX"), SystemApi_GetLastError());
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:è¯·æ±‚æ–‡ä»¶åˆ—è¡¨å¤±è´¥,é”™è¯¯ç :%lX", SystemApi_GetLastError());
 			return FALSE;
 		}
 		XContral_Handle_PostListFile(ppszFileList, nListCount, st_JsonRoot["PostUrl"].asCString());
@@ -157,39 +157,39 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_POPMESSAGE:
 	{
 		DWORD dwProcessId;
-		TCHAR tszExeFile[MAX_PATH];
+		CHAR tszExeFile[MAX_PATH];
 		memset(tszExeFile, '\0', MAX_PATH);
 
-		_tcscpy(tszExeFile, st_JsonRoot["ExecFile"].asCString());
+		strcpy(tszExeFile, st_JsonRoot["ExecFile"].asCString());
 
 		if (!SystemApi_Process_CreateProcess(&dwProcessId, tszExeFile))
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:ÇëÇó´´½¨½ø³ÌÊ§°Ü,´íÎóÂë:%lX"), SystemApi_GetLastError());
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:è¯·æ±‚åˆ›å»ºè¿›ç¨‹å¤±è´¥,é”™è¯¯ç :%lX", SystemApi_GetLastError());
 			return FALSE;
 		}
 	}
 	break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_STOPPROCESS:
-		TCHAR tszProcessName[64];
+		CHAR tszProcessName[64];
 		memset(tszProcessName, '\0', sizeof(tszProcessName));
-		_stprintf_s(tszProcessName, _T("%s"), st_JsonRoot["tszProcessName"].asCString());
+		sprintf(tszProcessName, "%s", st_JsonRoot["tszProcessName"].asCString());
 		if (!SystemApi_Process_Stop(tszProcessName))
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:ÇëÇóÍ£Ö¹½ø³ÌÊ§°Ü,´íÎóÂë:%lX"), SystemApi_GetLastError());
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:è¯·æ±‚åœæ­¢è¿›ç¨‹å¤±è´¥,é”™è¯¯ç :%lX", SystemApi_GetLastError());
 			return FALSE;
 		}
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_SHUTDOWN:
 		if (!SystemApi_System_Shutdown((DWORD)st_JsonRoot["ShutDownType"].asInt64()))
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:ÇëÇó¹Ø»úÊ§°Ü,´íÎóÂë:%lX"), SystemApi_GetLastError());
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:è¯·æ±‚å…³æœºå¤±è´¥,é”™è¯¯ç :%lX", SystemApi_GetLastError());
 			return FALSE;
 		}
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_ECMD:
 		if (-1 == system(st_JsonRoot["tszExecCmd"].asCString()))
 		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:ÇëÇóÖ´ĞĞÃüÁîÊ§°Ü,´íÎóÂë:%lX"), SystemApi_GetLastError());
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:è¯·æ±‚æ‰§è¡Œå‘½ä»¤å¤±è´¥,é”™è¯¯ç :%lX", SystemApi_GetLastError());
 			return FALSE;
 		}
 		break;
@@ -210,7 +210,7 @@ BOOL XContral_Task_ProtocolParse(LPCTSTR lpszMsgBuffer, int nMsgLen)
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_NOTHINGTODO:
 		break;
 	default:
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, _T("HTTPÈÎÎñ:ÇëÇóµÄ²Ù×÷Âë²»Ö§³Ö,²Ù×÷Âë:%d"), st_JsonRoot["unOperatorCode"].asUInt());
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTPä»»åŠ¡:è¯·æ±‚çš„æ“ä½œç ä¸æ”¯æŒ,æ“ä½œç :%d", st_JsonRoot["unOperatorCode"].asUInt());
 		return FALSE;
 	}
 	return TRUE;

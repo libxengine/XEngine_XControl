@@ -40,7 +40,7 @@ CXContral_Info::~CXContral_Info()
   意思：是否成功
 备注：
 *********************************************************************/
-BOOL CXContral_Info::XContral_Info_HardWare(TCHAR *ptszHWInfo,int *pInt_Len)
+BOOL CXContral_Info::XContral_Info_HardWare(CHAR *ptszHWInfo,int *pInt_Len)
 {
     BackManage_IsErrorOccur = FALSE;
 
@@ -51,11 +51,11 @@ BOOL CXContral_Info::XContral_Info_HardWare(TCHAR *ptszHWInfo,int *pInt_Len)
         return FALSE;
     }
     int nDiskNumber = 0;
-    TCHAR tszOSName[MAX_PATH];
+    CHAR tszOSName[MAX_PATH];
     DWORD nOSVersion;
     DWORD nOSBuild;
     DWORD nOSPro;
-    TCHAR tszOSInfo[1024];
+    CHAR tszOSInfo[1024];
     SYSTEMAPI_DISK_INFOMATION st_DiskInfo;
     SYSTEMAPI_CPU_INFOMATION st_CPUInfo;
     SYSTEMAPI_MEMORY_INFOMATION st_MemoryInfo;
@@ -74,14 +74,14 @@ BOOL CXContral_Info::XContral_Info_HardWare(TCHAR *ptszHWInfo,int *pInt_Len)
         BackManage_dwErrorCode = SystemApi_GetLastError();
         return FALSE;
     }
-    TCHAR tszDriveStr[MAX_PATH];
+    CHAR tszDriveStr[MAX_PATH];
     memset(tszDriveStr, '\0', MAX_PATH);
     
 #ifdef _WINDOWS
-    GetLogicalDriveStrings(MAX_PATH, tszDriveStr);
+    GetLogicalDriveStringsA(MAX_PATH, tszDriveStr);
 #else
-    LPCTSTR lpszDir = _T("/");
-    _tcscpy(tszDriveStr, lpszDir);
+    LPCSTR lpszDir = _T("/");
+    strcpy(tszDriveStr, lpszDir);
 #endif
 
     if (!SystemApi_HardWare_GetDiskInfomation(tszDriveStr,&st_DiskInfo, XENGINE_SYSTEMSDK_API_SYSTEM_SIZE_MB))
@@ -160,7 +160,7 @@ BOOL CXContral_Info::XContral_Info_HardWare(TCHAR *ptszHWInfo,int *pInt_Len)
     st_JsonRoot["Serial"] = st_JsonSerial;
     st_JsonRoot["NetCard"] = st_JsonNetCard;
 
-    _stprintf_s(tszOSInfo,_T("%s %lu %lu %lu"),tszOSName, nOSVersion,nOSBuild,nOSPro);
+    sprintf(tszOSInfo, "%s %lu %lu %lu", tszOSName, nOSVersion, nOSBuild, nOSPro);
     st_JsonRoot["Platfrom"] = tszOSInfo;
 
     if (*pInt_Len < (int)st_JsonRoot.toStyledString().length())
@@ -193,7 +193,7 @@ BOOL CXContral_Info::XContral_Info_HardWare(TCHAR *ptszHWInfo,int *pInt_Len)
   意思：是否成功
 备注：
 *********************************************************************/
-BOOL CXContral_Info::XContral_Info_SoftWare(TCHAR *ptszSWInfo,int *pInt_Len)
+BOOL CXContral_Info::XContral_Info_SoftWare(CHAR *ptszSWInfo,int *pInt_Len)
 {
     BackManage_IsErrorOccur = FALSE;
 
@@ -207,10 +207,10 @@ BOOL CXContral_Info::XContral_Info_SoftWare(TCHAR *ptszSWInfo,int *pInt_Len)
     DWORD nOSBuild;
     DWORD nOSProcessor;
     DWORD nOSVersion;
-    TCHAR tszOSInfo[MAX_PATH];
-    TCHAR tszUPTime[MAX_PATH];
-    TCHAR tszOSUser[MAX_PATH];
-    TCHAR tszServicePacket[MAX_PATH];
+    CHAR tszOSInfo[MAX_PATH];
+    CHAR tszUPTime[MAX_PATH];
+    CHAR tszOSUser[MAX_PATH];
+    CHAR tszServicePacket[MAX_PATH];
     XENGINE_LIBTIMER st_LibTimer;
 
     memset(tszOSInfo, '\0', MAX_PATH);
@@ -221,7 +221,7 @@ BOOL CXContral_Info::XContral_Info_SoftWare(TCHAR *ptszSWInfo,int *pInt_Len)
 
 #ifdef _WINDOWS
 	DWORD dwMaxSize = MAX_PATH;
-	if (!GetComputerName(tszOSUser, &dwMaxSize))
+	if (!GetComputerNameA(tszOSUser, &dwMaxSize))
 	{
 		BackManage_IsErrorOccur = TRUE;
 		BackManage_dwErrorCode = ERROR_NETENGINE_NETHELP_BACKMANAGE_GETINFO_SOFTWARE_GETNAME;
@@ -236,7 +236,7 @@ BOOL CXContral_Info::XContral_Info_SoftWare(TCHAR *ptszSWInfo,int *pInt_Len)
 		BackManage_dwErrorCode = ERROR_NETENGINE_NETHELP_BACKMANAGE_GETINFO_SOFTWARE_GETNAME;
 		return FALSE;
 	}
-    _tcscpy(tszOSUser, pSt_Passwd->pw_name);
+    strcpy(tszOSUser, pSt_Passwd->pw_name);
 #endif
     if (!SystemApi_System_GetSystemVer(tszOSInfo,&nOSVersion,&nOSBuild,&nOSProcessor))
     {
@@ -256,7 +256,7 @@ BOOL CXContral_Info::XContral_Info_SoftWare(TCHAR *ptszSWInfo,int *pInt_Len)
         BackManage_dwErrorCode = SystemApi_GetLastError();
         return FALSE;
     }
-    _stprintf_s(tszUPTime,_T("%04d-%02d-%02d %02d:%02d:%02d"),st_LibTimer.wYear,st_LibTimer.wMonth,st_LibTimer.wDay,st_LibTimer.wHour,st_LibTimer.wMinute,st_LibTimer.wSecond);
+    sprintf(tszUPTime, "%04d-%02d-%02d %02d:%02d:%02d", st_LibTimer.wYear, st_LibTimer.wMonth, st_LibTimer.wDay, st_LibTimer.wHour, st_LibTimer.wMinute, st_LibTimer.wSecond);
 
     Json::Value st_JsonRoot;
     Json::Value st_JsonSystem;

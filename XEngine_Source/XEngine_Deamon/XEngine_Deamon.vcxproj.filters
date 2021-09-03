@@ -15,42 +15,24 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="XEngine_XContral.cpp">
+    <ClCompile Include="XEngine_Deamon.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="XContral_Config.cpp">
+    <ClCompile Include="XEngine_APPEvents.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="XContral_Task.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="XContral_Handle.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="XContral_Network.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="XContral_Process.cpp">
+    <ClCompile Include="XEngine_Service.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="XContral_Config.h">
+    <ClInclude Include="XEngine_APPEvents.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="XContral_Hdr.h">
+    <ClInclude Include="XEngine_Hdr.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="XContral_Task.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="XContral_Handle.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="XContral_Network.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="XContral_Process.h">
+    <ClInclude Include="XEngine_Service.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
