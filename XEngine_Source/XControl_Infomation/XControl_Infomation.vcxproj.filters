@@ -13,11 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="头文件\XContral_Info">
-      <UniqueIdentifier>{6b5e799f-a85c-4ffc-86ef-37f650993aa0}</UniqueIdentifier>
+    <Filter Include="头文件\XControl_Info">
+      <UniqueIdentifier>{e4676031-dbb8-41f4-ae15-ae7c9be2ba5a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\XContral_Info">
-      <UniqueIdentifier>{a26ac211-34f8-475c-b0f3-43489d6ba3b1}</UniqueIdentifier>
+    <Filter Include="源文件\XControl_Info">
+      <UniqueIdentifier>{a97459f3-7907-4b4c-9f13-29317f24aea3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -27,8 +27,8 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="XContral_Info\XContral_Info.h">
-      <Filter>头文件\XContral_Info</Filter>
+    <ClInclude Include="XControl_Info\XControl_Info.h">
+      <Filter>头文件\XControl_Info</Filter>
     </ClInclude>
     <ClInclude Include="XInfo_Define.h">
       <Filter>头文件</Filter>
@@ -44,12 +44,12 @@
     <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="XContral_Info\XContral_Info.cpp">
-      <Filter>源文件\XContral_Info</Filter>
+    <ClCompile Include="XControl_Info\XControl_Info.cpp">
+      <Filter>源文件\XControl_Info</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="XContral_Infomation.def">
+    <None Include="XControl_Infomation.def">
       <Filter>源文件</Filter>
     </None>
   </ItemGroup>

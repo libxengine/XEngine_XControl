@@ -1,9 +1,9 @@
 ﻿#include "pch.h"
 #include "Configure_Json/Configure_Json.h"
 /********************************************************************
-//    Created:     2021/08/24  13:14:12
-//    File Name:   D:\XEngine_XContral\XEngine_Source\XContral_Configure\pch.cpp
-//    File Path:   D:\XEngine_XContral\XEngine_Source\XContral_Configure
+//    Created:     2021/09/08  10:08:11
+//    File Name:   D:\XEngine_XControl\XEngine_Source\XControl_Configure\pch.cpp
+//    File Path:   D:\XEngine_XControl\XEngine_Source\XControl_Configure
 //    File Base:   pch
 //    File Ext:    cpp
 //    Project:     XEngine(网络通信引擎)
@@ -15,9 +15,6 @@ BOOL Config_IsErrorOccur = FALSE;
 DWORD Config_dwErrorCode = 0;
 //////////////////////////////////////////////////////////////////////////
 CConfigure_Json m_ConfigJson;
-//////////////////////////////////////////////////////////////////////////
-//                    导出函数实现
-//////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 //                        导出的函数
 //////////////////////////////////////////////////////////////////////////

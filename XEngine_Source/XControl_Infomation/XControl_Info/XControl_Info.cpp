@@ -1,21 +1,21 @@
 #include "pch.h"
-#include "XContral_Info.h"
+#include "XControl_Info.h"
 /********************************************************************
-//	Created:	2017/5/26   14:09
-//	Filename: 	G:\NetEngine_Windows\NetEngine_SourceCode\NetEngine_NetHelp\NetHelp_BackManage\BackManage_GetInfo\BackManage_GetInfo.cpp
-//	File Path:	G:\NetEngine_Windows\NetEngine_SourceCode\NetEngine_NetHelp\NetHelp_BackManage\BackManage_GetInfo
-//	File Base:	BackManage_GetInfo
-//	File Ext:	cpp
-//  Project:    NetEngine(网络通信引擎)
-//	Author:		qyt
-//	Purpose:	信息收集类
-//	History:
+//    Created:     2021/09/08  10:12:32
+//    File Name:   D:\XEngine_XControl\XEngine_Source\XControl_Infomation\XControl_Info\XControl_Info.cpp
+//    File Path:   D:\XEngine_XControl\XEngine_Source\XControl_Infomation\XControl_Info
+//    File Base:   XControl_Info
+//    File Ext:    cpp
+//    Project:     XEngine(网络通信引擎)
+//    Author:      qyt
+//    Purpose:     信息收集类
+//    History:
 *********************************************************************/
-CXContral_Info::CXContral_Info()
+CXControl_Info::CXControl_Info()
 {
 
 }
-CXContral_Info::~CXContral_Info()
+CXControl_Info::~CXControl_Info()
 {
 
 }
@@ -23,7 +23,7 @@ CXContral_Info::~CXContral_Info()
 //                          公有函数
 //////////////////////////////////////////////////////////////////////////
 /********************************************************************
-函数名称：XContral_Info_HardWare
+函数名称：XControl_Info_HardWare
 函数功能：获取硬件信息
  参数.一：ptszHWInfo
   In/Out：Out
@@ -40,7 +40,7 @@ CXContral_Info::~CXContral_Info()
   意思：是否成功
 备注：
 *********************************************************************/
-BOOL CXContral_Info::XContral_Info_HardWare(CHAR *ptszHWInfo,int *pInt_Len)
+BOOL CXControl_Info::XControl_Info_HardWare(CHAR *ptszHWInfo,int *pInt_Len)
 {
     BackManage_IsErrorOccur = FALSE;
 
@@ -176,7 +176,7 @@ BOOL CXContral_Info::XContral_Info_HardWare(CHAR *ptszHWInfo,int *pInt_Len)
     return TRUE;
 }
 /********************************************************************
-函数名称：XContral_Info_SoftWare
+函数名称：XControl_Info_SoftWare
 函数功能：获取软件系统信息
  参数.一：ptszSWInfo
   In/Out：Out
@@ -193,7 +193,7 @@ BOOL CXContral_Info::XContral_Info_HardWare(CHAR *ptszHWInfo,int *pInt_Len)
   意思：是否成功
 备注：
 *********************************************************************/
-BOOL CXContral_Info::XContral_Info_SoftWare(CHAR *ptszSWInfo,int *pInt_Len)
+BOOL CXControl_Info::XControl_Info_SoftWare(CHAR *ptszSWInfo,int *pInt_Len)
 {
     BackManage_IsErrorOccur = FALSE;
 

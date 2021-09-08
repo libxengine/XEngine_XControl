@@ -13,45 +13,44 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\Configure_Json">
+      <UniqueIdentifier>{a6780ce3-4a96-47e6-b10d-4f479add718e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Configure_Json">
+      <UniqueIdentifier>{740ae17c-2737-4fef-ba1f-8c7cf61ca38d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="XEngine_XContral.cpp">
+    <ClInclude Include="framework.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Configure_Json\Configure_Json.h">
+      <Filter>头文件\Configure_Json</Filter>
+    </ClInclude>
+    <ClInclude Include="Config_Define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Config_Error.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="XContral_Config.cpp">
+    <ClCompile Include="pch.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="XContral_Task.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="XContral_Handle.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="XContral_Network.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="XContral_Process.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="Configure_Json\Configure_Json.cpp">
+      <Filter>源文件\Configure_Json</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="XContral_Config.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="XContral_Hdr.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="XContral_Task.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="XContral_Handle.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="XContral_Network.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="XContral_Process.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
+    <None Include="XControl_Configure.def">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

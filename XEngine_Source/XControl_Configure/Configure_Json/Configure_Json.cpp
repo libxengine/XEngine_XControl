@@ -47,7 +47,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	if ((NULL == lpszConfigFile) || (NULL == pSt_FileConfig))
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_PARAMENT;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_PARAMENT;
 		return FALSE;
 	}
 	JSONCPP_STRING st_JsonError;
@@ -58,7 +58,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	if (NULL == pSt_File)
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_OPENFILE;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_OPENFILE;
 		return FALSE;
 	}
 	int nCount = 0;
@@ -78,7 +78,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	if (!pSt_JsonReader->parse(tszMsgBuffer, tszMsgBuffer + nCount, &st_JsonRoot, &st_JsonError))
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_PARSE;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_PARSE;
 		return FALSE;
 	}
 
@@ -91,7 +91,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	if (st_JsonRoot["ClientTime"].empty() || (2 != st_JsonRoot["ClientTime"].size()))
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_TIME;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_TIME;
 		return FALSE;
 	}
 	Json::Value st_JsonTime = st_JsonRoot["ClientTime"];
@@ -101,7 +101,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	if (st_JsonRoot["ClientConfig"].empty() || (4 != st_JsonRoot["ClientConfig"].size()))
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_CLIENT;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_CLIENT;
 		return FALSE;
 	}
 	Json::Value st_JsonClient = st_JsonRoot["ClientConfig"];
@@ -113,7 +113,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	if (st_JsonRoot["RPCConfig"].empty() || (5 != st_JsonRoot["RPCConfig"].size()))
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_RPC;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_RPC;
 		return FALSE;
 	}
 	Json::Value st_JsonRPC = st_JsonRoot["RPCConfig"];
@@ -126,7 +126,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	if (st_JsonRoot["LogConfig"].empty() || (4 != st_JsonRoot["LogConfig"].size()))
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XENGINE_BLOGIC_CONFIG_JSON_XLOG;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_XLOG;
 		return FALSE;
 	}
 	Json::Value st_JsonXLog = st_JsonRoot["LogConfig"];
@@ -138,7 +138,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	if (st_JsonRoot["VersionList"].empty() || (1 != st_JsonRoot["VersionList"].size()))
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XENGINE_BLOGIC_CONFIG_JSON_VERSION;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_VERSION;
 		return FALSE;
 	}
 	Json::Value st_JsonVersion = st_JsonRoot["VersionList"];
@@ -175,7 +175,7 @@ BOOL CConfigure_Json::Config_Json_LoadList(LPCSTR lpszConfigFile, XENGINE_CONFIG
 	if ((NULL == lpszConfigFile) || (NULL == pSt_AppConfig))
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_PARAMENT;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_PARAMENT;
 		return FALSE;
 	}
 	JSONCPP_STRING st_JsonError;
@@ -186,7 +186,7 @@ BOOL CConfigure_Json::Config_Json_LoadList(LPCSTR lpszConfigFile, XENGINE_CONFIG
 	if (NULL == pSt_File)
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_OPENFILE;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_OPENFILE;
 		return FALSE;
 	}
 	int nCount = 0;
@@ -206,7 +206,7 @@ BOOL CConfigure_Json::Config_Json_LoadList(LPCSTR lpszConfigFile, XENGINE_CONFIG
 	if (!pSt_JsonReader->parse(tszMsgBuffer, tszMsgBuffer + nCount, &st_JsonRoot, &st_JsonError))
 	{
 		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_PARSE;
+		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_PARSE;
 		return FALSE;
 	}
 	int nListCount = st_JsonRoot["ListCount"].asInt();

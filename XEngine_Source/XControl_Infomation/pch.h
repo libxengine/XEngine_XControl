@@ -46,15 +46,15 @@ using namespace std;
 #include "XInfo_Define.h"
 #include "XInfo_Error.h"
 /********************************************************************
-//	Created:	2017/5/26   10:25
-//	Filename: 	G:\NetEngine_Windows\NetEngine_SourceCode\NetEngine_NetHelp\NetHelp_BackManage\BackManage_CommHdr.h
-//	File Path:	G:\NetEngine_Windows\NetEngine_SourceCode\NetEngine_NetHelp\NetHelp_BackManage
-//	File Base:	BackManage_CommHdr
-//	File Ext:	h
-//  Project:    NetEngine(网络通信引擎)
-//	Author:		qyt
-//	Purpose:	后台管理服务公用头文件
-//	History:
+//    Created:     2021/09/08  10:12:13
+//    File Name:   D:\XEngine_XControl\XEngine_Source\XControl_Infomation\pch.h
+//    File Path:   D:\XEngine_XControl\XEngine_Source\XControl_Infomation
+//    File Base:   pch
+//    File Ext:    h
+//    Project:     XEngine(网络通信引擎)
+//    Author:      qyt
+//    Purpose:     后台管理服务公用头文件
+//    History:
 *********************************************************************/
 extern BOOL BackManage_IsErrorOccur;
 extern DWORD BackManage_dwErrorCode;
