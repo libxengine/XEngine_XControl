@@ -39,6 +39,18 @@ XHTHREAD CALLBACK XContral_RPCThread(LPVOID lParam)
 	}
 	return 0;
 }
+BOOL XContral_RPC_Free(list<PROTOCOL_XRPCPARAMETE> *pStl_ListParamete)
+{
+	auto stl_ListIterator = pStl_ListParamete->begin();
+	for (; stl_ListIterator != pStl_ListParamete->end(); ++stl_ListIterator)
+	{
+		free(stl_ListIterator->lParameteValue);
+		stl_ListIterator->lParameteValue = NULL;
+	}
+	pStl_ListParamete->clear();
+	return TRUE;
+}
+
 BOOL XContral_RPC_Handle(RFCCOMPONENTS_HTTP_REQPARAM* pSt_HTTPParam, LPCSTR lpszClientAddr, LPCSTR lpszMsgBuffer, int nMsgLen, CHAR** pptszListHdr, int nHdrCount)
 {
 	CHAR tszFuncName[128];
@@ -54,6 +66,6 @@ BOOL XContral_RPC_Handle(RFCCOMPONENTS_HTTP_REQPARAM* pSt_HTTPParam, LPCSTR lpsz
 	{
 
 	}
-	//NetHelp_XRPCHelp_Free(&ppSt_ListParamete, nListCount);
+	XContral_RPC_Free(&stl_ListParamete);
 	return TRUE;
 }
