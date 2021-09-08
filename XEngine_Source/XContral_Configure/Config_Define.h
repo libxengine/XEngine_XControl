@@ -32,6 +32,14 @@ typedef struct tag_XEngine_ServerConfig
 		int nPort;
 		BOOL bEnable;
 	}st_Client;
+	struct  
+	{
+		int nPort;
+		int nThread;
+		int nClient;
+		int nTimeCheck;
+		int nTimeOut;
+	}st_XRpc;
 	struct
 	{
 		CHAR tszLogFile[MAX_PATH];

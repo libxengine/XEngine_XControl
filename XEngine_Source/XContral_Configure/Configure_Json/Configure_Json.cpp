@@ -110,6 +110,19 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	pSt_FileConfig->st_Client.nPort = st_JsonClient["nPort"].asInt();
 	strcpy(pSt_FileConfig->st_Client.tszIPAddr, st_JsonClient["tszIPAddr"].asCString());
 
+	if (st_JsonRoot["RPCConfig"].empty() || (5 != st_JsonRoot["RPCConfig"].size()))
+	{
+		Config_IsErrorOccur = TRUE;
+		Config_dwErrorCode = ERROR_XCONTRAL_MODULE_CONFIG_JSON_RPC;
+		return FALSE;
+	}
+	Json::Value st_JsonRPC = st_JsonRoot["RPCConfig"];
+	pSt_FileConfig->st_XRpc.nPort = st_JsonRPC["nPort"].asInt();
+	pSt_FileConfig->st_XRpc.nThread = st_JsonRPC["nThread"].asInt();
+	pSt_FileConfig->st_XRpc.nClient = st_JsonRPC["nClient"].asInt();
+	pSt_FileConfig->st_XRpc.nTimeCheck = st_JsonRPC["nTimeCheck"].asInt();
+	pSt_FileConfig->st_XRpc.nTimeOut = st_JsonRPC["nTimeOut"].asInt();
+
 	if (st_JsonRoot["LogConfig"].empty() || (4 != st_JsonRoot["LogConfig"].size()))
 	{
 		Config_IsErrorOccur = TRUE;
