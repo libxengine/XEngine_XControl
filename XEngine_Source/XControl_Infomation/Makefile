@@ -7,7 +7,7 @@ LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XE
 LIB = -lXEngine_BaseLib -lXEngine_SystemApi -lNetHelp_APIHelp -ljsoncpp
 LIBEX = -static-libgcc -lrt -ldl -lpthread
 LOADSO = -Wl,-rpath=,--disable-new-dtags
-LIBINCLUDE = XContral_Info.o pch.o
+LIBINCLUDE = XControl_Info.o pch.o
 
 ifeq ($(RELEASE),1)
 FLAGS = -c -O2 
@@ -30,19 +30,19 @@ else
 endif
 
 all:$(LIBINCLUDE)
-	$(CC) $(DEBUG) $(LIBINCLUDE) -o libXContral_Infomation.so -shared -fPIC $(LOADBIN) $(LIB) $(LIBEX) $(LOADSO)
+	$(CC) $(DEBUG) $(LIBINCLUDE) -o libXControl_Infomation.so -shared -fPIC $(LOADBIN) $(LIB) $(LIBEX) $(LOADSO)
 
 
-XContral_Info.o:./XContral_Info/XContral_Info.cpp                         
-	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./XContral_Info/XContral_Info.cpp
+XControl_Info.o:./XControl_Info/XControl_Info.cpp                         
+	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./XControl_Info/XControl_Info.cpp
 
 pch.o:./pch.cpp                          
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) ./pch.cpp
 
 
 InstallAll:InstallSo 
-InstallSo:./libXContral_Infomation.so
-	cp ./libXContral_Infomation.so ../../XEngine_Release/libXContral_Infomation.so
+InstallSo:./libXControl_Infomation.so
+	cp ./libXControl_Infomation.so ../../XEngine_Release/libXControl_Infomation.so
 
 
 

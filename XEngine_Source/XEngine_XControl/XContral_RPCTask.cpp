@@ -41,19 +41,8 @@ XHTHREAD CALLBACK XContral_RPCThread(LPVOID lParam)
 }
 BOOL XContral_RPC_Handle(RFCCOMPONENTS_HTTP_REQPARAM* pSt_HTTPParam, LPCSTR lpszClientAddr, LPCSTR lpszMsgBuffer, int nMsgLen, CHAR** pptszListHdr, int nHdrCount)
 {
-	int nSDLen = 2048;
-	int nRVLen = 2048;
-	int nJSLen = 0;
-	int nMsgType = 0;
-	CHAR tszSDBuffer[2048];
-	CHAR tszRVBuffer[2048];
-	CHAR* ptszMsgBuffer = NULL;
-	list<PROTOCOL_XRPCPARAMETE> stl_ListParamete;
-
-	memset(tszSDBuffer, '\0', sizeof(tszSDBuffer));
-	memset(tszRVBuffer, '\0', sizeof(tszRVBuffer));
-
 	CHAR tszFuncName[128];
+	list<PROTOCOL_XRPCPARAMETE> stl_ListParamete;
 	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE enXRPC_ReturnType;
 
 	memset(tszFuncName, '\0', sizeof(tszFuncName));
@@ -61,7 +50,7 @@ BOOL XContral_RPC_Handle(RFCCOMPONENTS_HTTP_REQPARAM* pSt_HTTPParam, LPCSTR lpsz
 	{
 		return FALSE;
 	}
-	if (0 == _strnicmp(tszFuncName, "XEngine_AddMethod", strlen(tszFuncName)))
+	if (0 == strncmp(tszFuncName, "XEngine_AddMethod", strlen(tszFuncName)))
 	{
 
 	}

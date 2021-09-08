@@ -30,7 +30,7 @@ else
 endif
 
 all:$(LIBINCLUDE)
-	$(CC) $(DEBUG) $(LIBINCLUDE) -o libXContral_Configure.so -shared -fPIC $(LOADBIN) $(LIB) $(LIBEX) $(LOADSO)
+	$(CC) $(DEBUG) $(LIBINCLUDE) -o libXControl_Configure.so -shared -fPIC $(LOADBIN) $(LIB) $(LIBEX) $(LOADSO)
 
 
 Configure_Json.o:./Configure_Json/Configure_Json.cpp                         
@@ -41,8 +41,8 @@ pch.o:./pch.cpp
 
 
 InstallAll:InstallSo 
-InstallSo:./libXContral_Configure.so
-	cp ./libXContral_Configure.so ../../XEngine_Release/libXContral_Configure.so
+InstallSo:./libXControl_Configure.so
+	cp ./libXControl_Configure.so ../../XEngine_Release/libXControl_Configure.so
 
 
 CleanAll:CleanObj CleanMk
