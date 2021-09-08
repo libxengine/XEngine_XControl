@@ -1,0 +1,7 @@
+LIBRARY
+
+EXPORTS
+	Protocol_GetLastError
+
+	Protocol_Packet_FuncCall
+	Protocol_Parse_FuncCall
