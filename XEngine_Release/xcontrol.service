@@ -1,4 +1,4 @@
-# XContral systemd service file
+# XControl systemd service file
 
 [Unit]
 Description=XEngine Backstage Service
@@ -10,7 +10,7 @@ WantedBy=multi-user.target
 
 [Service]
 Type=forking
-PIDFile=/run/xcontral.pid
-ExecStart=/usr/sbin/XEngine_XContral/XEngine_XContralApp
+PIDFile=/run/xcontrol.pid
+ExecStart=/usr/sbin/XEngine_XControl/XEngine_XControlApp
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s QUIT $MAINPID

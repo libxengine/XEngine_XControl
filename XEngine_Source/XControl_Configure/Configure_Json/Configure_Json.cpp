@@ -135,7 +135,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	pSt_FileConfig->st_XLog.nLogLeave = st_JsonXLog["nLogLeave"].asInt();
 	strcpy(pSt_FileConfig->st_XLog.tszLogFile, st_JsonXLog["tszLogFile"].asCString());
 
-	if (st_JsonRoot["VersionList"].empty() || (1 != st_JsonRoot["VersionList"].size()))
+	if (st_JsonRoot["VersionList"].empty())
 	{
 		Config_IsErrorOccur = TRUE;
 		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_VERSION;
