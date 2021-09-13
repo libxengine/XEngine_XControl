@@ -11,33 +11,6 @@
 //    History:
 *********************************************************************/
 //////////////////////////////////////////////////////////////////////////
-//                        导出的枚举型
-//////////////////////////////////////////////////////////////////////////
-//类型
-typedef enum 
-{
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_UNKNOW = 0,                           //未知类型,请求端可以为0,不指定
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_VOID = 1,                             //无类型,使用此类型作为返回值,服务器将不返回任何东西
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_BOOL = 2,                             //逻辑型
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_INT = 3,                              //整数型
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_UINT = 4,                             //无符号整数型
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_LONGINT = 5,                          //长整数型
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_ULONG = 6,                            //无符号长整数型
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_FLOAT = 7,                            //浮点型
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_DOUBLE = 8,                           //双精度浮点型
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_STRING = 9,                           //字符串
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_BIN = 10                              //二进制数据
-}ENUM_PROTOCOL_XRPC_PARAMETE_TYPE, * LPENUM_PROTOCOL_XRPC_PARAMETE_TYPE;
-//////////////////////////////////////////////////////////////////////////
-//                        导出的数据结构
-//////////////////////////////////////////////////////////////////////////
-typedef struct 
-{
-	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE enXRPC_ParameteType;                  //参数类型
-	int nParameteLen;                                                     //参数大小,数值相关类型这个值可以为0
-	LPVOID lParameteValue;                                                //自定义参数值
-}PROTOCOL_XRPCPARAMETE, * LPPROTOCOL_XRPCPARAMETE;
-//////////////////////////////////////////////////////////////////////////
 //                        导出函数
 //////////////////////////////////////////////////////////////////////////
 extern "C" DWORD Protocol_GetLastError(int* pInt_SysError = NULL);
@@ -45,7 +18,7 @@ extern "C" DWORD Protocol_GetLastError(int* pInt_SysError = NULL);
 /*                        封装类函数                                    */
 /************************************************************************/
 /********************************************************************
-函数名称：Protocol_Packet_FuncCall
+函数名称：Protocol_Packet_RPCResponse
 函数功能：打包返回客户端数据库的协议函数
  参数.一：lpszFuncName
   In/Out：In
@@ -82,12 +55,51 @@ extern "C" DWORD Protocol_GetLastError(int* pInt_SysError = NULL);
   意思：是否成功
 备注：
 *********************************************************************/
-extern "C" BOOL Protocol_Packet_FuncCall(LPCSTR lpszFuncName, LPCSTR lpszValue, int nMsgLen, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE enXRPC_ParamType, CHAR* ptszMsgBuffer, int* pInt_MsgLen);
+extern "C" BOOL Protocol_Packet_RPCResponse(LPCSTR lpszFuncName, LPCSTR lpszValue, int nMsgLen, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE enXRPC_ParamType, CHAR* ptszMsgBuffer, int* pInt_MsgLen);
+/********************************************************************
+函数名称：Protocol_Packet_RPCRequest
+函数功能：打包远程调用函数协议
+ 参数.一：lpszFuncName
+  In/Out：In
+  类型：常量字符指针
+  可空：N
+  意思：输入函数名称
+ 参数.二：enRtnType
+  In/Out：In
+  类型：枚举型
+  可空：N
+  意思：输入返回值类型
+ 参数.三：pppSt_ListParamete
+  In/Out：In
+  类型：三级指针
+  可空：N
+  意思：输入参数
+ 参数.四：nListCount
+  In/Out：In
+  类型：整数型
+  可空：N
+  意思：输入参数个数
+ 参数.五：ptszMsgBuffer
+  In/Out：Out
+  类型：字符指针
+  可空：N
+  意思：输出打好包的数据
+ 参数.六：pInt_MsgLen
+  In/Out：In/Out
+  类型：整数型指针
+  可空：N
+  意思：输入:提供缓冲区大小 输出:打包的数据大小
+返回值
+  类型：逻辑型
+  意思：是否成功
+备注：pppSt_ListParamete内存由用户申请和释放
+*********************************************************************/
+extern "C" BOOL Protocol_Packet_RPCRequest(LPCSTR lpszFuncName, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE enRtnType, list<PROTOCOL_XRPCPARAMETE>* pStl_ListParament, CHAR* ptszMsgBuffer, int* pInt_MsgLen);
 /************************************************************************/
 /*                        解析类函数                                    */
 /************************************************************************/
 /********************************************************************
-函数名称：Protocol_Parse_FuncCall
+函数名称：Protocol_Parse_RPCRequest
 函数功能：服务器解析函数调用
  参数.一：lpszFuncName
   In/Out：In
@@ -124,4 +136,33 @@ extern "C" BOOL Protocol_Packet_FuncCall(LPCSTR lpszFuncName, LPCSTR lpszValue, 
   意思：是否成功
 备注：必须使用帮助函数的内存释放函数进行释放内存
 *********************************************************************/
-extern "C" BOOL Protocol_Parse_FuncCall(LPCSTR lpszMsgBuffer, int nMsgLen, CHAR* ptszFuncName, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE* penRtnType, list<PROTOCOL_XRPCPARAMETE>* pStl_ListParamete);
+extern "C" BOOL Protocol_Parse_RPCRequest(LPCSTR lpszMsgBuffer, int nMsgLen, CHAR* ptszFuncName, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE* penRtnType, list<PROTOCOL_XRPCPARAMETE>* pStl_ListParamete);
+/********************************************************************
+函数名称：Protocol_Parse_RPCReponse
+函数功能：客户端返回数据解析函数
+ 参数.一：lpszMsgBuffer
+  In/Out：In
+  类型：常量字符指针
+  可空：N
+  意思：输入要解析的缓冲区
+ 参数.二：nMsgLen
+  In/Out：In
+  类型：整数型
+  可空：N
+  意思：输入缓冲区大小
+ 参数.三：ptszFuncName
+  In/Out：Out
+  类型：字符指针
+  可空：N
+  意思：输出服务器返回的函数名称
+ 参数.四：pSt_RPCParament
+  In/Out：Out
+  类型：数据结构指针
+  可空：N
+  意思：输出返回的数据
+返回值
+  类型：逻辑型
+  意思：是否成功
+备注：
+*********************************************************************/
+extern "C" BOOL Protocol_Parse_RPCReponse(LPCSTR lpszMsgBuffer, int nMsgLen, CHAR* ptszFuncName, PROTOCOL_XRPCPARAMETE* pSt_RPCParament);

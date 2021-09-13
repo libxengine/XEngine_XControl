@@ -17,7 +17,8 @@ public:
     CProtocol_Parse();
     ~CProtocol_Parse();
 public:
-    BOOL Protocol_Parse_FuncCall(LPCSTR lpszMsgBuffer, int nMsgLen, CHAR* ptszFuncName, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE* penRtnType, list<PROTOCOL_XRPCPARAMETE>* pStl_ListParamete);
+    BOOL Protocol_Parse_RPCRequest(LPCSTR lpszMsgBuffer, int nMsgLen, CHAR* ptszFuncName, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE* penRtnType, list<PROTOCOL_XRPCPARAMETE>* pStl_ListParamete);
+    BOOL Protocol_Parse_RPCReponse(LPCSTR lpszMsgBuffer, int nMsgLen, CHAR* ptszFuncName, PROTOCOL_XRPCPARAMETE* pSt_RPCParament);
 protected:
 private:
 };

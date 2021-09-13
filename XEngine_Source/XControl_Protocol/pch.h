@@ -29,6 +29,7 @@
 #include <XEngine_Include/XEngine_ProtocolHdr.h>
 #include <XEngine_Include/XEngine_Core/OPenSsl_Define.h>
 #include <XEngine_Include/XEngine_Core/OPenSsl_Error.h>
+#include "../XControl_Protocol.h"
 using namespace std;
 #include "Protocol_Define.h"
 #include "Protocol_Error.h"
