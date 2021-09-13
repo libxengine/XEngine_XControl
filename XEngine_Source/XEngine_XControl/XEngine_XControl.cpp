@@ -59,11 +59,11 @@ int main(int argc, char** argv)
 #ifdef _WINDOWS
 	WSADATA st_WSAData;
 	WSAStartup(MAKEWORD(2, 2), &st_WSAData);
-	LPCSTR lpszWndName = "XEngine_XContralApp";
+	LPCSTR lpszWndName = "XEngine_XControlApp";
 #endif
 	bIsRun = TRUE;
-	LPCSTR lpszHTTPCode = "./XEngine_Config/HttpCode.types";
-	LPCSTR lpszHTTPMime = "./XEngine_Config/HttpMime.types";
+	LPCSTR lpszHTTPCode = "./XContral_Config/HttpCode.types";
+	LPCSTR lpszHTTPMime = "./XContral_Config/HttpMime.types";
 	THREADPOOL_PARAMENT** ppSt_ListRPCParam;
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 
@@ -74,7 +74,7 @@ int main(int argc, char** argv)
 
 	if (!XContral_Parament(argc, argv))
 	{
-		printf("初始化参数失败!\n");
+		printf("初始化参数失败,错误:%lX!\n", Config_GetLastError());
 		goto NETSERVICE_APPEXIT;
 	}
 	st_XLogConfig.XLog_MaxBackupFile = st_ServiceConfig.st_XLog.nMaxCount;
@@ -313,7 +313,7 @@ int main(int argc, char** argv)
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动RPC网络服务器失败，错误：%lX", NetCore_GetLastError());
 		goto NETSERVICE_APPEXIT;
 	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，启动RPC网络服务器成功,rpc端口:%d,IO:%d", st_ServiceConfig.st_XRpc.nPort, st_ServiceConfig.st_XRpc.nThread);
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，启动RPC网络服务器成功,RPC端口:%d,IO:%d", st_ServiceConfig.st_XRpc.nPort, st_ServiceConfig.st_XRpc.nThread);
 	NetCore_TCPXCore_RegisterCallBackEx(xhRPCSocket, XContral_Callback_RPCLogin, XContral_Callback_RPCRecv, XContral_Callback_RPCLeave);
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，注册RPC网络事件成功");
 

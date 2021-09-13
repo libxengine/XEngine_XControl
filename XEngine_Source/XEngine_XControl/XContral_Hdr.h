@@ -112,9 +112,15 @@ extern XENGIEN_EMAILCONFIG st_EMailConfig;
 #pragma comment(lib,"x64/XEngine_SystemSdk/XEngine_SystemApi.lib")
 #pragma comment(lib,"x64/XEngine_DownLoad/XEngine_DownLoad.lib")
 #else
+#ifdef _DEBUG
 #pragma comment(lib,"../Debug/XControl_Configure.lib")
 #pragma comment(lib,"../Debug/XControl_Infomation.lib")
 #pragma comment(lib,"../Debug/XControl_Protocol.lib")
+#else
+#pragma comment(lib,"../Release/XControl_Configure.lib")
+#pragma comment(lib,"../Release/XControl_Infomation.lib")
+#pragma comment(lib,"../Release/XControl_Protocol.lib")
+#endif
 #pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
 #pragma comment(lib,"x86/XEngine_Core/XEngine_OPenSsl.lib")
 #pragma comment(lib,"x86/XEngine_Core/XEngine_Core.lib")

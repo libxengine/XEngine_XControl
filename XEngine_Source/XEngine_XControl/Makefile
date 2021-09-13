@@ -52,4 +52,4 @@ CleanAll:CleanObj CleanMk
 CleanObj:                                              
 	rm *.o
 CleanMk:                                  
-	rm XEngine_XContralApp
+	rm XEngine_XControlApp

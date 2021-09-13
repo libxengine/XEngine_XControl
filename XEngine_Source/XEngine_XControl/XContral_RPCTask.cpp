@@ -58,13 +58,14 @@ BOOL XContral_RPC_Handle(RFCCOMPONENTS_HTTP_REQPARAM* pSt_HTTPParam, LPCSTR lpsz
 	ENUM_PROTOCOL_XRPC_PARAMETE_TYPE enXRPC_ReturnType;
 
 	memset(tszFuncName, '\0', sizeof(tszFuncName));
-	if (!Protocol_Parse_FuncCall(lpszMsgBuffer, nMsgLen, tszFuncName, &enXRPC_ReturnType, &stl_ListParamete))
+	if (!Protocol_Parse_RPCRequest(lpszMsgBuffer, nMsgLen, tszFuncName, &enXRPC_ReturnType, &stl_ListParamete))
 	{
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "RPC客户端:%s,处理客户端请求失败,错误：%lX", lpszClientAddr, Protocol_GetLastError());
 		return FALSE;
 	}
 	if (0 == strncmp(tszFuncName, "XEngine_AddMethod", strlen(tszFuncName)))
 	{
-
+		XRPCCore_Task_CalMethod(lpszClientAddr, tszFuncName, enXRPC_ReturnType, &stl_ListParamete);
 	}
 	XContral_RPC_Free(&stl_ListParamete);
 	return TRUE;
