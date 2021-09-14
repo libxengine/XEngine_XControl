@@ -51,7 +51,7 @@ extern DWORD Protocol_dwErrorCode;
 #ifdef _DEBUG
 #pragma comment(lib,"x86/XEngine_Core/XEngine_OPenSsl.lib")
 #else
-#ifdef WIN64
+#ifdef _WIN64
 #pragma comment(lib,"x64/XEngine_Core/XEngine_OPenSsl.lib")
 #else
 #pragma comment(lib,"x86/XEngine_Core/XEngine_OPenSsl.lib")
