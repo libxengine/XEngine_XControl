@@ -62,7 +62,7 @@ void WINAPI ServiceMain()
 	//读取配置
 	XENGINE_SERVERCONFIG st_ServiceConfig;
 	memset(&st_ServiceConfig, '\0', sizeof(XENGINE_SERVERCONFIG));
-	LPCSTR lpszBaseCfg = "./XContral_Config/XEngine_Config.json";
+	LPCSTR lpszBaseCfg = "./XControl_Config/XEngine_Config.json";
 
 	if (!Config_Json_File(lpszBaseCfg, &st_ServiceConfig))
 	{
@@ -71,7 +71,7 @@ void WINAPI ServiceMain()
 	//////////////////////////////////////////////////////////////////////////
 	st_XLogConfig.XLog_MaxBackupFile = st_ServiceConfig.st_XLog.nMaxCount;
 	st_XLogConfig.XLog_MaxSize = st_ServiceConfig.st_XLog.nMaxSize;
-	strcpy(st_XLogConfig.tszFileName, "./XContral_Log/XEngine_Deamon.log");
+	strcpy(st_XLogConfig.tszFileName, "./XControl_Log/XEngine_Deamon.log");
 	xhLog = HelpComponents_XLog_Init(HELPCOMPONENTS_XLOG_OUTTYPE_FILE | HELPCOMPONENTS_XLOG_OUTTYPE_STD, &st_XLogConfig);
 	if (NULL == xhLog)
 	{
