@@ -85,14 +85,15 @@ extern XENGINE_SERVERCONFIG st_ServiceConfig;
 extern XENGINE_CONFIGAPP st_APPConfig;
 extern XENGIEN_EMAILCONFIG st_EMailConfig;
 
-#include "XContral_Config.h"
-#include "XContral_Handle.h"
-#include "XContral_Task.h"
-#include "XContral_Network.h"
-#include "XContral_Process.h"
-#include "XContral_RPCTask.h"
+#include "XControl_Config.h"
+#include "XControl_Handle.h"
+#include "XControl_Task.h"
+#include "XControl_Network.h"
+#include "XControl_Process.h"
+#include "XControl_RPCTask.h"
 
-#include "XContral_RPCTask/RPCTask_CalMethod.h"
+#include "XControl_RPCTask/RPCTask_MethodCal.h"
+#include "XControl_RPCTask/RPCTask_MethodMessage.h"
 
 #ifdef _WINDOWS
 #pragma comment(lib,"Ws2_32.lib")

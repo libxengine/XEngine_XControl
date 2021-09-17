@@ -148,24 +148,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="XContral_Config.cpp" />
-    <ClCompile Include="XContral_Handle.cpp" />
-    <ClCompile Include="XContral_Network.cpp" />
-    <ClCompile Include="XContral_Process.cpp" />
-    <ClCompile Include="XContral_RPCTask.cpp" />
-    <ClCompile Include="XContral_RPCTask\RPCTask_CalMethod.cpp" />
-    <ClCompile Include="XContral_Task.cpp" />
+    <ClCompile Include="XControl_Config.cpp" />
+    <ClCompile Include="XControl_Handle.cpp" />
+    <ClCompile Include="XControl_Network.cpp" />
+    <ClCompile Include="XControl_Process.cpp" />
+    <ClCompile Include="XControl_RPCTask.cpp" />
+    <ClCompile Include="XControl_RPCTask\RPCTask_MethodCal.cpp" />
+    <ClCompile Include="XControl_RPCTask\RPCTask_MethodMessage.cpp" />
+    <ClCompile Include="XControl_Task.cpp" />
     <ClCompile Include="XEngine_XControl.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="XContral_Config.h" />
-    <ClInclude Include="XContral_Handle.h" />
-    <ClInclude Include="XContral_Hdr.h" />
-    <ClInclude Include="XContral_Network.h" />
-    <ClInclude Include="XContral_Process.h" />
-    <ClInclude Include="XContral_RPCTask.h" />
-    <ClInclude Include="XContral_RPCTask\RPCTask_CalMethod.h" />
-    <ClInclude Include="XContral_Task.h" />
+    <ClInclude Include="XControl_Config.h" />
+    <ClInclude Include="XControl_Handle.h" />
+    <ClInclude Include="XControl_Hdr.h" />
+    <ClInclude Include="XControl_Network.h" />
+    <ClInclude Include="XControl_Process.h" />
+    <ClInclude Include="XControl_RPCTask.h" />
+    <ClInclude Include="XControl_RPCTask\RPCTask_MethodCal.h" />
+    <ClInclude Include="XControl_RPCTask\RPCTask_MethodMessage.h" />
+    <ClInclude Include="XControl_Task.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

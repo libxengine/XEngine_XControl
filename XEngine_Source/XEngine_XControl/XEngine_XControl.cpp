@@ -1,4 +1,4 @@
-﻿#include "XContral_Hdr.h"
+﻿#include "XControl_Hdr.h"
 
 BOOL bIsRun = FALSE;
 BOOL bExist = FALSE;
@@ -62,8 +62,8 @@ int main(int argc, char** argv)
 	LPCSTR lpszWndName = "XEngine_XControlApp";
 #endif
 	bIsRun = TRUE;
-	LPCSTR lpszHTTPCode = "./XContral_Config/HttpCode.types";
-	LPCSTR lpszHTTPMime = "./XContral_Config/HttpMime.types";
+	LPCSTR lpszHTTPCode = "./XControl_Config/HttpCode.types";
+	LPCSTR lpszHTTPMime = "./XControl_Config/HttpMime.types";
 	THREADPOOL_PARAMENT** ppSt_ListRPCParam;
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 	memset(&st_APPConfig, '\0', sizeof(XENGINE_CONFIGAPP));
 	memset(&st_EMailConfig, '\0', sizeof(XENGIEN_EMAILCONFIG));
 
-	if (!XContral_Parament(argc, argv))
+	if (!XControl_Parament(argc, argv))
 	{
 		printf("初始化参数失败,错误:%lX!\n", Config_GetLastError());
 		goto NETSERVICE_APPEXIT;
@@ -101,8 +101,8 @@ int main(int argc, char** argv)
 	{
 		UCHAR tszEnBuffer[4096];
 		CHAR tszDeBuffer[4096];
-		LPCSTR lpszSrcFile = "./XContral_Config/Manage_EMail.ini";
-		LPCSTR lpszDstFile = "./XContral_Config/Manage_EMail.ini.dat";
+		LPCSTR lpszSrcFile = "./XControl_Config/Manage_EMail.ini";
+		LPCSTR lpszDstFile = "./XControl_Config/Manage_EMail.ini.dat";
 
 		memset(tszEnBuffer, '\0', sizeof(tszEnBuffer));
 		memset(tszDeBuffer, '\0', sizeof(tszDeBuffer));
@@ -134,7 +134,7 @@ int main(int argc, char** argv)
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，初始化信号处理成功");
 	if (st_ServiceConfig.bAutoStart)
 	{
-		if (!SystemApi_Process_AutoStart("XEngine", "XEngine_XContral"))
+		if (!SystemApi_Process_AutoStart("XEngine", "XEngine_XControl"))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，注册软件开机启动失败!错误:%lX", SystemApi_GetLastError());
 			goto NETSERVICE_APPEXIT;
@@ -169,7 +169,7 @@ int main(int argc, char** argv)
 
 	if (0 != _access(st_ServiceConfig.tszTmpFile, 0))
 	{
-		if (XContral_Parament_EMail())
+		if (XControl_Parament_EMail())
 		{
 			if (st_EMailConfig.bEnable)
 			{
@@ -240,7 +240,7 @@ int main(int argc, char** argv)
 				goto NETSERVICE_APPEXIT;
 			}
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，创建TCP连接成功,地址:%s,端口:%d", st_ServiceConfig.st_Client.tszIPAddr, st_ServiceConfig.st_Client.nPort);
-			pSTDThread_TCP = make_shared<std::thread>(XContral_Thread_TCPTask);
+			pSTDThread_TCP = make_shared<std::thread>(XControl_Thread_TCPTask);
 			if (!pSTDThread_TCP->joinable())
 			{
 				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，创建TCP任务线程失败");
@@ -256,7 +256,7 @@ int main(int argc, char** argv)
 				goto NETSERVICE_APPEXIT;
 			}
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，创建UDP连接成功,地址:%s,端口:%d", st_ServiceConfig.st_Client.tszIPAddr, st_ServiceConfig.st_Client.nPort);
-			pSTDThread_UDP = make_shared<std::thread>(XContral_Thread_UDPTask);
+			pSTDThread_UDP = make_shared<std::thread>(XControl_Thread_UDPTask);
 			if (!pSTDThread_UDP->joinable())
 			{
 				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，创建UDP任务线程失败");
@@ -270,7 +270,7 @@ int main(int argc, char** argv)
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, "启动服务中，客户端被设置为不自动连接");
 	}
 	//创建任务线程
-	pSTDThread_Http = make_shared<std::thread>(XContral_Thread_HttpTask);
+	pSTDThread_Http = make_shared<std::thread>(XControl_Thread_HttpTask);
 	if (!pSTDThread_Http->joinable())
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，创建HTTP任务线程失败");
@@ -296,7 +296,7 @@ int main(int argc, char** argv)
 
 	if (st_ServiceConfig.st_XRpc.nTimeCheck > 0)
 	{
-		if (!SocketOpt_HeartBeat_InitEx(&xhRPCHeart, st_ServiceConfig.st_XRpc.nTimeOut, st_ServiceConfig.st_XRpc.nTimeCheck, XContral_Callback_RPCHeart))
+		if (!SocketOpt_HeartBeat_InitEx(&xhRPCHeart, st_ServiceConfig.st_XRpc.nTimeOut, st_ServiceConfig.st_XRpc.nTimeCheck, XControl_Callback_RPCHeart))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "初始化RPC心跳服务失败，错误：%lX", NetCore_GetLastError());
 			goto NETSERVICE_APPEXIT;
@@ -314,7 +314,7 @@ int main(int argc, char** argv)
 		goto NETSERVICE_APPEXIT;
 	}
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，启动RPC网络服务器成功,RPC端口:%d,IO:%d", st_ServiceConfig.st_XRpc.nPort, st_ServiceConfig.st_XRpc.nThread);
-	NetCore_TCPXCore_RegisterCallBackEx(xhRPCSocket, XContral_Callback_RPCLogin, XContral_Callback_RPCRecv, XContral_Callback_RPCLeave);
+	NetCore_TCPXCore_RegisterCallBackEx(xhRPCSocket, XControl_Callback_RPCLogin, XControl_Callback_RPCRecv, XControl_Callback_RPCLeave);
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，注册RPC网络事件成功");
 
 	BaseLib_OperatorMemory_Malloc((XPPPMEM)&ppSt_ListRPCParam, st_ServiceConfig.st_XRpc.nThread, sizeof(THREADPOOL_PARAMENT));
@@ -324,7 +324,7 @@ int main(int argc, char** argv)
 
 		*pInt_Pos = i;
 		ppSt_ListRPCParam[i]->lParam = pInt_Pos;
-		ppSt_ListRPCParam[i]->fpCall_ThreadsTask = XContral_RPCThread;
+		ppSt_ListRPCParam[i]->fpCall_ThreadsTask = XControl_RPCThread;
 	}
 	if (!ManagePool_Thread_NQCreate(&xhRPCPool, &ppSt_ListRPCParam, st_ServiceConfig.st_XRpc.nThread))
 	{

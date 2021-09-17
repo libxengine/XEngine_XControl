@@ -1,6 +1,6 @@
-﻿#include "XContral_Hdr.h"
+﻿#include "XControl_Hdr.h"
 
-XHTHREAD XContral_Thread_HttpTask()
+XHTHREAD XControl_Thread_HttpTask()
 {
 	time_t nTimeStart = time(NULL);
 
@@ -11,7 +11,7 @@ XHTHREAD XContral_Thread_HttpTask()
 		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, NULL, &ptszMsgBody, &nBLen))
 		{
 			nTimeStart = time(NULL);//更新
-			XContral_Task_ProtocolParse(ptszMsgBody, nBLen);
+			XControl_Task_ProtocolParse(ptszMsgBody, nBLen);
 		}
 		BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBody);
 		//通过一个简单的任务处理机制来延迟
@@ -27,7 +27,7 @@ XHTHREAD XContral_Thread_HttpTask()
 	}
 	return 0;
 }
-XHTHREAD XContral_Thread_TCPTask()
+XHTHREAD XControl_Thread_TCPTask()
 {
 	CHAR tszMsgBuffer[4096];
 
@@ -37,13 +37,13 @@ XHTHREAD XContral_Thread_TCPTask()
 		memset(tszMsgBuffer, '\0', sizeof(tszMsgBuffer));
 		if (XClient_TCPSelect_RecvMsg(hTCPSocket, tszMsgBuffer, &nMsgLen))
 		{
-			XContral_Task_ProtocolParse(tszMsgBuffer, nMsgLen);
+			XControl_Task_ProtocolParse(tszMsgBuffer, nMsgLen);
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 	return 0;
 }
-XHTHREAD XContral_Thread_UDPTask()
+XHTHREAD XControl_Thread_UDPTask()
 {
 	CHAR tszMsgBuffer[4096];
 
@@ -53,14 +53,14 @@ XHTHREAD XContral_Thread_UDPTask()
 		memset(tszMsgBuffer, '\0', sizeof(tszMsgBuffer));
 		if (XClient_TCPSelect_RecvMsg(hUDPSocket, tszMsgBuffer, &nMsgLen))
 		{
-			XContral_Task_ProtocolParse(tszMsgBuffer, nMsgLen);
+			XControl_Task_ProtocolParse(tszMsgBuffer, nMsgLen);
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 	return 0;
 }
 //////////////////////////////////////////////////////////////////////////
-BOOL XContral_Task_ProtocolParse(LPCSTR lpszMsgBuffer, int nMsgLen)
+BOOL XControl_Task_ProtocolParse(LPCSTR lpszMsgBuffer, int nMsgLen)
 {
 	Json::Value st_JsonRoot;
 	Json::CharReaderBuilder st_JsonBuild;
@@ -180,7 +180,7 @@ BOOL XContral_Task_ProtocolParse(LPCSTR lpszMsgBuffer, int nMsgLen)
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTP任务:请求文件列表失败,错误码:%lX", SystemApi_GetLastError());
 			return FALSE;
 		}
-		XContral_Handle_PostListFile(ppszFileList, nListCount, st_JsonRoot["PostUrl"].asCString());
+		XControl_Handle_PostListFile(ppszFileList, nListCount, st_JsonRoot["PostUrl"].asCString());
 		BaseLib_OperatorMemory_Free((XPPPMEM)&ppszFileList, nListCount);
 	}
 		break;

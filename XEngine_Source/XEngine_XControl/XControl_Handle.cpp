@@ -1,6 +1,6 @@
-﻿#include "XContral_Hdr.h"
+﻿#include "XControl_Hdr.h"
 
-BOOL XContral_Handle_PostListFile(CHAR** ppszFileList, int nListCount, LPCSTR lpszPostUrl)
+BOOL XControl_Handle_PostListFile(CHAR** ppszFileList, int nListCount, LPCSTR lpszPostUrl)
 {
 	Json::Value st_JsonRoot;
 	Json::Value st_JsonArray;

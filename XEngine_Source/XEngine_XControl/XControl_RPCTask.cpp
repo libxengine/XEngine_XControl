@@ -1,6 +1,6 @@
-﻿#include "XContral_Hdr.h"
+﻿#include "XControl_Hdr.h"
 
-XHTHREAD CALLBACK XContral_RPCThread(LPVOID lParam)
+XHTHREAD CALLBACK XControl_RPCThread(LPVOID lParam)
 {
 	int nThreadPos = *(int*)lParam;
 	nThreadPos++;
@@ -31,7 +31,7 @@ XHTHREAD CALLBACK XContral_RPCThread(LPVOID lParam)
 					XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTP服务器获取消息失败，获取数据包失败，错误：%lX", HttpServer_GetLastError());
 					continue;
 				}
-				XContral_RPC_Handle(&st_HTTPReqparam, ppSst_ListAddr[i]->tszClientAddr, ptszMsgBuffer, nMsgLen, ppszHdrList, nHdrCount);
+				XControl_RPC_Handle(&st_HTTPReqparam, ppSst_ListAddr[i]->tszClientAddr, ptszMsgBuffer, nMsgLen, ppszHdrList, nHdrCount);
 				BaseLib_OperatorMemory_FreeCStyle((VOID**)&ptszMsgBuffer);
 			}
 		}
@@ -39,7 +39,7 @@ XHTHREAD CALLBACK XContral_RPCThread(LPVOID lParam)
 	}
 	return 0;
 }
-BOOL XContral_RPC_Free(list<PROTOCOL_XRPCPARAMETE> *pStl_ListParamete)
+BOOL XControl_RPC_Free(list<PROTOCOL_XRPCPARAMETE> *pStl_ListParamete)
 {
 	auto stl_ListIterator = pStl_ListParamete->begin();
 	for (; stl_ListIterator != pStl_ListParamete->end(); ++stl_ListIterator)
@@ -51,7 +51,7 @@ BOOL XContral_RPC_Free(list<PROTOCOL_XRPCPARAMETE> *pStl_ListParamete)
 	return TRUE;
 }
 
-BOOL XContral_RPC_Handle(RFCCOMPONENTS_HTTP_REQPARAM* pSt_HTTPParam, LPCSTR lpszClientAddr, LPCSTR lpszMsgBuffer, int nMsgLen, CHAR** pptszListHdr, int nHdrCount)
+BOOL XControl_RPC_Handle(RFCCOMPONENTS_HTTP_REQPARAM* pSt_HTTPParam, LPCSTR lpszClientAddr, LPCSTR lpszMsgBuffer, int nMsgLen, CHAR** pptszListHdr, int nHdrCount)
 {
 	CHAR tszFuncName[128];
 	list<PROTOCOL_XRPCPARAMETE> stl_ListParamete;
@@ -63,10 +63,14 @@ BOOL XContral_RPC_Handle(RFCCOMPONENTS_HTTP_REQPARAM* pSt_HTTPParam, LPCSTR lpsz
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "RPC客户端:%s,处理客户端请求失败,错误：%lX", lpszClientAddr, Protocol_GetLastError());
 		return FALSE;
 	}
-	if (0 == strncmp(tszFuncName, "XEngine_AddMethod", strlen(tszFuncName)))
+	if (0 == strncmp(tszFuncName, "XEngine_MethodCal", strlen(tszFuncName)))
 	{
-		XRPCCore_Task_CalMethod(lpszClientAddr, tszFuncName, enXRPC_ReturnType, &stl_ListParamete);
+		XRPCCore_Task_MethodCal(lpszClientAddr, tszFuncName, enXRPC_ReturnType, &stl_ListParamete);
 	}
-	XContral_RPC_Free(&stl_ListParamete);
+	if (0 == strncmp(tszFuncName, "XEngine_MethodMessage", strlen(tszFuncName)))
+	{
+		XRPCCore_Task_MethodMessage(lpszClientAddr, tszFuncName, enXRPC_ReturnType, &stl_ListParamete);
+	}
+	XControl_RPC_Free(&stl_ListParamete);
 	return TRUE;
 }

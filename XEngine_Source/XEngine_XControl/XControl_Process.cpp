@@ -1,4 +1,4 @@
-﻿#include "XContral_Hdr.h"
+﻿#include "XControl_Hdr.h"
 
 BOOL APPManage_CreateService(XENGINE_APPINFO *pSt_APPInfo)
 {

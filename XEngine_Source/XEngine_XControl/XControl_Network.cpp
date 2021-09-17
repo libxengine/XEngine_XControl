@@ -1,13 +1,13 @@
-﻿#include "XContral_Hdr.h"
+﻿#include "XControl_Hdr.h"
 
-BOOL __stdcall XContral_Callback_RPCLogin(LPCSTR lpszClientAddr, SOCKET hSocket, LPVOID lParam)
+BOOL __stdcall XControl_Callback_RPCLogin(LPCSTR lpszClientAddr, SOCKET hSocket, LPVOID lParam)
 {
 	SocketOpt_HeartBeat_InsertAddrEx(xhRPCHeart, lpszClientAddr);
 	RfcComponents_HttpServer_CreateClientEx(xhRPCPacket, lpszClientAddr, 0);
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "RPC客户端连接，RPC客户端地址：%s", lpszClientAddr);
 	return TRUE;
 }
-void __stdcall XContral_Callback_RPCRecv(LPCSTR lpszClientAddr, SOCKET hSocket, LPCSTR lpszRecvMsg, int nMsgLen, LPVOID lParam)
+void __stdcall XControl_Callback_RPCRecv(LPCSTR lpszClientAddr, SOCKET hSocket, LPCSTR lpszRecvMsg, int nMsgLen, LPVOID lParam)
 {
 	if (!RfcComponents_HttpServer_InserQueueEx(xhRPCPacket, lpszClientAddr, lpszRecvMsg, nMsgLen))
 	{
@@ -16,16 +16,16 @@ void __stdcall XContral_Callback_RPCRecv(LPCSTR lpszClientAddr, SOCKET hSocket, 
 	}
 	SocketOpt_HeartBeat_ActiveAddrEx(xhRPCHeart, lpszClientAddr);
 }
-void __stdcall XContral_Callback_RPCLeave(LPCSTR lpszClientAddr, SOCKET hSocket, LPVOID lParam)
+void __stdcall XControl_Callback_RPCLeave(LPCSTR lpszClientAddr, SOCKET hSocket, LPVOID lParam)
 {
-	XContral_Client_Close(lpszClientAddr, XENGINE_CONTRALAPP_NETTYPE_XPRC, FALSE);
+	XControl_Client_Close(lpszClientAddr, XENGINE_CONTRALAPP_NETTYPE_XPRC, FALSE);
 }
-void __stdcall XContral_Callback_RPCHeart(LPCSTR lpszClientAddr, SOCKET hSocket, int nStatus, LPVOID lParam)
+void __stdcall XControl_Callback_RPCHeart(LPCSTR lpszClientAddr, SOCKET hSocket, int nStatus, LPVOID lParam)
 {
-	XContral_Client_Close(lpszClientAddr, XENGINE_CONTRALAPP_NETTYPE_XPRC, TRUE);
+	XControl_Client_Close(lpszClientAddr, XENGINE_CONTRALAPP_NETTYPE_XPRC, TRUE);
 }
 //////////////////////////////////////////////////////////////////////////
-void XContral_Client_Close(LPCSTR lpszClientAddr, int nIPProto, BOOL bHeart)
+void XControl_Client_Close(LPCSTR lpszClientAddr, int nIPProto, BOOL bHeart)
 {
 	if (XENGINE_CONTRALAPP_NETTYPE_XPRC == nIPProto)
 	{
@@ -47,7 +47,7 @@ void XContral_Client_Close(LPCSTR lpszClientAddr, int nIPProto, BOOL bHeart)
 	}
 }
 //////////////////////////////////////////////////////////////////////////
-BOOL XContral_Client_Send(LPCSTR lpszClientAddr, LPCSTR lpszMsgBuffer, int nMsgLen, int nIPProto)
+BOOL XControl_Client_Send(LPCSTR lpszClientAddr, LPCSTR lpszMsgBuffer, int nMsgLen, int nIPProto)
 {
 	if (XENGINE_CONTRALAPP_NETTYPE_XPRC == nIPProto)
 	{

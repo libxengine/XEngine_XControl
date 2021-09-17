@@ -6,4 +6,4 @@ typedef struct
 	CHAR tszFileName[MAX_PATH];
 }XCONTRAL_FILEINFO;
 
-BOOL XContral_Handle_PostListFile(CHAR** ppszFileList, int nListCount, LPCSTR lpszPostUrl);
+BOOL XControl_Handle_PostListFile(CHAR** ppszFileList, int nListCount, LPCSTR lpszPostUrl);

@@ -1,10 +1,10 @@
-﻿#include "XContral_Hdr.h"
+﻿#include "XControl_Hdr.h"
 
-BOOL XContral_Parament(int argc, char **argv)
+BOOL XControl_Parament(int argc, char **argv)
 {
 
-    LPCSTR lpszBaseCfg = "./XContral_Config/XEngine_Config.json";
-    LPCSTR lpszListCfg = "./XContral_Config/XEngine_ConfigList.json";
+    LPCSTR lpszBaseCfg = "./XControl_Config/XEngine_Config.json";
+    LPCSTR lpszListCfg = "./XControl_Config/XEngine_ConfigList.json";
 
     if (!Config_Json_File(lpszBaseCfg, &st_ServiceConfig))
     {
@@ -19,7 +19,7 @@ BOOL XContral_Parament(int argc, char **argv)
     {
         if ((0 == strcmp("-h", argv[i])) || (0 == strcmp("-H", argv[i])))
         {
-            XContral_ParamentHelp();
+            XControl_ParamentHelp();
             return FALSE;
         }
         if ((0 == strcmp("-v", argv[i])) || (0 == strcmp("-V", argv[i])))
@@ -42,12 +42,12 @@ BOOL XContral_Parament(int argc, char **argv)
     }
     return TRUE;
 }
-BOOL XContral_Parament_EMail()
+BOOL XControl_Parament_EMail()
 {
     CHAR tszEnBuffer[4096];
     CHAR tszDeBuffer[4096];
-    LPCSTR lpszSrcFile = "./XContral_Config/XContral_EMail.ini.dat";
-    LPCSTR lpszDstFile = "./XContral_Config/XContral_EMail.ini.bak";
+    LPCSTR lpszSrcFile = "./XControl_Config/XControl_EMail.ini.dat";
+    LPCSTR lpszDstFile = "./XControl_Config/XControl_EMail.ini.bak";
 
     memset(tszEnBuffer, '\0', sizeof(tszEnBuffer));
     memset(tszDeBuffer, '\0', sizeof(tszDeBuffer));
@@ -105,7 +105,7 @@ BOOL XContral_Parament_EMail()
     remove(lpszDstFile);
     return TRUE;
 }
-void XContral_ParamentHelp()
+void XControl_ParamentHelp()
 {
     printf("--------------------------启动参数帮助开始--------------------------\n");
     printf("后台管理服务启动参数：程序 参数 参数值，参数是区分大小写的。如果不指定将会加载默认的ini配置文件里面的参数\n");
