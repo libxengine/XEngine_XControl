@@ -1,0 +1,35 @@
+{
+  "tszTaskUrl": "http://127.0.0.1:5580/Api/task/GetTask",
+  "tszTmpFile": "./XControl_Temp/XEngine_File.dat",
+  "tszAPPDeamon": "D:\\XEngine_XControl\\XEngine_Source\\Debug\\MFCApplication1.exe",
+  "bAutoStart": 0,
+  "bHideWnd": 0,
+  "ClientTime": {
+    "nCheckTime": 1,
+    "nErrorTime": 3
+  },
+  "ClientConfig": {
+    "bEnable": 0,
+    "nIPType": 6,
+    "nPort": 5001,
+    "tszIPAddr": "127.0.0.1"
+  },
+  "RPCConfig": {
+    "nPort": 5002,
+    "nThread": 2,
+    "nClient": 10000,
+    "nTimeCheck": 3,
+    "nTimeOut": 5
+  },
+  "LogConfig": {
+    "nMaxSize": 1024000,
+    "nMaxCount": 10,
+    "nLogLeave": 32,
+    "tszLogFile": "./XControl_Log/XEngien_Control.log"
+  },
+  "VersionList": [
+    "3.0.0.1001",
+    "2.1.0.1001",
+    "2.0.0.1001"
+  ]
+}

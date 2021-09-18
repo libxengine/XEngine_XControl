@@ -1,0 +1,10 @@
+LIBRARY
+
+EXPORTS
+	Protocol_GetLastError
+
+	Protocol_Packet_RPCResponse
+	Protocol_Packet_RPCRequest
+
+	Protocol_Parse_RPCRequest
+	Protocol_Parse_RPCReponse

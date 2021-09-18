@@ -1,7 +1,0 @@
-LIBRARY
-
-EXPORTS
-	XInfo_GetLastError
-
-	XContral_Info_HardWare
-	XContral_Info_SoftWare

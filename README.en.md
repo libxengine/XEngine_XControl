@@ -15,6 +15,7 @@ Lightweight background service management tool,control your computer with HTTP o
 5. Support HTTP task acceptance processing  
 6. support connect protocol for tcp and udp  
 7. support deamon local service and process and Strategy control
+8. support user writer xrpc protocol to process events
 
 #### Installation
 
@@ -66,6 +67,12 @@ make FLAGS=CleanAll clear
 6.  -c parament create a encrypto email info file  
 7.  run..  
 
+## directory struct
+- XEngine_Docment   docment directory
+- XEngine_Release   install directory
+- XEngine_Source    code    directory
+- XEngine_APPClient example client
+
 ## system task list
 nothing to do...   
 delete file  
@@ -80,14 +87,10 @@ execute command
 connenct  
 user custom protocol start  
 
-## directory struct
-- XEngine_Docment  docment directory
-- XEngine_Release  install directory
-- XEngine_Source   code    directory
-
 ## Clean up statement
 the software will not generate any files to other directories in your system.  
 the software can achieve complete cleanup by directly delete the directory.  
+the software will not modify any of your system configuration.  
 
 ## Participate in contribution
 

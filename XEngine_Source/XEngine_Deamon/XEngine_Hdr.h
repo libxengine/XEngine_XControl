@@ -13,8 +13,8 @@
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Define.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Error.h>
 using namespace std;
-#include "../XContral_Configure/Config_Define.h"
-#include "../XContral_Configure/Config_Error.h"
+#include "../XControl_Configure/Config_Define.h"
+#include "../XControl_Configure/Config_Error.h"
 #include "XEngine_APPEvents.h"
 #include "XEngine_Service.h"
 /********************************************************************
@@ -42,14 +42,14 @@ extern SERVICE_STATUS st_Status;
 #pragma comment(lib, "Shlwapi.lib")
 #pragma comment(lib, "advapi32.lib")
 #ifdef _WIN64
-#pragma comment(lib,"../x64/Release/XContral_Configure.lib")
+#pragma comment(lib,"../x64/Release/XControl_Configure.lib")
 #pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
 #pragma comment(lib,"x64/XEngine_HelpComponents/HelpComponents_XLog.lib")
 #else
 #ifdef _DEBUG
-#pragma comment(lib,"../Debug/XContral_Configure.lib")
+#pragma comment(lib,"../Debug/XControl_Configure.lib")
 #else
-#pragma comment(lib,"../Release/XContral_Configure.lib")
+#pragma comment(lib,"../Release/XControl_Configure.lib")
 #endif
 #pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
 #pragma comment(lib,"x86/XEngine_HelpComponents/HelpComponents_XLog.lib")

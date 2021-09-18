@@ -1,0 +1,16 @@
+# XControl systemd service file
+
+[Unit]
+Description=XEngine Backstage Service
+Documentation=http://www.xyry.org
+After=network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=forking
+PIDFile=/run/xcontrol.pid
+ExecStart=/usr/sbin/XEngine_XControl/XEngine_XControlApp
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID

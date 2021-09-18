@@ -1,0 +1,7 @@
+LIBRARY
+
+EXPORTS
+	XInfo_GetLastError
+
+	XControl_Info_HardWare
+	XControl_Info_SoftWare

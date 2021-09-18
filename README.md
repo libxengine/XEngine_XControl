@@ -14,13 +14,14 @@ c c++
 4. 支持一些高级特性  
 5. 支持HTTP任务接受处理  
 6. 支持TCP,UDP连接协议控制  
-7. 支持守护本地服务和程序以及策略控制
+7. 支持守护本地服务和程序以及策略控制  
+8. 支持用户编写PRC来处理事件  
 
 ## 安装教程
 
 #### 版本需求
 支持WINDOWS 7SP1和LINUX(UBUNT20.04,CENTOS8)以上系统  
-XEngine版本需要V7.20或者以上版本  
+XEngine版本需要V7.21或者以上版本  
 vcpkg 需要2021.05.11以上版本  
 
 #### Windows
@@ -66,9 +67,10 @@ make FLAGS=CleanAll 清理编译
 7.  运行  
 
 ## 目录结构
-- XEngine_Docment  文档目录结构  
-- XEngine_Release  安装目录结构  
-- XEngine_Source   源代目录结构  
+- XEngine_Docment   文档目录结构  
+- XEngine_Release   安装目录结构  
+- XEngine_Source    源代目录结构  
+- XEngine_APPClient 示例客户端
 
 ## 系统任务列表
 没有需要执行的任务  
@@ -88,6 +90,7 @@ make FLAGS=CleanAll 清理编译
 ## 绿色声明
 此软件不会产生任何文件到你的系统的其他目录中.  
 此软件可通过直接删除主目录而达到完全清理目的.  
+此软件不会修改你的任何系统配置.  
 
 ## 参与贡献
 
