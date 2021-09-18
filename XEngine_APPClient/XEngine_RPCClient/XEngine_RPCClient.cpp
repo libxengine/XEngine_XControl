@@ -61,7 +61,7 @@ int XEngine_AddMethod(int a, int b)
 
 	stl_ListParament.push_back(st_XRPCParameteB);
 
-    Protocol_Packet_RPCRequest("XEngine_AddMethod", ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_INT, &stl_ListParament, tszMsgBuffer, &nMsgLen);
+    Protocol_Packet_RPCRequest("XEngine_MethodCal", ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_INT, &stl_ListParament, tszMsgBuffer, &nMsgLen);
 
 	int nBLen = 0;
 	CHAR* ptszMsgBody;
