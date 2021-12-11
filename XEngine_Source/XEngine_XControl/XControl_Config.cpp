@@ -77,10 +77,10 @@ BOOL XControl_Parament_EMail()
     fclose(pSt_DeFile);
 
     st_EMailConfig.st_EMailSmtp.bIsCall = FALSE;
-	BaseLib_OperatorFile_ReadProfileToString(lpszDstFile, "Email", "SmtpAddr", st_EMailConfig.st_EMailSmtp.tszServiceAddr);
-	BaseLib_OperatorFile_ReadProfileToString(lpszDstFile, "Email", "SmtpUser", st_EMailConfig.st_EMailSmtp.tszUserName);
-	BaseLib_OperatorFile_ReadProfileToString(lpszDstFile, "Email", "SmtpPass", st_EMailConfig.st_EMailSmtp.tszPassWord);
-	BaseLib_OperatorFile_ReadProfileToString(lpszDstFile, "Email", "SmtpFrom", st_EMailConfig.st_EMailSmtp.tszFromAddr);
+	BaseLib_OperatorFile_ReadProfileFromFile(lpszDstFile, "Email", "SmtpAddr", st_EMailConfig.st_EMailSmtp.tszServiceAddr);
+    BaseLib_OperatorFile_ReadProfileFromFile(lpszDstFile, "Email", "SmtpUser", st_EMailConfig.st_EMailSmtp.tszUserName);
+    BaseLib_OperatorFile_ReadProfileFromFile(lpszDstFile, "Email", "SmtpPass", st_EMailConfig.st_EMailSmtp.tszPassWord);
+    BaseLib_OperatorFile_ReadProfileFromFile(lpszDstFile, "Email", "SmtpFrom", st_EMailConfig.st_EMailSmtp.tszFromAddr);
 
     int i = 0;
     while (1)
@@ -93,7 +93,7 @@ BOOL XControl_Parament_EMail()
         memset(tszSendValue, '\0', sizeof(tszSendValue));
 
         sprintf(tszSendKey, "MailAddr%d", i);
-        if (BaseLib_OperatorFile_ReadProfileToString(lpszDstFile, "SendTo", tszSendKey, tszSendValue) <= 0)
+        if (BaseLib_OperatorFile_ReadProfileFromFile(lpszDstFile, "SendTo", tszSendKey, tszSendValue) <= 0)
         {
             break;
         }
