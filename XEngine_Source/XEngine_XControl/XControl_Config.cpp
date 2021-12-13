@@ -47,7 +47,6 @@ BOOL XControl_Parament_EMail()
     CHAR tszEnBuffer[4096];
     CHAR tszDeBuffer[4096];
     LPCSTR lpszSrcFile = "./XControl_Config/XControl_EMail.ini.dat";
-    LPCSTR lpszDstFile = "./XControl_Config/XControl_EMail.ini.bak";
 
     memset(tszEnBuffer, '\0', sizeof(tszEnBuffer));
     memset(tszDeBuffer, '\0', sizeof(tszDeBuffer));
@@ -55,32 +54,29 @@ BOOL XControl_Parament_EMail()
     st_EMailConfig.pStl_ListAddr = new list<string>;
 
     FILE* pSt_EnFile = fopen(lpszSrcFile, "rb");
-    FILE* pSt_DeFile = fopen(lpszDstFile, "wb");
-    if (NULL == pSt_EnFile || NULL == pSt_DeFile)
+    if (NULL == pSt_EnFile)
     {
         XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，获取电子邮件信息文件失败,无法发送邮件信息，错误:%d", errno);
         return FALSE;
     }
-    int nERet = fread(tszEnBuffer, 1, sizeof(tszEnBuffer), pSt_EnFile);
-    if (nERet <= 0)
+    int nRet = fread(tszEnBuffer, 1, sizeof(tszEnBuffer), pSt_EnFile);
+    if (nRet <= 0)
     {
         XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，获取电子邮件配置信息失败,无法发送邮件信息，错误:%d", errno);
         return FALSE;
     }
-    if (!OPenSsl_XCrypto_Decoder(tszEnBuffer, &nERet, tszDeBuffer, "xengineemail"))
+    if (!OPenSsl_XCrypto_Decoder(tszEnBuffer, &nRet, tszDeBuffer, "xengineemail"))
     {
         XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，解密电子邮件信息失败,无法发送邮件信息，错误:%lX", OPenSsl_GetLastError());
         return FALSE;
     }
-    fwrite(tszDeBuffer, 1, nERet, pSt_DeFile);
     fclose(pSt_EnFile);
-    fclose(pSt_DeFile);
 
     st_EMailConfig.st_EMailSmtp.bIsCall = FALSE;
-	BaseLib_OperatorFile_ReadProfileFromFile(lpszDstFile, "Email", "SmtpAddr", st_EMailConfig.st_EMailSmtp.tszServiceAddr);
-    BaseLib_OperatorFile_ReadProfileFromFile(lpszDstFile, "Email", "SmtpUser", st_EMailConfig.st_EMailSmtp.tszUserName);
-    BaseLib_OperatorFile_ReadProfileFromFile(lpszDstFile, "Email", "SmtpPass", st_EMailConfig.st_EMailSmtp.tszPassWord);
-    BaseLib_OperatorFile_ReadProfileFromFile(lpszDstFile, "Email", "SmtpFrom", st_EMailConfig.st_EMailSmtp.tszFromAddr);
+	BaseLib_OperatorFile_ReadProfileFromMemory(tszDeBuffer, nRet, "Email", "SmtpAddr", st_EMailConfig.st_EMailSmtp.tszServiceAddr);
+    BaseLib_OperatorFile_ReadProfileFromMemory(tszDeBuffer, nRet, "Email", "SmtpUser", st_EMailConfig.st_EMailSmtp.tszUserName);
+    BaseLib_OperatorFile_ReadProfileFromMemory(tszDeBuffer, nRet, "Email", "SmtpPass", st_EMailConfig.st_EMailSmtp.tszPassWord);
+    BaseLib_OperatorFile_ReadProfileFromMemory(tszDeBuffer, nRet, "Email", "SmtpFrom", st_EMailConfig.st_EMailSmtp.tszFromAddr);
 
     int i = 0;
     while (1)
@@ -93,16 +89,14 @@ BOOL XControl_Parament_EMail()
         memset(tszSendValue, '\0', sizeof(tszSendValue));
 
         sprintf(tszSendKey, "MailAddr%d", i);
-        if (BaseLib_OperatorFile_ReadProfileFromFile(lpszDstFile, "SendTo", tszSendKey, tszSendValue) <= 0)
+        if (BaseLib_OperatorFile_ReadProfileFromMemory(tszDeBuffer, nRet, "SendTo", tszSendKey, tszSendValue) <= 0)
         {
             break;
         }
         st_EMailConfig.pStl_ListAddr->push_back(tszSendValue);
     }
     XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，获得电子邮件配置信息,将发送数据");
-
     st_EMailConfig.bEnable = TRUE;
-    remove(lpszDstFile);
     return TRUE;
 }
 void XControl_ParamentHelp()
