@@ -93,16 +93,20 @@ int main(int argc, char** argv)
 	signal(SIGTERM, ServiceApp_Stop);
 	signal(SIGABRT, ServiceApp_Stop);
 
-	if ((XENGINE_VERSION_KERNEL < 7) || (XENGINE_VERSION_MAIN < 20))
+	//每秒小于10KB就认为网络有问题
+	if (!APIHelp_HttpRequest_SetGlobalTime(1, 10, 100))
 	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, "启动服务中，检查到XENGINE版本号不正确，可能会造成无法预料的错误");
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，设置HTTP全局超时失败，错误:%d", APIHelp_GetLastError());
+		goto NETSERVICE_APPEXIT;
 	}
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，设置HTTP全局超时成功");
+
 	if (st_EMailConfig.bCreateEmail)
 	{
 		UCHAR tszEnBuffer[4096];
 		CHAR tszDeBuffer[4096];
-		LPCSTR lpszSrcFile = "./XControl_Config/Manage_EMail.ini";
-		LPCSTR lpszDstFile = "./XControl_Config/Manage_EMail.ini.dat";
+		LPCSTR lpszSrcFile = "./XControl_Config/XControl_EMail.ini";
+		LPCSTR lpszDstFile = "./XControl_Config/XControl_EMail.ini.dat";
 
 		memset(tszEnBuffer, '\0', sizeof(tszEnBuffer));
 		memset(tszDeBuffer, '\0', sizeof(tszDeBuffer));
@@ -183,8 +187,6 @@ int main(int argc, char** argv)
 				memset(tszHWInfo, '\0', sizeof(tszHWInfo));
 				memset(tszRPInfo, '\0', sizeof(tszRPInfo));
 
-				LPCSTR lpszSendAddr = "<486179@qq.com>";
-
 				XNETHANDLE xhSmtp;
 				if (!RfcComponents_EMailClient_SmtpInit(&xhSmtp, &st_EMailConfig.st_EMailSmtp))
 				{
@@ -202,10 +204,14 @@ int main(int argc, char** argv)
 					goto NETSERVICE_APPEXIT;
 				}
 				sprintf(tszRPInfo, "%s\r\n%s", tszSWInfo, tszHWInfo);
-				if (!RfcComponents_EMailClient_SmtpSend(xhSmtp, lpszSendAddr, "XEngine控制后台信息报告", tszRPInfo))
+
+				for (auto stl_ListIterator = st_EMailConfig.pStl_ListAddr->begin(); stl_ListIterator != st_EMailConfig.pStl_ListAddr->end(); stl_ListIterator++)
 				{
-					XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，投递系统信息消息失败,错误:%lX", EMailClient_GetLastError());
-					goto NETSERVICE_APPEXIT;
+					if (!RfcComponents_EMailClient_SmtpSend(xhSmtp, stl_ListIterator->c_str(), "XEngine控制后台信息报告", tszRPInfo))
+					{
+						XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，投递系统信息消息失败,错误:%lX", EMailClient_GetLastError());
+						continue;
+					}
 				}
 				RfcComponents_EMailClient_SmtpClose(xhSmtp);
 
@@ -269,22 +275,6 @@ int main(int argc, char** argv)
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, "启动服务中，客户端被设置为不自动连接");
 	}
-	//创建任务线程
-	pSTDThread_Http = make_shared<std::thread>(XControl_Thread_HttpTask);
-	if (!pSTDThread_Http->joinable())
-	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，创建HTTP任务线程失败");
-		goto NETSERVICE_APPEXIT;
-	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，创建HTTP任务线程成功");
-
-	pSTDThread_App = make_shared<std::thread>(APPManage_Thread_Process);
-	if (!pSTDThread_App->joinable())
-	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务器，启动进程守护线程失败，无法继续...");
-		goto NETSERVICE_APPEXIT;
-	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，初始化进程的守护线程成功");
 	//RPC服务
 	xhRPCPacket = RfcComponents_HttpServer_InitEx(lpszHTTPCode, lpszHTTPMime, st_ServiceConfig.st_XRpc.nThread);
 	if (NULL == xhRPCPacket)
@@ -332,6 +322,22 @@ int main(int argc, char** argv)
 		goto NETSERVICE_APPEXIT;
 	}
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，启动RPC线程池服务成功,启动个数:%d", st_ServiceConfig.st_XRpc.nThread);
+	//创建任务线程
+	pSTDThread_Http = make_shared<std::thread>(XControl_Thread_HttpTask);
+	if (!pSTDThread_Http->joinable())
+	{
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，创建HTTP任务线程失败");
+		goto NETSERVICE_APPEXIT;
+	}
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，创建HTTP任务线程成功");
+
+	pSTDThread_App = make_shared<std::thread>(APPManage_Thread_Process);
+	if (!pSTDThread_App->joinable())
+	{
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务器，启动进程守护线程失败，无法继续...");
+		goto NETSERVICE_APPEXIT;
+	}
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，初始化进程的守护线程成功");
 
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，所有服务已经启动完毕,程序运行中...");
 	while (TRUE)

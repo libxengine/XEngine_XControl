@@ -2,7 +2,6 @@
 
 BOOL XControl_Parament(int argc, char **argv)
 {
-
     LPCSTR lpszBaseCfg = "./XControl_Config/XEngine_Config.json";
     LPCSTR lpszListCfg = "./XControl_Config/XEngine_ConfigList.json";
 
