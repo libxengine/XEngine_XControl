@@ -50,8 +50,6 @@ BOOL XControl_Parament_EMail()
     memset(tszEnBuffer, '\0', sizeof(tszEnBuffer));
     memset(tszDeBuffer, '\0', sizeof(tszDeBuffer));
 
-    st_EMailConfig.pStl_ListAddr = new list<string>;
-
     FILE* pSt_EnFile = fopen(lpszSrcFile, "rb");
     if (NULL == pSt_EnFile)
     {
@@ -77,23 +75,7 @@ BOOL XControl_Parament_EMail()
     BaseLib_OperatorFile_ReadProfileFromMemory(tszDeBuffer, nRet, "Email", "SmtpPass", st_EMailConfig.st_EMailSmtp.tszPassWord);
     BaseLib_OperatorFile_ReadProfileFromMemory(tszDeBuffer, nRet, "Email", "SmtpFrom", st_EMailConfig.st_EMailSmtp.tszFromAddr);
 
-    int i = 0;
-    while (1)
-    {
-        i++;
-        CHAR tszSendKey[MAX_PATH];
-        CHAR tszSendValue[MAX_PATH];
-
-        memset(tszSendKey, '\0', sizeof(tszSendKey));
-        memset(tszSendValue, '\0', sizeof(tszSendValue));
-
-        sprintf(tszSendKey, "MailAddr%d", i);
-        if (BaseLib_OperatorFile_ReadProfileFromMemory(tszDeBuffer, nRet, "SendTo", tszSendKey, tszSendValue) <= 0)
-        {
-            break;
-        }
-        st_EMailConfig.pStl_ListAddr->push_back(tszSendValue);
-    }
+    BaseLib_OperatorFile_ReadProfileFromMemory(tszDeBuffer, nRet, "SendTo", "AddrList", st_EMailConfig.tszAddrList);
     XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，获得电子邮件配置信息,将发送数据");
     st_EMailConfig.bEnable = TRUE;
     return TRUE;

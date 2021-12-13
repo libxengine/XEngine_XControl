@@ -133,6 +133,8 @@ int main(int argc, char** argv)
 		fwrite(tszEnBuffer, 1, nDRet, pSt_EnFile);
 		fclose(pSt_EnFile);
 		fclose(pSt_DeFile);
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，创建加密电子邮箱信息成功,程序退出.");
+		goto NETSERVICE_APPEXIT;
 	}
 
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，初始化信号处理成功");
@@ -204,15 +206,7 @@ int main(int argc, char** argv)
 					goto NETSERVICE_APPEXIT;
 				}
 				sprintf(tszRPInfo, "%s\r\n%s", tszSWInfo, tszHWInfo);
-
-				for (auto stl_ListIterator = st_EMailConfig.pStl_ListAddr->begin(); stl_ListIterator != st_EMailConfig.pStl_ListAddr->end(); stl_ListIterator++)
-				{
-					if (!RfcComponents_EMailClient_SmtpSend(xhSmtp, stl_ListIterator->c_str(), "XEngine控制后台信息报告", tszRPInfo))
-					{
-						XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，投递系统信息消息失败,错误:%lX", EMailClient_GetLastError());
-						continue;
-					}
-				}
+				RfcComponents_EMailClient_SmtpSend(xhSmtp, st_EMailConfig.tszAddrList, "XEngine控制后台信息报告", tszRPInfo);
 				RfcComponents_EMailClient_SmtpClose(xhSmtp);
 
 				FILE* pSt_File = fopen(st_ServiceConfig.tszTmpFile, "wb");
