@@ -166,7 +166,7 @@ BOOL CProtocol_Parse::Protocol_Parse_RPCRequest(LPCSTR lpszMsgBuffer, int nMsgLe
         break;
         case ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_ULONG:
         {
-            ULONGLONG ullValue = st_JsonArray[i]["ParameteValue"].asUInt64();
+            __int64u ullValue = st_JsonArray[i]["ParameteValue"].asUInt64();
             memcpy(st_XRpcParamete.lParameteValue, &ullValue, st_XRpcParamete.nParameteLen);
         }
         break;
@@ -360,7 +360,7 @@ BOOL CProtocol_Parse::Protocol_Parse_RPCReponse(LPCSTR lpszMsgBuffer, int nMsgLe
     break;
     case ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_ULONG:
     {
-        ULONGLONG ullValue = st_JsonRoot["XRpc_ReturnValue"].asUInt64();
+        __int64u ullValue = st_JsonRoot["XRpc_ReturnValue"].asUInt64();
         memcpy(pSt_RPCParament->lParameteValue, &ullValue, pSt_RPCParament->nParameteLen);
     }
     break;
