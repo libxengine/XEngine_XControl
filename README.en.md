@@ -34,9 +34,6 @@ vcpkg.exe install jsoncpp
 vcpkg integrate install  
 you can not use vcpkg and config jsoncpp development for youself   
 
-##### XEngine
-download xengine through git.read xengine project readme file to configure your env
-
 #### Linux
 Linux use Makefile to complie  
 supproted ubuntu x64 or centos x64     
@@ -49,8 +46,7 @@ Centos8.x
 sudo dnf install jsoncpp-devel  
 
 ##### XEngine Install
-you can install xengine env to your system by shell   
-like this:sudo XEngine_LINEnv.sh -i 3  
+download xengine through git.read xengine project readme file to configure your env  
 ##### complie
 execute command in XEngine_Source path
 make complie  
@@ -63,7 +59,7 @@ make FLAGS=CleanAll clear
 2.  download code
 3.  complie
 4.  install
-5.  change to your config file and email config Manage_EMail.ini  
+5.  change to your config file and email config XControl_EMail.ini  
 6.  -c parament create a encrypto email info file  
 7.  run..  
 
@@ -86,11 +82,6 @@ remote shutdown computre
 execute command  
 connenct  
 user custom protocol start  
-
-## Clean up statement
-the software will not generate any files to other directories in your system.  
-the software can achieve complete cleanup by directly delete the directory.  
-the software will not modify any of your system configuration.  
 
 ## Participate in contribution
 
