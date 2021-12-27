@@ -48,7 +48,7 @@ void ServiceApp_Stop(int signo)
 		SocketOpt_HeartBeat_DestoryEx(xhRPCHeart);
 
 		XClient_TCPSelect_Close(hTCPSocket);
-		XClient_TCPSelect_Close(hUDPSocket);
+		XClient_UDPSelect_Close(hUDPSocket);
 		HelpComponents_XLog_Destroy(xhLog);
 		bExist = TRUE;
 		exit(0);
@@ -370,7 +370,7 @@ NETSERVICE_APPEXIT:
 		SocketOpt_HeartBeat_DestoryEx(xhRPCHeart);
 
 		XClient_TCPSelect_Close(hTCPSocket);
-		XClient_TCPSelect_Close(hUDPSocket);
+		XClient_UDPSelect_Close(hUDPSocket);
 		HelpComponents_XLog_Destroy(xhLog);
 	}
 
