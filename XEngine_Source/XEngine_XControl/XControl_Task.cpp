@@ -29,15 +29,18 @@ XHTHREAD XControl_Thread_HttpTask()
 }
 XHTHREAD XControl_Thread_TCPTask()
 {
-	CHAR tszMsgBuffer[4096];
-
 	while (bIsRun)
 	{
-		int nMsgLen = 4096;
-		memset(tszMsgBuffer, '\0', sizeof(tszMsgBuffer));
-		if (XClient_TCPSelect_RecvMsg(hTCPSocket, tszMsgBuffer, &nMsgLen))
+		int nMsgLen = 0;
+		CHAR* ptszMsgBuffer = NULL;
+		XENGINE_PROTOCOLHDR st_ProtocolHdr;
+
+		memset(&st_ProtocolHdr, '\0', sizeof(XENGINE_PROTOCOLHDR));
+
+		if (XClient_TCPSelect_RecvPkt(hTCPSocket, &ptszMsgBuffer, &nMsgLen, &st_ProtocolHdr))
 		{
-			XControl_Task_ProtocolParse(tszMsgBuffer, nMsgLen);
+			XControl_Task_ProtocolParse(ptszMsgBuffer, nMsgLen);
+			BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBuffer);
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
@@ -45,15 +48,17 @@ XHTHREAD XControl_Thread_TCPTask()
 }
 XHTHREAD XControl_Thread_UDPTask()
 {
-	CHAR tszMsgBuffer[4096];
-
 	while (bIsRun)
 	{
-		int nMsgLen = 4096;
-		memset(tszMsgBuffer, '\0', sizeof(tszMsgBuffer));
-		if (XClient_TCPSelect_RecvMsg(hUDPSocket, tszMsgBuffer, &nMsgLen))
+		int nMsgLen = 0;
+		CHAR* ptszMsgBuffer = NULL;
+		XENGINE_PROTOCOLHDR st_ProtocolHdr;
+
+		memset(&st_ProtocolHdr, '\0', sizeof(XENGINE_PROTOCOLHDR));
+		if (XClient_TCPSelect_RecvPkt(hUDPSocket, &ptszMsgBuffer, &nMsgLen, &st_ProtocolHdr))
 		{
-			XControl_Task_ProtocolParse(tszMsgBuffer, nMsgLen);
+			XControl_Task_ProtocolParse(ptszMsgBuffer, nMsgLen);
+			BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBuffer);
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
