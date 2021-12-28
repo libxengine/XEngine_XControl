@@ -35,9 +35,6 @@ vcpkg 需要2021.05.11以上版本
 集成VS环境: vcpkg integrate install  
 vcpkg 主要为了方便安装jsoncpp,如果你想自己配置jsoncpp的环境,可以不使用vcpkg...  
 
-##### XEngine环境
-XEngine通过GIT下载,参考XEngine项目的readme配置环境  
-
 #### Linux
 Linux使用Makefile编译  
 UBUNTU20.04 x64或者CENTOS8 x64均可  
@@ -48,8 +45,8 @@ sudo apt install libjsoncpp-devel
 Centos8.x  
 sudo dnf install jsoncpp-devel  
 
-##### XEngine环境
-XEngine可以通过脚本文件安装sudo XEngine_LINEnv.sh -i 3
+#### XEngine环境
+XEngine通过GIT下载,参考XEngine项目的readme配置环境  
 ##### 编译命令
 在XEngine_Source目录下执行命令
 make 编译  
@@ -62,7 +59,7 @@ make FLAGS=CleanAll 清理编译
 2.  下载代码
 3.  编译
 4.  安装
-5.  修改配置文件和电子邮件配置Manage_EMail.ini  
+5.  修改配置文件和电子邮件配置XControl_EMail.ini  
 6.  -c 参数创建加密邮件信息  
 7.  运行  
 
@@ -86,11 +83,6 @@ make FLAGS=CleanAll 清理编译
 执行命令  
 连接  
 用户自定义开始  
-
-## 绿色声明
-此软件不会产生任何文件到你的系统的其他目录中.  
-此软件可通过直接删除主目录而达到完全清理目的.  
-此软件不会修改你的任何系统配置.  
 
 ## 参与贡献
 

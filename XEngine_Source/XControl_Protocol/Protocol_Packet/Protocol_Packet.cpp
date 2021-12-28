@@ -113,7 +113,7 @@ BOOL CProtocol_Packet::Protocol_Packet_RPCResponse(LPCSTR lpszFuncName, LPCSTR l
     break;
     case ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_ULONG:
     {
-        ULONGLONG ullValue = 0;
+        __int64u ullValue = 0;
         memcpy(&ullValue, lpszValue, nMsgLen);
         st_JsonRoot["XRpc_ReturnLen"] = nMsgLen;
         st_JsonRoot["XRpc_ReturnValue"] = (Json::Value::UInt64)ullValue;
@@ -288,8 +288,8 @@ BOOL CProtocol_Packet::Protocol_Packet_RPCRequest(LPCSTR lpszFuncName, ENUM_PROT
 		break;
 		case ENUM_PROTOCOL_XRPC_PARAMETE_TYPE_ULONG:
 		{
-			ULONGLONG ullValue = 0;
-			memcpy(&ullValue, stl_ListIterator->lParameteValue, sizeof(ULONGLONG));
+			__int64u ullValue = 0;
+			memcpy(&ullValue, stl_ListIterator->lParameteValue, sizeof(__int64u));
 			st_JsonObject["ParameteType"] = stl_ListIterator->enXRPC_ParameteType;
 			st_JsonObject["ParameteLen"] = stl_ListIterator->nParameteLen;
 			st_JsonObject["ParameteValue"] = (Json::Value::UInt64)ullValue;

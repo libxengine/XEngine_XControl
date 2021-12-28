@@ -1,7 +1,7 @@
 {
   "tszTaskUrl": "http://127.0.0.1:5580/Api/task/GetTask",
   "tszTmpFile": "./XControl_Temp/XEngine_File.dat",
-  "tszAPPDeamon": "D:\\XEngine_XControl\\XEngine_Source\\Debug\\MFCApplication1.exe",
+  "tszAPPDeamon": "./XEngine_XControl.exe",
   "bAutoStart": 0,
   "bHideWnd": 0,
   "ClientTime": {
@@ -28,6 +28,7 @@
     "tszLogFile": "./XControl_Log/XEngien_Control.log"
   },
   "VersionList": [
+    "3.1.0.1001 Build20211228",
     "3.0.0.1001",
     "2.1.0.1001",
     "2.0.0.1001"

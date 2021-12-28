@@ -29,15 +29,18 @@ XHTHREAD XControl_Thread_HttpTask()
 }
 XHTHREAD XControl_Thread_TCPTask()
 {
-	CHAR tszMsgBuffer[4096];
-
 	while (bIsRun)
 	{
-		int nMsgLen = 4096;
-		memset(tszMsgBuffer, '\0', sizeof(tszMsgBuffer));
-		if (XClient_TCPSelect_RecvMsg(hTCPSocket, tszMsgBuffer, &nMsgLen))
+		int nMsgLen = 0;
+		CHAR* ptszMsgBuffer = NULL;
+		XENGINE_PROTOCOLHDR st_ProtocolHdr;
+
+		memset(&st_ProtocolHdr, '\0', sizeof(XENGINE_PROTOCOLHDR));
+
+		if (XClient_TCPSelect_RecvPkt(hTCPSocket, &ptszMsgBuffer, &nMsgLen, &st_ProtocolHdr))
 		{
-			XControl_Task_ProtocolParse(tszMsgBuffer, nMsgLen);
+			XControl_Task_ProtocolParse(ptszMsgBuffer, nMsgLen);
+			BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBuffer);
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
@@ -45,15 +48,17 @@ XHTHREAD XControl_Thread_TCPTask()
 }
 XHTHREAD XControl_Thread_UDPTask()
 {
-	CHAR tszMsgBuffer[4096];
-
 	while (bIsRun)
 	{
-		int nMsgLen = 4096;
-		memset(tszMsgBuffer, '\0', sizeof(tszMsgBuffer));
-		if (XClient_TCPSelect_RecvMsg(hUDPSocket, tszMsgBuffer, &nMsgLen))
+		int nMsgLen = 0;
+		CHAR* ptszMsgBuffer = NULL;
+		XENGINE_PROTOCOLHDR st_ProtocolHdr;
+
+		memset(&st_ProtocolHdr, '\0', sizeof(XENGINE_PROTOCOLHDR));
+		if (XClient_TCPSelect_RecvPkt(hUDPSocket, &ptszMsgBuffer, &nMsgLen, &st_ProtocolHdr))
 		{
-			XControl_Task_ProtocolParse(tszMsgBuffer, nMsgLen);
+			XControl_Task_ProtocolParse(ptszMsgBuffer, nMsgLen);
+			BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBuffer);
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
@@ -175,37 +180,41 @@ BOOL XControl_Task_ProtocolParse(LPCSTR lpszMsgBuffer, int nMsgLen)
 	{
 		int nListCount = 0;
 		CHAR** ppszFileList;
-		if (!SystemApi_File_EnumFile(st_JsonRoot["FindPath"].asCString(), &ppszFileList, &nListCount))
+		if (SystemApi_File_EnumFile(st_JsonRoot["FindPath"].asCString(), &ppszFileList, &nListCount))
+		{
+			XControl_Handle_PostListFile(ppszFileList, nListCount, st_JsonRoot["PostUrl"].asCString());
+			BaseLib_OperatorMemory_Free((XPPPMEM)&ppszFileList, nListCount);
+		}
+		else
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTP任务:请求文件列表失败,错误码:%lX", SystemApi_GetLastError());
-			return FALSE;
 		}
-		XControl_Handle_PostListFile(ppszFileList, nListCount, st_JsonRoot["PostUrl"].asCString());
-		BaseLib_OperatorMemory_Free((XPPPMEM)&ppszFileList, nListCount);
 	}
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_EXEC:
+	{
+		DWORD dwProcessID = 0;
+		if (SystemApi_Process_CreateProcess(&dwProcessID, st_JsonRoot["ExecFile"].asCString(),NULL, st_JsonRoot["ExecShow"].asInt()))
+		{
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "HTTP任务:请求创建进程成功,进程:%s", st_JsonRoot["ExecFile"].asCString());
+		}
+		else
+		{
+			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTP任务:请求创建进程:%s 失败,错误码:%lX", st_JsonRoot["ExecFile"].asCString(), SystemApi_GetLastError());
+		}
+	}
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_POPMESSAGE:
 	{
-		DWORD dwProcessId;
-		CHAR tszExeFile[MAX_PATH];
-		memset(tszExeFile, '\0', MAX_PATH);
-
-		strcpy(tszExeFile, st_JsonRoot["ExecFile"].asCString());
-
-		if (!SystemApi_Process_CreateProcess(&dwProcessId, tszExeFile))
-		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTP任务:请求创建进程失败,错误码:%lX", SystemApi_GetLastError());
-			return FALSE;
-		}
+#ifdef _WINDOWS
+		MessageBoxA(NULL, st_JsonRoot["MessageBox"].asCString(), "提示", MB_OK);
+#else
+#endif
+		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "HTTP任务:请求弹出消息:%s", st_JsonRoot["MessageBox"].asCString());
 	}
 	break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_STOPPROCESS:
-		CHAR tszProcessName[64];
-		memset(tszProcessName, '\0', sizeof(tszProcessName));
-		sprintf(tszProcessName, "%s", st_JsonRoot["tszProcessName"].asCString());
-		if (!SystemApi_Process_Stop(tszProcessName))
+		if (!SystemApi_Process_Stop(st_JsonRoot["tszProcessName"].asCString()))
 		{
 			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "HTTP任务:请求停止进程失败,错误码:%lX", SystemApi_GetLastError());
 			return FALSE;

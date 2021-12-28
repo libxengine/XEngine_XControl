@@ -61,9 +61,9 @@ using namespace std;
 typedef struct
 {
 	RFCCOMPONENTS_EMAILSMTP st_EMailSmtp;
+	CHAR tszAddrList[2048];
 	BOOL bEnable;
 	BOOL bCreateEmail;
-	list<string>* pStl_ListAddr;
 }XENGIEN_EMAILCONFIG;
 
 extern BOOL bIsRun;
