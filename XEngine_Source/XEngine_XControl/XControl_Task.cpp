@@ -8,22 +8,18 @@ XHTHREAD XControl_Thread_HttpTask()
 	{
 		int nBLen = 0;
 		CHAR* ptszMsgBody = NULL;
-		if (APIHelp_HttpRequest_Get(st_ServiceConfig.tszTaskUrl, &ptszMsgBody, &nBLen))
-		{
+		APIHELP_HTTPPARAMENT st_HTTPParam;
+
+		memset(&st_HTTPParam, '\0', sizeof(APIHELP_HTTPPARAMENT));
+
+		st_HTTPParam.nTimeConnect = 2;
+		if (APIHelp_HttpRequest_Get(st_ServiceConfig.tszTaskUrl, &ptszMsgBody, &nBLen, NULL, NULL, NULL, &st_HTTPParam))
+	    {
 			nTimeStart = time(NULL);//更新
 			XControl_Task_ProtocolParse(ptszMsgBody, nBLen);
 		}
 		BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBody);
-		//通过一个简单的任务处理机制来延迟
-		time_t nTimeEnd = time(NULL);
-		if ((nTimeEnd - nTimeStart) > 1)
-		{
-			std::this_thread::sleep_for(std::chrono::seconds(1));
-		}
-		else
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(5));
-		}
+		std::this_thread::sleep_for(std::chrono::seconds(st_ServiceConfig.st_Time.nHTTPThreadTime));
 	}
 	return 0;
 }
@@ -42,7 +38,7 @@ XHTHREAD XControl_Thread_TCPTask()
 			XControl_Task_ProtocolParse(ptszMsgBuffer, nMsgLen);
 			BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBuffer);
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(st_ServiceConfig.st_Time.nTCPThreadTime));
 	}
 	return 0;
 }
@@ -60,7 +56,7 @@ XHTHREAD XControl_Thread_UDPTask()
 			XControl_Task_ProtocolParse(ptszMsgBuffer, nMsgLen);
 			BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBuffer);
 		}
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(st_ServiceConfig.st_Time.nUDPThreadTime));
 	}
 	return 0;
 }
