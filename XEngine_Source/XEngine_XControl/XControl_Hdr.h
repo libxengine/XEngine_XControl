@@ -37,8 +37,14 @@ using namespace std;
 #include <XEngine_Include/XEngine_Client/XClient_Error.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Define.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Error.h>
+#ifdef _T
+#undef  _T
+#define _T(x)      x
 #include <XEngine_Include/XEngine_RfcComponents/HttpServer_Define.h>
 #include <XEngine_Include/XEngine_RfcComponents/HttpServer_Error.h>
+#undef  _T
+#define _T(x)       __T(x)
+#endif
 #include <XEngine_Include/XEngine_RfcComponents/EmailClient_Define.h>
 #include <XEngine_Include/XEngine_RfcComponents/EmailClient_Error.h>
 #include <XEngine_Include/XEngine_DownLoad/DownLoad_Define.h>

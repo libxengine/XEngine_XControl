@@ -146,7 +146,7 @@ XHTHREAD APPManage_Thread_Process()
 				//如果没设置，那么表示启动一次就不用管了
 				SYSTEMAPI_PROCESS_INFOMATION st_ProcessInfo;
 				memset(&st_ProcessInfo, '\0', sizeof(SYSTEMAPI_PROCESS_INFOMATION));
-				if (SystemApi_Process_GetProcessInfo(stl_ListIterator->tszAPPName, 0, &st_ProcessInfo))
+				if (SystemApi_Process_GetProcessInfo(&st_ProcessInfo, stl_ListIterator->tszAPPName))
 				{
 					if (ENUM_SYSTEMSDK_PROCFILE_PROCFILE_PROCESS_STATE_ZOMBIE == st_ProcessInfo.en_ProcessState)
 					{
