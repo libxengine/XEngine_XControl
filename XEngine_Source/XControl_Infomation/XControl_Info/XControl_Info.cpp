@@ -51,6 +51,7 @@ BOOL CXControl_Info::XControl_Info_HardWare(CHAR *ptszHWInfo,int *pInt_Len)
         return FALSE;
     }
     int nDiskNumber = 0;
+    CHAR** pptszRootName;
     CHAR tszOSName[MAX_PATH];
     DWORD nOSVersion;
     DWORD nOSBuild;
@@ -68,12 +69,14 @@ BOOL CXControl_Info::XControl_Info_HardWare(CHAR *ptszHWInfo,int *pInt_Len)
     memset(&st_DiskInfo,'\0',sizeof(SYSTEMAPI_DISK_INFOMATION));
     memset(&st_SDKSerial,'\0',sizeof(SYSTEMAPI_SERIAL_INFOMATION));
 
-    if (!SystemApi_HardWare_GetDiskNumber(&nDiskNumber,NULL))
+    if (!SystemApi_HardWare_GetDiskNumber(&pptszRootName, &nDiskNumber))
     {
         BackManage_IsErrorOccur = TRUE;
         BackManage_dwErrorCode = SystemApi_GetLastError();
         return FALSE;
     }
+    BaseLib_OperatorMemory_Free((XPPPMEM)&pptszRootName, nDiskNumber);
+
     CHAR tszDriveStr[MAX_PATH];
     memset(tszDriveStr, '\0', MAX_PATH);
     
@@ -136,23 +139,23 @@ BOOL CXControl_Info::XControl_Info_HardWare(CHAR *ptszHWInfo,int *pInt_Len)
 
     st_JsonSerial["DiskSerial"] = st_SDKSerial.tszDiskSerial;
     st_JsonSerial["CpuSerial"] = st_SDKSerial.tszCpuSerial;
-    st_JsonSerial["BaseboardSerial"] = st_SDKSerial.tszBaseBoardSerial;
-    st_JsonSerial["BiosSerial"] = st_SDKSerial.tszBiosSerail;
+    st_JsonSerial["BoardSerial"] = st_SDKSerial.tszBoardSerial;
+    st_JsonSerial["SystemSerail"] = st_SDKSerial.tszSystemSerail;
 
 	int nListCount = 0;
-	APIHELP_NETCARD** ppSt_NetCard;
-	APIHelp_NetWork_GetIPAddr(&ppSt_NetCard, &nListCount);
+    NETXAPI_CARDINFO** ppSt_ListIFInfo;
+    NetXApi_Socket_GetCardInfo(&ppSt_ListIFInfo, &nListCount);
 	for (int i = 0; i < nListCount; i++)
 	{
         Json::Value st_JsonIPAddr;
-        st_JsonIPAddr["tszIFName"] = ppSt_NetCard[i]->tszIFName;
-        st_JsonIPAddr["tszIPAddr"] = ppSt_NetCard[i]->tszIPAddr;
-        st_JsonIPAddr["tszBroadAddr"] = ppSt_NetCard[i]->tszBroadAddr;
-        st_JsonIPAddr["tszMaskAddr"] = ppSt_NetCard[i]->tszMaskAddr;
-        st_JsonIPAddr["tszMacAddr"] = ppSt_NetCard[i]->tszMacAddr;
+        st_JsonIPAddr["tszIFName"] = ppSt_ListIFInfo[i]->tszIFName;
+        st_JsonIPAddr["tszIPAddr"] = ppSt_ListIFInfo[i]->tszIPAddr;
+        st_JsonIPAddr["tszBroadAddr"] = ppSt_ListIFInfo[i]->tszBroadAddr;
+        st_JsonIPAddr["tszDnsAddr"] = ppSt_ListIFInfo[i]->tszDnsAddr;
+        st_JsonIPAddr["tszMacAddr"] = ppSt_ListIFInfo[i]->tszMacAddr;
         st_JsonNetCard.append(st_JsonIPAddr);
 	}
-    BaseLib_OperatorMemory_Free((XPPPMEM)&ppSt_NetCard, nListCount);
+    BaseLib_OperatorMemory_Free((XPPPMEM)&ppSt_ListIFInfo, nListCount);
 
     st_JsonRoot["Disk"] = st_JsonDisk;
     st_JsonRoot["Cpu"] = st_JsonCpu;
