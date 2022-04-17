@@ -6,7 +6,10 @@
   "bHideWnd": 0,
   "ClientTime": {
     "nCheckTime": 1,
-    "nErrorTime": 3
+    "nErrorTime": 3,
+    "nHTTPThreadTime": 1,
+    "nTCPThreadTime": 1,
+    "nUDPThreadTime": 1
   },
   "ClientConfig": {
     "bEnable": 0,
@@ -28,6 +31,7 @@
     "tszLogFile": "./XControl_Log/XEngien_Control.log"
   },
   "VersionList": [
+    "3.2.0.1001 Build20220417",
     "3.1.0.1001 Build20211228",
     "3.0.0.1001",
     "2.1.0.1001",

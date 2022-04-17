@@ -2,8 +2,6 @@
 
 XHTHREAD XControl_Thread_HttpTask()
 {
-	time_t nTimeStart = time(NULL);
-
 	while (bIsRun)
 	{
 		int nBLen = 0;
@@ -11,15 +9,14 @@ XHTHREAD XControl_Thread_HttpTask()
 		APIHELP_HTTPPARAMENT st_HTTPParam;
 
 		memset(&st_HTTPParam, '\0', sizeof(APIHELP_HTTPPARAMENT));
-
+		
 		st_HTTPParam.nTimeConnect = 2;
 		if (APIHelp_HttpRequest_Get(st_ServiceConfig.tszTaskUrl, &ptszMsgBody, &nBLen, NULL, NULL, NULL, &st_HTTPParam))
 	    {
-			nTimeStart = time(NULL);//更新
 			XControl_Task_ProtocolParse(ptszMsgBody, nBLen);
 		}
 		BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBody);
-		std::this_thread::sleep_for(std::chrono::seconds(st_ServiceConfig.st_Time.nHTTPThreadTime));
+		std::this_thread::sleep_for(std::chrono::milliseconds(st_ServiceConfig.st_Time.nHTTPThreadTime));
 	}
 	return 0;
 }
