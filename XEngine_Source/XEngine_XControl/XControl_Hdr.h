@@ -1,4 +1,4 @@
-#ifdef _MSC_BUILD
+Ôªø#ifdef _MSC_BUILD
 #include <windows.h>
 #include <tchar.h>
 #include <io.h>
@@ -57,7 +57,7 @@ using namespace std;
 #include "../XControl_Protocol/Protocol_Error.h"
 
 #define XENGINE_CONTRALAPP_NETTYPE_XPRC 1
-//” º˛≈‰÷√
+//ÈÇÆ‰ª∂ÈÖçÁΩÆ
 typedef struct
 {
 	RFCCOMPONENTS_EMAILSMTP st_EMailSmtp;

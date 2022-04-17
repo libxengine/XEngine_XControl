@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 XHTHREAD CALLBACK XControl_RPCThread(LPVOID lParam);
 BOOL XControl_RPC_Free(list<PROTOCOL_XRPCPARAMETE>* pStl_ListParamete);

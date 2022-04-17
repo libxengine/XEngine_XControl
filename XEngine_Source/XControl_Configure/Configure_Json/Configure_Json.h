@@ -1,13 +1,13 @@
-#pragma once
+ï»¿#pragma once
 /********************************************************************
 //    Created:     2021/08/24  11:17:07
 //    File Name:   D:\XEngine_XContral\XEngine_Source\XContral_Configure\Configure_Json\Configure_Json.h
 //    File Path:   D:\XEngine_XContral\XEngine_Source\XContral_Configure\Configure_Json
 //    File Base:   Configure_Json
 //    File Ext:    h
-//    Project:     XEngine(ÍøÂçÍ¨ĞÅÒıÇæ)
+//    Project:     XEngine(ç½‘ç»œé€šä¿¡å¼•æ“)
 //    Author:      qyt
-//    Purpose:     ÅäÖÃÎÄ¼ş¶ÁÈ¡Àà
+//    Purpose:     é…ç½®æ–‡ä»¶è¯»å–ç±»
 //    History:
 *********************************************************************/
 

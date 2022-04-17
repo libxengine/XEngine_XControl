@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Configure_Json.h"
 /********************************************************************
 //    Created:     2021/08/24  11:17:18
@@ -6,9 +6,9 @@
 //    File Path:   D:\XEngine_XContral\XEngine_Source\XContral_Configure\Configure_Json
 //    File Base:   Configure_Json
 //    File Ext:    cpp
-//    Project:     XEngine(ÍøÂçÍ¨ÐÅÒýÇæ)
+//    Project:     XEngine(ç½‘ç»œé€šä¿¡å¼•æ“Ž)
 //    Author:      qyt
-//    Purpose:     ÅäÖÃÎÄ¼þ¶ÁÈ¡Àà
+//    Purpose:     é…ç½®æ–‡ä»¶è¯»å–ç±»
 //    History:
 *********************************************************************/
 CConfigure_Json::CConfigure_Json()
@@ -20,25 +20,25 @@ CConfigure_Json::~CConfigure_Json()
 
 }
 //////////////////////////////////////////////////////////////////////////
-//                        ¹«ÓÃº¯Êý
+//                        å…¬ç”¨å‡½æ•°
 //////////////////////////////////////////////////////////////////////////
 /********************************************************************
-º¯ÊýÃû³Æ£ºConfig_Json_File
-º¯Êý¹¦ÄÜ£ºJSON»ù´¡ÅäÖÃ¶ÁÈ¡
- ²ÎÊý.Ò»£ºlpszConfigFile
-  In/Out£ºIn
-  ÀàÐÍ£º³£Á¿×Ö·ûÖ¸Õë
-  ¿É¿Õ£ºN
-  ÒâË¼£ºÊäÈëÎÄ¼þµØÖ·
- ²ÎÊý.¶þ£ºpSt_FileConfig
-  In/Out£ºOut
-  ÀàÐÍ£ºÊý¾Ý½á¹¹Ö¸Õë
-  ¿É¿Õ£ºN
-  ÒâË¼£ºÊä³ö»ñÈ¡µ½µÄÅäÖÃÐÅÏ¢
-·µ»ØÖµ
-  ÀàÐÍ£ºÂß¼­ÐÍ
-  ÒâË¼£ºÊÇ·ñ³É¹¦
-±¸×¢£º
+å‡½æ•°åç§°ï¼šConfig_Json_File
+å‡½æ•°åŠŸèƒ½ï¼šJSONåŸºç¡€é…ç½®è¯»å–
+ å‚æ•°.ä¸€ï¼šlpszConfigFile
+  In/Outï¼šIn
+  ç±»åž‹ï¼šå¸¸é‡å­—ç¬¦æŒ‡é’ˆ
+  å¯ç©ºï¼šN
+  æ„æ€ï¼šè¾“å…¥æ–‡ä»¶åœ°å€
+ å‚æ•°.äºŒï¼špSt_FileConfig
+  In/Outï¼šOut
+  ç±»åž‹ï¼šæ•°æ®ç»“æž„æŒ‡é’ˆ
+  å¯ç©ºï¼šN
+  æ„æ€ï¼šè¾“å‡ºèŽ·å–åˆ°çš„é…ç½®ä¿¡æ¯
+è¿”å›žå€¼
+  ç±»åž‹ï¼šé€»è¾‘åž‹
+  æ„æ€ï¼šæ˜¯å¦æˆåŠŸ
+å¤‡æ³¨ï¼š
 *********************************************************************/
 BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONFIG* pSt_FileConfig)
 {
@@ -151,22 +151,22 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	return TRUE;
 }
 /********************************************************************
-º¯ÊýÃû³Æ£ºConfig_Json_LoadList
-º¯Êý¹¦ÄÜ£ºJSON APPÁÐ±íÅäÖÃ¶ÁÈ¡
- ²ÎÊý.Ò»£ºlpszConfigFile
-  In/Out£ºIn
-  ÀàÐÍ£º³£Á¿×Ö·ûÖ¸Õë
-  ¿É¿Õ£ºN
-  ÒâË¼£ºÊäÈëÎÄ¼þµØÖ·
- ²ÎÊý.¶þ£ºpSt_FileConfig
-  In/Out£ºOut
-  ÀàÐÍ£ºÊý¾Ý½á¹¹Ö¸Õë
-  ¿É¿Õ£ºN
-  ÒâË¼£ºÊä³ö»ñÈ¡µ½µÄÅäÖÃÐÅÏ¢
-·µ»ØÖµ
-  ÀàÐÍ£ºÂß¼­ÐÍ
-  ÒâË¼£ºÊÇ·ñ³É¹¦
-±¸×¢£º
+å‡½æ•°åç§°ï¼šConfig_Json_LoadList
+å‡½æ•°åŠŸèƒ½ï¼šJSON APPåˆ—è¡¨é…ç½®è¯»å–
+ å‚æ•°.ä¸€ï¼šlpszConfigFile
+  In/Outï¼šIn
+  ç±»åž‹ï¼šå¸¸é‡å­—ç¬¦æŒ‡é’ˆ
+  å¯ç©ºï¼šN
+  æ„æ€ï¼šè¾“å…¥æ–‡ä»¶åœ°å€
+ å‚æ•°.äºŒï¼špSt_FileConfig
+  In/Outï¼šOut
+  ç±»åž‹ï¼šæ•°æ®ç»“æž„æŒ‡é’ˆ
+  å¯ç©ºï¼šN
+  æ„æ€ï¼šè¾“å‡ºèŽ·å–åˆ°çš„é…ç½®ä¿¡æ¯
+è¿”å›žå€¼
+  ç±»åž‹ï¼šé€»è¾‘åž‹
+  æ„æ€ï¼šæ˜¯å¦æˆåŠŸ
+å¤‡æ³¨ï¼š
 *********************************************************************/
 BOOL CConfigure_Json::Config_Json_LoadList(LPCSTR lpszConfigFile, XENGINE_CONFIGAPP* pSt_AppConfig)
 {

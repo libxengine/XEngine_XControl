@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <tchar.h>
 #include <list>
 #include <string>
@@ -23,9 +23,9 @@ using namespace std;
 //    File Path:   D:\XEngine_XContral\XEngine_Source\XEngine_Deamon
 //    File Base:   XEngine_Hdr
 //    File Ext:    h
-//    Project:     XEngine(ÍøÂçÍ¨ÐÅÒýÇæ)
+//    Project:     XEngine(ç½‘ç»œé€šä¿¡å¼•æ“Ž)
 //    Author:      qyt
-//    Purpose:     ¹«ÓÐÍ·ÎÄ¼þ
+//    Purpose:     å…¬æœ‰å¤´æ–‡ä»¶
 //    History:
 *********************************************************************/
 
