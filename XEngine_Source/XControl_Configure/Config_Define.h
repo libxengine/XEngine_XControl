@@ -24,6 +24,9 @@ typedef struct tag_XEngine_ServerConfig
 	{
 		int nCheckTime;
 		int nErrorTime;
+		int nHTTPThreadTime;
+		int nTCPThreadTime;
+		int nUDPThreadTime;
 	}st_Time;
 	struct
 	{

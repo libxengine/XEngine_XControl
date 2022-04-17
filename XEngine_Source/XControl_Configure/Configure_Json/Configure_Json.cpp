@@ -88,7 +88,7 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	pSt_FileConfig->bAutoStart = st_JsonRoot["bAutoStart"].asInt();
 	pSt_FileConfig->bHideWnd = st_JsonRoot["bHideWnd"].asInt();
 
-	if (st_JsonRoot["ClientTime"].empty() || (2 != st_JsonRoot["ClientTime"].size()))
+	if (st_JsonRoot["ClientTime"].empty() || (5 != st_JsonRoot["ClientTime"].size()))
 	{
 		Config_IsErrorOccur = TRUE;
 		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_TIME;
@@ -97,6 +97,9 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	Json::Value st_JsonTime = st_JsonRoot["ClientTime"];
 	pSt_FileConfig->st_Time.nCheckTime = st_JsonTime["nCheckTime"].asInt();
 	pSt_FileConfig->st_Time.nErrorTime = st_JsonTime["nErrorTime"].asInt();
+	pSt_FileConfig->st_Time.nHTTPThreadTime = st_JsonTime["nHTTPThreadTime"].asInt();
+	pSt_FileConfig->st_Time.nTCPThreadTime = st_JsonTime["nTCPThreadTime"].asInt();
+	pSt_FileConfig->st_Time.nUDPThreadTime = st_JsonTime["nUDPThreadTime"].asInt();
 
 	if (st_JsonRoot["ClientConfig"].empty() || (4 != st_JsonRoot["ClientConfig"].size()))
 	{
