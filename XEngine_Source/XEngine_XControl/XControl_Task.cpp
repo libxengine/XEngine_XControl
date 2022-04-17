@@ -8,7 +8,7 @@ XHTHREAD XControl_Thread_HttpTask()
 	{
 		int nBLen = 0;
 		CHAR* ptszMsgBody = NULL;
-		if (APIHelp_HttpRequest_Post(st_ServiceConfig.tszTaskUrl, NULL, NULL, &ptszMsgBody, &nBLen))
+		if (APIHelp_HttpRequest_Get(st_ServiceConfig.tszTaskUrl, &ptszMsgBody, &nBLen))
 		{
 			nTimeStart = time(NULL);//更新
 			XControl_Task_ProtocolParse(ptszMsgBody, nBLen);
