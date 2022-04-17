@@ -1,4 +1,4 @@
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 #include <windows.h>
 #include <tchar.h>
 #include <io.h>
@@ -95,43 +95,42 @@ extern XENGIEN_EMAILCONFIG st_EMailConfig;
 #include "XControl_RPCTask/RPCTask_MethodCal.h"
 #include "XControl_RPCTask/RPCTask_MethodMessage.h"
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 #pragma comment(lib,"Ws2_32.lib")
+#pragma comment(lib,"XEngine_BaseLib/XEngine_BaseLib.lib")
+#pragma comment(lib,"XEngine_Core/XEngine_OPenSsl.lib")
+#pragma comment(lib,"XEngine_Core/XEngine_Core.lib")
+#pragma comment(lib,"XEngine_Core/XEngine_ManagePool.lib")
+#pragma comment(lib,"XEngine_Client/XClient_Socket.lib")
+#pragma comment(lib,"XEngine_HelpComponents/HelpComponents_XLog.lib")
+#pragma comment(lib,"XEngine_RfcComponents/RfcComponents_EmailClient.lib")
+#pragma comment(lib,"XEngine_RfcComponents/RfcComponents_HttpServer.lib")
+#pragma comment(lib,"XEngine_NetHelp/NetHelp_APIHelp.lib")
+#pragma comment(lib,"XEngine_SystemSdk/XEngine_SystemApi.lib")
+#pragma comment(lib,"XEngine_DownLoad/XEngine_DownLoad.lib")
 #ifdef _WIN64
+#ifdef _DEBUG
+#pragma comment(lib,"../x64/Debug/jsoncpp")
+#pragma comment(lib,"../x64/Debug/XControl_Configure.lib")
+#pragma comment(lib,"../x64/Debug/XControl_Infomation.lib")
+#pragma comment(lib,"../x64/Debug/XControl_Protocol.lib")
+#else
+#pragma comment(lib,"../x64/Release/jsoncpp")
 #pragma comment(lib,"../x64/Release/XControl_Configure.lib")
 #pragma comment(lib,"../x64/Release/XControl_Infomation.lib")
 #pragma comment(lib,"../x64/Release/XControl_Protocol.lib")
-#pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"x64/XEngine_Core/XEngine_Core.lib")
-#pragma comment(lib,"x64/XEngine_Core/XEngine_ManagePool.lib")
-#pragma comment(lib,"x64/XEngine_Core/XEngine_OPenSsl.lib")
-#pragma comment(lib,"x64/XEngine_Client/XClient_Socket.lib")
-#pragma comment(lib,"x64/XEngine_HelpComponents/HelpComponents_XLog.lib")
-#pragma comment(lib,"x64/XEngine_RfcComponents/RfcComponents_EmailClient.lib")
-#pragma comment(lib,"x64/XEngine_RfcComponents/RfcComponents_HttpServer.lib")
-#pragma comment(lib,"x64/XEngine_NetHelp/NetHelp_APIHelp.lib")
-#pragma comment(lib,"x64/XEngine_SystemSdk/XEngine_SystemApi.lib")
-#pragma comment(lib,"x64/XEngine_DownLoad/XEngine_DownLoad.lib")
+#endif
 #else
 #ifdef _DEBUG
+#pragma comment(lib,"../Debug/jsoncpp")
 #pragma comment(lib,"../Debug/XControl_Configure.lib")
 #pragma comment(lib,"../Debug/XControl_Infomation.lib")
 #pragma comment(lib,"../Debug/XControl_Protocol.lib")
 #else
+#pragma comment(lib,"../Release/jsoncpp")
 #pragma comment(lib,"../Release/XControl_Configure.lib")
 #pragma comment(lib,"../Release/XControl_Infomation.lib")
 #pragma comment(lib,"../Release/XControl_Protocol.lib")
 #endif
-#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"x86/XEngine_Core/XEngine_OPenSsl.lib")
-#pragma comment(lib,"x86/XEngine_Core/XEngine_Core.lib")
-#pragma comment(lib,"x86/XEngine_Core/XEngine_ManagePool.lib")
-#pragma comment(lib,"x86/XEngine_Client/XClient_Socket.lib")
-#pragma comment(lib,"x86/XEngine_HelpComponents/HelpComponents_XLog.lib")
-#pragma comment(lib,"x86/XEngine_RfcComponents/RfcComponents_EmailClient.lib")
-#pragma comment(lib,"x86/XEngine_RfcComponents/RfcComponents_HttpServer.lib")
-#pragma comment(lib,"x86/XEngine_NetHelp/NetHelp_APIHelp.lib")
-#pragma comment(lib,"x86/XEngine_SystemSdk/XEngine_SystemApi.lib")
-#pragma comment(lib,"x86/XEngine_DownLoad/XEngine_DownLoad.lib")
 #endif
 #endif

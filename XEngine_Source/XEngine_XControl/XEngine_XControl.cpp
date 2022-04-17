@@ -56,7 +56,7 @@ void ServiceApp_Stop(int signo)
 }
 int main(int argc, char** argv)
 {
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	WSADATA st_WSAData;
 	WSAStartup(MAKEWORD(2, 2), &st_WSAData);
 	LPCSTR lpszWndName = "XEngine_XControlApp";
@@ -92,15 +92,6 @@ int main(int argc, char** argv)
 	signal(SIGINT, ServiceApp_Stop);
 	signal(SIGTERM, ServiceApp_Stop);
 	signal(SIGABRT, ServiceApp_Stop);
-
-	//每秒小于10KB就认为网络有问题
-	if (!APIHelp_HttpRequest_SetGlobalTime(1, 10, 100))
-	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，设置HTTP全局超时失败，错误:%d", APIHelp_GetLastError());
-		goto NETSERVICE_APPEXIT;
-	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，设置HTTP全局超时成功");
-
 	if (st_EMailConfig.bCreateEmail)
 	{
 		UCHAR tszEnBuffer[4096];
@@ -149,7 +140,7 @@ int main(int argc, char** argv)
 	}
 	if (st_ServiceConfig.bHideWnd)
 	{
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 		BOOL bIsFound = FALSE;
 		SetConsoleTitleA(lpszWndName);
 		HWND hWnd = GetDesktopWindow();
@@ -374,7 +365,7 @@ NETSERVICE_APPEXIT:
 		HelpComponents_XLog_Destroy(xhLog);
 	}
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	WSACleanup();
 #endif
 	return 0;

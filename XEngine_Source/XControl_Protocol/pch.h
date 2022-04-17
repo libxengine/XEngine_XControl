@@ -7,23 +7,17 @@
 #ifndef PCH_H
 #define PCH_H
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 // 添加要在此处预编译的标头
 #include "framework.h"
 #include <tchar.h>
 #include <WinSock2.h>
-#include <json/json.h>
-#else
-#ifdef _CENTOS
-#include <json/json.h>
-#else
-#include <jsoncpp/json/json.h>
-#endif
 #endif
 #endif //PCH_H
 #include <string.h>
 #include <memory>
 #include <list>
+#include <json/json.h>
 #include <XEngine_Include/XEngine_CommHdr.h>
 #include <XEngine_Include/XEngine_Types.h>
 #include <XEngine_Include/XEngine_ProtocolHdr.h>
@@ -47,14 +41,19 @@ using namespace std;
 extern BOOL Protocol_IsErrorOccur;
 extern DWORD Protocol_dwErrorCode;
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
+#pragma comment(lib,"XEngine_Core/XEngine_OPenSsl")
 #ifdef _DEBUG
-#pragma comment(lib,"x86/XEngine_Core/XEngine_OPenSsl.lib")
+#ifdef _WIN64
+#pragma comment(lib,"../x64/Debug/jsoncpp")
+#else
+#pragma comment(lib,"../Debug/jsoncpp")
+#endif
 #else
 #ifdef _WIN64
-#pragma comment(lib,"x64/XEngine_Core/XEngine_OPenSsl.lib")
+#pragma comment(lib,"../x64/Release/jsoncpp")
 #else
-#pragma comment(lib,"x86/XEngine_Core/XEngine_OPenSsl.lib")
+#pragma comment(lib,"../Release/jsoncpp")
 #endif
 #endif
 #endif

@@ -206,7 +206,7 @@ BOOL XControl_Task_ProtocolParse(LPCSTR lpszMsgBuffer, int nMsgLen)
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_POPMESSAGE:
 	{
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 		MessageBoxA(NULL, st_JsonRoot["MessageBox"].asCString(), "提示", MB_OK);
 #else
 #endif

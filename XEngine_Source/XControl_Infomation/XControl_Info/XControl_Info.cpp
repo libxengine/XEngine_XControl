@@ -80,7 +80,7 @@ BOOL CXControl_Info::XControl_Info_HardWare(CHAR *ptszHWInfo,int *pInt_Len)
     CHAR tszDriveStr[MAX_PATH];
     memset(tszDriveStr, '\0', MAX_PATH);
     
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
     GetLogicalDriveStringsA(MAX_PATH, tszDriveStr);
 #else
     LPCSTR lpszDir = _T("/");
@@ -222,7 +222,7 @@ BOOL CXControl_Info::XControl_Info_SoftWare(CHAR *ptszSWInfo,int *pInt_Len)
     memset(tszServicePacket, '\0', MAX_PATH);
     memset(&st_LibTimer, '\0', sizeof(XENGINE_LIBTIMER));
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	DWORD dwMaxSize = MAX_PATH;
 	if (!GetComputerNameA(tszOSUser, &dwMaxSize))
 	{

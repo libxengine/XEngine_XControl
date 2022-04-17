@@ -37,21 +37,23 @@ extern STARTUPINFO st_StartInfo;
 extern PROCESS_INFORMATION st_ProcessInfo;
 extern SERVICE_STATUS st_Status;
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment(lib, "Shlwapi.lib")
 #pragma comment(lib, "advapi32.lib")
+#pragma comment(lib,"XEngine_BaseLib/XEngine_BaseLib.lib")
+#pragma comment(lib,"XEngine_HelpComponents/HelpComponents_XLog.lib")
 #ifdef _WIN64
+#ifdef _DEBUG
+#pragma comment(lib,"../x64/Debug/XControl_Configure.lib")
+#else
 #pragma comment(lib,"../x64/Release/XControl_Configure.lib")
-#pragma comment(lib,"x64/XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"x64/XEngine_HelpComponents/HelpComponents_XLog.lib")
+#endif
 #else
 #ifdef _DEBUG
 #pragma comment(lib,"../Debug/XControl_Configure.lib")
 #else
 #pragma comment(lib,"../Release/XControl_Configure.lib")
 #endif
-#pragma comment(lib,"x86/XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"x86/XEngine_HelpComponents/HelpComponents_XLog.lib")
 #endif
 #endif

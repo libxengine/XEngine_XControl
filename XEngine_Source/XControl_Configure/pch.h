@@ -7,23 +7,18 @@
 #ifndef PCH_H
 #define PCH_H
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 // 添加要在此处预编译的标头
 #include "framework.h"
 #include <tchar.h>
-#include <json/json.h>
 #else
-#ifdef _CENTOS
-#include <json/json.h>
-#else
-#include <jsoncpp/json/json.h>
-#endif
 #endif
 #endif //PCH_H
 #include <list>
 #include <string>
 #include <memory>
 #include <string.h>
+#include <json/json.h>
 #include <XEngine_Include/XEngine_CommHdr.h>
 #include <XEngine_Include/XEngine_Types.h>
 using namespace std;
@@ -42,3 +37,19 @@ using namespace std;
 *********************************************************************/
 extern BOOL Config_IsErrorOccur;
 extern DWORD Config_dwErrorCode;
+
+#ifdef _MSC_BUILD
+#ifdef _DEBUG
+#ifdef _WIN64
+#pragma comment(lib,"../x64/Debug/jsoncpp")
+#else
+#pragma comment(lib,"../Debug/jsoncpp")
+#endif
+#else
+#ifdef _WIN64
+#pragma comment(lib,"../x64/Release/jsoncpp")
+#else
+#pragma comment(lib,"../Release/jsoncpp")
+#endif
+#endif
+#endif

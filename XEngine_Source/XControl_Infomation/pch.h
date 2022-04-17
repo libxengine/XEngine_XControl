@@ -7,7 +7,7 @@
 #ifndef PCH_H
 #define PCH_H
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 // 添加要在此处预编译的标头
 #include "framework.h"
 #include <stdio.h>
