@@ -3,6 +3,7 @@ copy /y "D:\XEngine\XEngine_SourceCode\Debug\XEngine_Algorithm.dll" "./"
 copy /y "D:\XEngine\XEngine_SourceCode\Debug\XEngine_Core.dll" "./"
 copy /y "D:\XEngine\XEngine_SourceCode\Debug\XEngine_ManagePool.dll" "./"
 copy /y "D:\XEngine\XEngine_SourceCode\Debug\XEngine_OPenSsl.dll" "./"
+copy /y "D:\XEngine\XEngine_SourceCode\Debug\XEngine_NetXApi.dll" "./"
 
 copy /y "D:\XEngine\XEngine_SourceCode\Debug\XClient_Socket.dll" "./"
 
