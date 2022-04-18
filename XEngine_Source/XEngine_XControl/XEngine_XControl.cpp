@@ -206,7 +206,7 @@ int main(int argc, char** argv)
 					XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务中，写入临时文件失败,错误:%d", errno);
 					goto NETSERVICE_APPEXIT;
 				}
-				fwrite(_T("XEngine"), 1, 7, pSt_File);
+				fwrite("XEngine", 1, 7, pSt_File);
 				fclose(pSt_File);
 				XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，投递系统信息消息成功");
 			}
@@ -324,7 +324,7 @@ int main(int argc, char** argv)
 	}
 	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，初始化进程的守护线程成功");
 
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，所有服务已经启动完毕,程序运行中...");
+	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，所有服务已经启动完毕,程序运行中,XEngine版本:%s,服务器发行次数:%d,版本;%s...", XENGINE_VERSION_STR, st_ServiceConfig.st_Version.pStl_ListVer->size(), st_ServiceConfig.st_Version.pStl_ListVer->front().c_str());
 	while (TRUE)
 	{
 		if (bExist)
