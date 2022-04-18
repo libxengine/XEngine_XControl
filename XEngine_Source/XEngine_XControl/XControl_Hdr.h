@@ -2,17 +2,11 @@
 #include <windows.h>
 #include <tchar.h>
 #include <io.h>
-#include <json/json.h>
 #else
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <netinet/in.h>
-#ifdef _CENTOS
-#include <json/json.h>
-#else
-#include <jsoncpp/json/json.h>
-#endif
 #endif
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,6 +15,7 @@
 #include <list>
 #include <thread>
 #include <memory>
+#include <json/json.h>
 using namespace std;
 #include <XEngine_Include/XEngine_CommHdr.h>
 #include <XEngine_Include/XEngine_Types.h>
@@ -45,7 +40,9 @@ using namespace std;
 #include <XEngine_Include/XEngine_RfcComponents/HttpServer_Define.h>
 #include <XEngine_Include/XEngine_RfcComponents/HttpServer_Error.h>
 #undef  _T
+#ifdef _MSC_BUILD
 #define _T(x)       __T(x)
+#endif
 #endif
 #include <XEngine_Include/XEngine_RfcComponents/EmailClient_Define.h>
 #include <XEngine_Include/XEngine_RfcComponents/EmailClient_Error.h>

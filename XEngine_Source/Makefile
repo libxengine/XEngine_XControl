@@ -3,17 +3,22 @@ UNICODE = 0
 
 FLAGS = RELEASE=$(RELEASE)
 
+XCONTROL_JSON_PATH = ./XEngine_ThirdPart/jsoncpp
+
 XCONTROL_INFO_PATH = ./XControl_Infomation
 XCONTROL_CONFIG_PATH = ./XControl_Configure
 XCONTROL_PROTOCOL_PATH = ./XControl_Protocol
 
 XCONTROL_APP_PATH = ./XEngine_XControl
 
-NETENGINE_LIB = libXControl_Infomation.so libXControl_Configure.so libXControl_Protocol.so XEngine_XControl.exe
+NETENGINE_LIB = libjsoncpp.so libXControl_Infomation.so libXControl_Configure.so libXControl_Protocol.so XEngine_XControl.exe
 
 .PHONY:MakeAll 
 MakeAll:$(NETENGINE_LIB)
 	
+libjsoncpp.so:
+	make -C $(XCONTROL_JSON_PATH) $(FLAGS)
+
 libXControl_Infomation.so:
 	make -C $(XCONTROL_INFO_PATH) $(FLAGS)
 libXControl_Configure.so:
