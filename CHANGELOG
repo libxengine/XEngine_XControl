@@ -1,0 +1,53 @@
+XEngine_XControl V3.1.0.1001
+
+增加:http请求超时
+优化:获取列表和停止进程命令
+优化:配置文件
+修改:匹配XEngine版本
+修改:电子邮件信息现在从内存读取
+修改:创建电子邮件文件后没有退出程序
+修改:现在TCP和UDP需要协议头了
+修改:发送电子邮件地址不正确的问题
+修正:弹出窗口是创建进程的问题
+修正:执行进程没有工作的问题
+修正:邮件文件名不正确的问题
+修正:邮件地址没有被使用的问题
+修正:构建文件和拷贝文件错误的问题
+
+added:http request timeout
+improved:get list and stop process command
+improved:configure file
+modify:xengine version match
+modify:read email information from memory
+modify:will be exit program after create email file
+modify:send email address
+modify:tcp and udp client need protocol hdr
+fixed:pop message is a problem with the create process
+fixed:execute not work
+fixed:email file name
+fixed:email address in configure file is not used
+fixed:build error and copy file
+======================================================================================
+XEngine_XControl V3.0.0.1001
+
+添加:RPC服务支持
+添加:协议模块
+修改:文件名称,统一命名
+修改:配置模块不在验证版本列表个数
+删除:VS suo文件
+修正:编译问题
+
+add:rpc service
+added:protocol module
+modify:filename,Unified name rules
+modify:Not verified version lists number
+delete:vs suo file
+fixed:build error
+======================================================================================
+XEngine_XControl V2.0.0.1001 
+======================================================================================
+XEngine_XControl V1.2.0.1001 
+======================================================================================
+XEngine_XControl V1.1.0.1001
+======================================================================================
+XEngine_XControl V1.0.0.1001 
