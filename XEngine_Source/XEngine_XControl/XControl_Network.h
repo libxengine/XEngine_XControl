@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 BOOL __stdcall XControl_Callback_RPCLogin(LPCSTR lpszClientAddr, SOCKET hSocket, LPVOID lParam);
 void __stdcall XControl_Callback_RPCRecv(LPCSTR lpszClientAddr, SOCKET hSocket, LPCSTR lpszRecvMsg, int nMsgLen, LPVOID lParam);

@@ -1,13 +1,13 @@
-#pragma once
+ï»¿#pragma once
 /********************************************************************
 //    Created:     2021/09/08  10:07:18
 //    File Name:   D:\XEngine_XControl\XEngine_Source\XControl_Configure\Config_Error.h
 //    File Path:   D:\XEngine_XControl\XEngine_Source\XControl_Configure
 //    File Base:   Config_Error
 //    File Ext:    h
-//    Project:     XEngine(ÍøÂçÍ¨ÐÅÒýÇæ)
+//    Project:     XEngine(ç½‘ç»œé€šä¿¡å¼•æ“Ž)
 //    Author:      qyt
-//    Purpose:     ´íÎóµ¼³ö
+//    Purpose:     é”™è¯¯å¯¼å‡º
 //    History:
 *********************************************************************/
 #define ERROR_XCONTROL_MODULE_CONFIG_JSON_PARAMENT 0xAB00A001

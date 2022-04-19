@@ -1,4 +1,4 @@
-#include "XEngine_Hdr.h"
+﻿#include "XEngine_Hdr.h"
 
 BOOL XEngine_APPManage_RunService(LPCTSTR lpszServiceFile)
 {

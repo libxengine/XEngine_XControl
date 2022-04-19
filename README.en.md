@@ -22,31 +22,20 @@ Lightweight background service management tool,control your computer with HTTP o
 #### Requirements  
 support system above windows 7sp1 and linux(ubuntu20.04,centos8)  
 XEngine need V7.20 or above  
-vcpkg need 2021.05.11 or above  
+
+#### XEngine Env
+install XEngine can be refer to xengine Readme docment  
+GITEE:https://gitee.com/xyry/libxengine
+GITHUB:https://github.com/libxengine/xengine
 
 #### Windows
-use vs2019 x86(debug or release) x64(only release) open and complie  
+use vs open and complie  
 You need to configure the environment in the following way, otherwise you may need to set the library directory in the project yourself  
-
-##### install Dependent library
-vcpkg:https://github.com/microsoft/vcpkg   
-vcpkg.exe install jsoncpp  
-vcpkg integrate install  
-you can not use vcpkg and config jsoncpp development for youself   
 
 #### Linux
 Linux use Makefile to complie  
 supproted ubuntu x64 or centos x64     
 
-##### install Dependent library
-install jsoncpp to your system  
-ubuntu20.04  
-sudo apt install libjsoncpp-devel  
-Centos8.x  
-sudo dnf install jsoncpp-devel  
-
-##### XEngine Install
-download xengine through git.read xengine project readme file to configure your env  
 ##### complie
 execute command in XEngine_Source path
 make complie  

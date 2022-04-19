@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 XHTHREAD XControl_Thread_HttpTask();
 XHTHREAD XControl_Thread_TCPTask();

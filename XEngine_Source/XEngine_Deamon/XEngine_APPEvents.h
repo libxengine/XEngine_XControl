@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 BOOL XEngine_APPManage_RunService(LPCTSTR lpszServiceFile);
 BOOL XEngine_APPManage_CheckService();

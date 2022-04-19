@@ -5,7 +5,7 @@ BOOL APPManage_CreateService(XENGINE_APPINFO *pSt_APPInfo)
 	CHAR tszCmdExe[1024];
 	memset(tszCmdExe, '\0', sizeof(tszCmdExe));
 
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	sprintf(tszCmdExe, "sc stop %s", pSt_APPInfo->tszAPPName);
 #else
 	sprintf(tszCmdExe, "systemctl restart %s", pSt_APPInfo->tszAPPName);
@@ -14,7 +14,7 @@ BOOL APPManage_CreateService(XENGINE_APPINFO *pSt_APPInfo)
 	{
 		return FALSE;
 	}
-#ifdef _WINDOWS
+#ifdef _MSC_BUILD
 	memset(tszCmdExe, '\0', sizeof(tszCmdExe));
 	sprintf(tszCmdExe, "sc start %s", pSt_APPInfo->tszAPPName);
 	if (-1 == system(tszCmdExe))
@@ -99,11 +99,11 @@ XHTHREAD APPManage_Thread_Process()
 				//进程不存在才启动
 				SYSTEMAPI_PROCESS_INFOMATION st_ProcessInfo;
 				memset(&st_ProcessInfo, '\0', sizeof(SYSTEMAPI_PROCESS_INFOMATION));
-				if (SystemApi_Process_GetProcessInfo(stl_ListIterator->tszAPPName, 0, &st_ProcessInfo))
+				if (SystemApi_Process_GetProcessInfo(&st_ProcessInfo, stl_ListIterator->tszAPPName))
 				{
 					if (ENUM_SYSTEMSDK_PROCFILE_PROCFILE_PROCESS_STATE_ZOMBIE == st_ProcessInfo.en_ProcessState)
 					{
-#ifndef _WINDOWS
+#ifndef _MSC_BUILD
 						//僵尸进程必须使用waitpid退出
 						int nStatus = 0;
 						waitpid(st_ProcessInfo.nPid, &nStatus, 0);
@@ -146,11 +146,11 @@ XHTHREAD APPManage_Thread_Process()
 				//如果没设置，那么表示启动一次就不用管了
 				SYSTEMAPI_PROCESS_INFOMATION st_ProcessInfo;
 				memset(&st_ProcessInfo, '\0', sizeof(SYSTEMAPI_PROCESS_INFOMATION));
-				if (SystemApi_Process_GetProcessInfo(stl_ListIterator->tszAPPName, 0, &st_ProcessInfo))
+				if (SystemApi_Process_GetProcessInfo(&st_ProcessInfo, stl_ListIterator->tszAPPName))
 				{
 					if (ENUM_SYSTEMSDK_PROCFILE_PROCFILE_PROCESS_STATE_ZOMBIE == st_ProcessInfo.en_ProcessState)
 					{
-#ifndef _WINDOWS
+#ifndef _MSC_BUILD
 						//僵尸进程必须使用waitpid退出
 						int nStatus = 0;
 						waitpid(st_ProcessInfo.nPid, &nStatus, 0);

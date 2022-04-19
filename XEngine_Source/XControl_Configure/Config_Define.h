@@ -1,17 +1,17 @@
-#pragma once
+ï»¿#pragma once
 /********************************************************************
 //    Created:     2021/09/08  10:07:10
 //    File Name:   D:\XEngine_XControl\XEngine_Source\XControl_Configure\Config_Define.h
 //    File Path:   D:\XEngine_XControl\XEngine_Source\XControl_Configure
 //    File Base:   Config_Define
 //    File Ext:    h
-//    Project:     XEngine(ÍøÂçÍ¨ÐÅÒýÇæ)
+//    Project:     XEngine(ç½‘ç»œé€šä¿¡å¼•æ“Ž)
 //    Author:      qyt
-//    Purpose:     ÅäÖÃÄ£¿éµ¼³ö
+//    Purpose:     é…ç½®æ¨¡å—å¯¼å‡º
 //    History:
 *********************************************************************/
 //////////////////////////////////////////////////////////////////////////
-//                        µ¼³öµÄÊý¾Ý½á¹¹
+//                        å¯¼å‡ºçš„æ•°æ®ç»“æž„
 //////////////////////////////////////////////////////////////////////////
 typedef struct tag_XEngine_ServerConfig
 {
@@ -24,6 +24,9 @@ typedef struct tag_XEngine_ServerConfig
 	{
 		int nCheckTime;
 		int nErrorTime;
+		int nHTTPThreadTime;
+		int nTCPThreadTime;
+		int nUDPThreadTime;
 	}st_Time;
 	struct
 	{
@@ -52,17 +55,17 @@ typedef struct tag_XEngine_ServerConfig
 		list<string>* pStl_ListVer;
 	}st_Version;
 }XENGINE_SERVERCONFIG;
-//ÓÃ»§½ø³ÌÁÐ±í
+//ç”¨æˆ·è¿›ç¨‹åˆ—è¡¨
 typedef struct
 {
-	CHAR tszAPPName[MAX_PATH];         //Ó¦ÓÃ³ÌÐòÃû³Æ
-	CHAR tszAPPPath[MAX_PATH];         //Ó¦ÓÃ³ÌÐòÂ·¾¶
-	BOOL bShow;                        //ÏÔÊ¾»¹ÊÇÒþ²Ø 
-	BOOL bAutoStart;                   //ÊÇ·ñ×Ô¶¯Æô¶¯
-	BOOL bEnable;                      //ÊÇ·ñÆôÓÃ
-	BOOL bService;                     //ÊÇ·ñÎª·þÎñÆô¶¯
-	int nReTime;                       //ÊÇ·ñ×Ô¶¯ÖØÆô
-	//×Ô¶¨Òå
+	CHAR tszAPPName[MAX_PATH];         //åº”ç”¨ç¨‹åºåç§°
+	CHAR tszAPPPath[MAX_PATH];         //åº”ç”¨ç¨‹åºè·¯å¾„
+	BOOL bShow;                        //æ˜¾ç¤ºè¿˜æ˜¯éšè— 
+	BOOL bAutoStart;                   //æ˜¯å¦è‡ªåŠ¨å¯åŠ¨
+	BOOL bEnable;                      //æ˜¯å¦å¯ç”¨
+	BOOL bService;                     //æ˜¯å¦ä¸ºæœåŠ¡å¯åŠ¨
+	int nReTime;                       //æ˜¯å¦è‡ªåŠ¨é‡å¯
+	//è‡ªå®šä¹‰
 	int nErrorTime;
 	__int64x nStartTime;
 }XENGINE_APPINFO;
@@ -71,47 +74,47 @@ typedef struct
 	list<XENGINE_APPINFO>* pStl_ListApp;
 }XENGINE_CONFIGAPP;
 //////////////////////////////////////////////////////////////////////////
-//                        µ¼³öµÄº¯Êý
+//                        å¯¼å‡ºçš„å‡½æ•°
 //////////////////////////////////////////////////////////////////////////
 extern "C" DWORD Config_GetLastError(int* pInt_SysError = NULL);
 /************************************************************************/
-/*                        ÅäÖÃ¶ÁÈ¡µ¼³ö                                  */
+/*                        é…ç½®è¯»å–å¯¼å‡º                                  */
 /************************************************************************/
 /********************************************************************
-º¯ÊýÃû³Æ£ºConfig_Json_File
-º¯Êý¹¦ÄÜ£ºJSON»ù´¡ÅäÖÃ¶ÁÈ¡
- ²ÎÊý.Ò»£ºlpszConfigFile
-  In/Out£ºIn
-  ÀàÐÍ£º³£Á¿×Ö·ûÖ¸Õë
-  ¿É¿Õ£ºN
-  ÒâË¼£ºÊäÈëÎÄ¼þµØÖ·
- ²ÎÊý.¶þ£ºpSt_FileConfig
-  In/Out£ºOut
-  ÀàÐÍ£ºÊý¾Ý½á¹¹Ö¸Õë
-  ¿É¿Õ£ºN
-  ÒâË¼£ºÊä³ö»ñÈ¡µ½µÄÅäÖÃÐÅÏ¢
-·µ»ØÖµ
-  ÀàÐÍ£ºÂß¼­ÐÍ
-  ÒâË¼£ºÊÇ·ñ³É¹¦
-±¸×¢£º
+å‡½æ•°åç§°ï¼šConfig_Json_File
+å‡½æ•°åŠŸèƒ½ï¼šJSONåŸºç¡€é…ç½®è¯»å–
+ å‚æ•°.ä¸€ï¼šlpszConfigFile
+  In/Outï¼šIn
+  ç±»åž‹ï¼šå¸¸é‡å­—ç¬¦æŒ‡é’ˆ
+  å¯ç©ºï¼šN
+  æ„æ€ï¼šè¾“å…¥æ–‡ä»¶åœ°å€
+ å‚æ•°.äºŒï¼špSt_FileConfig
+  In/Outï¼šOut
+  ç±»åž‹ï¼šæ•°æ®ç»“æž„æŒ‡é’ˆ
+  å¯ç©ºï¼šN
+  æ„æ€ï¼šè¾“å‡ºèŽ·å–åˆ°çš„é…ç½®ä¿¡æ¯
+è¿”å›žå€¼
+  ç±»åž‹ï¼šé€»è¾‘åž‹
+  æ„æ€ï¼šæ˜¯å¦æˆåŠŸ
+å¤‡æ³¨ï¼š
 *********************************************************************/
 extern "C" BOOL Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONFIG* pSt_FileConfig);
 /********************************************************************
-º¯ÊýÃû³Æ£ºConfig_Json_LoadList
-º¯Êý¹¦ÄÜ£ºJSON APPÁÐ±íÅäÖÃ¶ÁÈ¡
- ²ÎÊý.Ò»£ºlpszConfigFile
-  In/Out£ºIn
-  ÀàÐÍ£º³£Á¿×Ö·ûÖ¸Õë
-  ¿É¿Õ£ºN
-  ÒâË¼£ºÊäÈëÎÄ¼þµØÖ·
- ²ÎÊý.¶þ£ºpSt_FileConfig
-  In/Out£ºOut
-  ÀàÐÍ£ºÊý¾Ý½á¹¹Ö¸Õë
-  ¿É¿Õ£ºN
-  ÒâË¼£ºÊä³ö»ñÈ¡µ½µÄÅäÖÃÐÅÏ¢
-·µ»ØÖµ
-  ÀàÐÍ£ºÂß¼­ÐÍ
-  ÒâË¼£ºÊÇ·ñ³É¹¦
-±¸×¢£º
+å‡½æ•°åç§°ï¼šConfig_Json_LoadList
+å‡½æ•°åŠŸèƒ½ï¼šJSON APPåˆ—è¡¨é…ç½®è¯»å–
+ å‚æ•°.ä¸€ï¼šlpszConfigFile
+  In/Outï¼šIn
+  ç±»åž‹ï¼šå¸¸é‡å­—ç¬¦æŒ‡é’ˆ
+  å¯ç©ºï¼šN
+  æ„æ€ï¼šè¾“å…¥æ–‡ä»¶åœ°å€
+ å‚æ•°.äºŒï¼špSt_FileConfig
+  In/Outï¼šOut
+  ç±»åž‹ï¼šæ•°æ®ç»“æž„æŒ‡é’ˆ
+  å¯ç©ºï¼šN
+  æ„æ€ï¼šè¾“å‡ºèŽ·å–åˆ°çš„é…ç½®ä¿¡æ¯
+è¿”å›žå€¼
+  ç±»åž‹ï¼šé€»è¾‘åž‹
+  æ„æ€ï¼šæ˜¯å¦æˆåŠŸ
+å¤‡æ³¨ï¼š
 *********************************************************************/
 extern "C" BOOL Config_Json_LoadList(LPCSTR lpszConfigFile, XENGINE_CONFIGAPP* pSt_AppConfig);

@@ -1,12 +1,13 @@
 CC = g++ -Wall -std=c++17 -fPIC
 RELEASE = 0
 UNICODE = 0
-INCLUDE = -I ./
+INCLUDE = -I ./ -I ../XEngine_ThirdPart/jsoncpp
 FILECENTOS = /etc/redhat-release
-LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_SystemSdk -L /usr/local/lib/XEngine_Release/XEngine_NetHelp
-LIB = -lXEngine_BaseLib -lXEngine_SystemApi -lNetHelp_APIHelp -ljsoncpp
+LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_Core -L /usr/local/lib/XEngine_Release/XEngine_SystemSdk   \
+          -L ../XEngine_ThirdPart/jsoncpp
+LIB = -lXEngine_BaseLib -lXEngine_NetXApi -lXEngine_SystemApi -ljsoncpp
 LIBEX = -static-libgcc -lrt -ldl -lpthread
-LOADSO = -Wl,-rpath=,--disable-new-dtags
+LOADSO = -Wl,-rpath=./,--disable-new-dtags
 LIBINCLUDE = XControl_Info.o pch.o
 
 ifeq ($(RELEASE),1)
@@ -37,7 +38,7 @@ XControl_Info.o:./XControl_Info/XControl_Info.cpp
 	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./XControl_Info/XControl_Info.cpp
 
 pch.o:./pch.cpp                          
-	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) ./pch.cpp
+	$(CC) $(DEBUG) $(FLAGS) $(UNICODE) $(INCLUDE) ./pch.cpp
 
 
 InstallAll:InstallSo 
