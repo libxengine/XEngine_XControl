@@ -1,3 +1,25 @@
+XEngine_XControl V3.2.0.1001
+
+增加:JSONCPP模块
+增加:线程检测等待时间
+更新:VS2019到VS2022
+修改:文件编码格式修改为utf8-bom
+修改:获取任务方法从post改成get
+修改:在服务启动的时候输出版本信息
+修正:XEngine新版本无法编译的问题
+修正:DEBUG64无法编译的问题
+删除:无用代码
+
+added:jsoncpp module
+added:thread time check
+update:vs2019 to vs2022
+modify:code encodec to utf8-bom
+modify:get task method to get from post
+modify:print version information when the process start
+fixed:build error for xengine ver 7.32
+fixed:debug 64 build error
+delete:unused code
+======================================================================================
 XEngine_XControl V3.1.0.1001
 
 增加:http请求超时
