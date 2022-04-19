@@ -24,7 +24,7 @@ c c++
 XEngine版本需要V7.32或者以上版本  
 
 #### XEngine环境
-安装XEngine可以参考其Readme文档
+安装XEngine可以参考其Readme文档  
 GITEE:https://gitee.com/xyry/libxengine
 GITHUB:https://github.com/libxengine/xengine
 
