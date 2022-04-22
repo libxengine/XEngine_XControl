@@ -16,7 +16,6 @@
 typedef struct tag_XEngine_ServerConfig
 {
 	CHAR tszTaskUrl[MAX_PATH];
-	CHAR tszTmpFile[MAX_PATH];
 	CHAR tszAPPDeamon[MAX_PATH];
 	BOOL bAutoStart;
 	BOOL bHideWnd;
@@ -28,21 +27,6 @@ typedef struct tag_XEngine_ServerConfig
 		int nTCPThreadTime;
 		int nUDPThreadTime;
 	}st_Time;
-	struct
-	{
-		CHAR tszIPAddr[128];
-		int nIPType;
-		int nPort;
-		BOOL bEnable;
-	}st_Client;
-	struct  
-	{
-		int nPort;
-		int nThread;
-		int nClient;
-		int nTimeCheck;
-		int nTimeOut;
-	}st_XRpc;
 	struct
 	{
 		CHAR tszLogFile[MAX_PATH];

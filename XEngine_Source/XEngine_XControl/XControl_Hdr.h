@@ -22,14 +22,10 @@ using namespace std;
 #include <XEngine_Include/XEngine_ProtocolHdr.h>
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Define.h>
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Error.h>
-#include <XEngine_Include/XEngine_Core/OPenSsl_Define.h>
-#include <XEngine_Include/XEngine_Core/OPenSsl_Error.h>
 #include <XEngine_Include/XEngine_Client/XClient_Define.h>
 #include <XEngine_Include/XEngine_Client/XClient_Error.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Define.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Error.h>
-#include <XEngine_Include/XEngine_RfcComponents/EmailClient_Define.h>
-#include <XEngine_Include/XEngine_RfcComponents/EmailClient_Error.h>
 #include <XEngine_Include/XEngine_DownLoad/DownLoad_Define.h>
 #include <XEngine_Include/XEngine_DownLoad/DownLoad_Error.h>
 #include <XEngine_Include/XEngine_NetHelp/APIHelp_Define.h>
@@ -45,16 +41,6 @@ using namespace std;
 #include "../XControl_Protocol/Protocol_Define.h"
 #include "../XControl_Protocol/Protocol_Error.h"
 
-#define XENGINE_CONTRALAPP_NETTYPE_XPRC 1
-//邮件配置
-typedef struct
-{
-	RFCCOMPONENTS_EMAILSMTP st_EMailSmtp;
-	CHAR tszAddrList[2048];
-	BOOL bEnable;
-	BOOL bCreateEmail;
-}XENGIEN_EMAILCONFIG;
-
 extern BOOL bIsRun;
 extern BOOL bExist;
 extern XLOG xhLog;
@@ -68,7 +54,6 @@ extern shared_ptr<std::thread> pSTDThread_UDP;
 extern shared_ptr<std::thread> pSTDThread_App;
 extern XENGINE_SERVERCONFIG st_ServiceConfig;
 extern XENGINE_CONFIGAPP st_APPConfig;
-extern XENGIEN_EMAILCONFIG st_EMailConfig;
 
 #include "XControl_Config.h"
 #include "XControl_Handle.h"
@@ -78,10 +63,8 @@ extern XENGIEN_EMAILCONFIG st_EMailConfig;
 #ifdef _MSC_BUILD
 #pragma comment(lib,"Ws2_32.lib")
 #pragma comment(lib,"XEngine_BaseLib/XEngine_BaseLib.lib")
-#pragma comment(lib,"XEngine_Core/XEngine_OPenSsl.lib")
 #pragma comment(lib,"XEngine_Client/XClient_Socket.lib")
 #pragma comment(lib,"XEngine_HelpComponents/HelpComponents_XLog.lib")
-#pragma comment(lib,"XEngine_RfcComponents/RfcComponents_EmailClient.lib")
 #pragma comment(lib,"XEngine_NetHelp/NetHelp_APIHelp.lib")
 #pragma comment(lib,"XEngine_SystemSdk/XEngine_SystemApi.lib")
 #pragma comment(lib,"XEngine_DownLoad/XEngine_DownLoad.lib")
