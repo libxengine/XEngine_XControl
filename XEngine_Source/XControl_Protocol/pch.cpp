@@ -31,22 +31,7 @@ extern "C" DWORD Protocol_GetLastError(int* pInt_SysError)
 /************************************************************************/
 /*                        封装类函数                                    */
 /************************************************************************/
-extern "C" BOOL Protocol_Packet_RPCResponse(LPCSTR lpszFuncName, LPCSTR lpszValue, int nMsgLen, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE enXRPC_ParamType, CHAR * ptszMsgBuffer, int* pInt_MsgLen)
-{
-	return m_ProtocolPacket.Protocol_Packet_RPCResponse(lpszFuncName, lpszValue, nMsgLen, enXRPC_ParamType, ptszMsgBuffer, pInt_MsgLen);
-}
-extern "C" BOOL Protocol_Packet_RPCRequest(LPCSTR lpszFuncName, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE enRtnType, list<PROTOCOL_XRPCPARAMETE>*pStl_ListParament, CHAR * ptszMsgBuffer, int* pInt_MsgLen)
-{
-	return m_ProtocolPacket.Protocol_Packet_RPCRequest(lpszFuncName, enRtnType, pStl_ListParament, ptszMsgBuffer, pInt_MsgLen);
-}
+
 /************************************************************************/
 /*                        解析类函数                                    */
 /************************************************************************/
-extern "C" BOOL Protocol_Parse_RPCRequest(LPCSTR lpszMsgBuffer, int nMsgLen, CHAR * ptszFuncName, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE * penRtnType, list<PROTOCOL_XRPCPARAMETE>*pStl_ListParamete)
-{
-	return m_ProtocolParse.Protocol_Parse_RPCRequest(lpszMsgBuffer, nMsgLen, ptszFuncName, penRtnType, pStl_ListParamete);
-}
-extern "C" BOOL Protocol_Parse_RPCReponse(LPCSTR lpszMsgBuffer, int nMsgLen, CHAR * ptszFuncName, PROTOCOL_XRPCPARAMETE * pSt_RPCParament)
-{
-	return m_ProtocolParse.Protocol_Parse_RPCReponse(lpszMsgBuffer, nMsgLen, ptszFuncName, pSt_RPCParament);
-}
