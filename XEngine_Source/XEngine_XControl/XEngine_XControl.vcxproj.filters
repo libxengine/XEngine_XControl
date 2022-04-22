@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="源文件\XControl_RPCTask">
-      <UniqueIdentifier>{dfc7994f-94ac-465b-952b-272e6ffec9e5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="头文件\XControl_RPCTask">
-      <UniqueIdentifier>{fa4d45d7-47c9-42e1-b877-c71d29f1b406}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="XEngine_XControl.cpp">
@@ -30,23 +24,11 @@
     <ClCompile Include="XControl_Handle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="XControl_Network.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="XControl_Process.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="XControl_RPCTask.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="XControl_Task.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="XControl_RPCTask\RPCTask_MethodCal.cpp">
-      <Filter>源文件\XControl_RPCTask</Filter>
-    </ClCompile>
-    <ClCompile Include="XControl_RPCTask\RPCTask_MethodMessage.cpp">
-      <Filter>源文件\XControl_RPCTask</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,23 +41,11 @@
     <ClInclude Include="XControl_Hdr.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="XControl_Network.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="XControl_Process.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="XControl_RPCTask.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="XControl_Task.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="XControl_RPCTask\RPCTask_MethodCal.h">
-      <Filter>头文件\XControl_RPCTask</Filter>
-    </ClInclude>
-    <ClInclude Include="XControl_RPCTask\RPCTask_MethodMessage.h">
-      <Filter>头文件\XControl_RPCTask</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

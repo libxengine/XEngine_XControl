@@ -152,11 +152,7 @@
   <ItemGroup>
     <ClCompile Include="XControl_Config.cpp" />
     <ClCompile Include="XControl_Handle.cpp" />
-    <ClCompile Include="XControl_Network.cpp" />
     <ClCompile Include="XControl_Process.cpp" />
-    <ClCompile Include="XControl_RPCTask.cpp" />
-    <ClCompile Include="XControl_RPCTask\RPCTask_MethodCal.cpp" />
-    <ClCompile Include="XControl_RPCTask\RPCTask_MethodMessage.cpp" />
     <ClCompile Include="XControl_Task.cpp" />
     <ClCompile Include="XEngine_XControl.cpp" />
   </ItemGroup>
@@ -164,11 +160,7 @@
     <ClInclude Include="XControl_Config.h" />
     <ClInclude Include="XControl_Handle.h" />
     <ClInclude Include="XControl_Hdr.h" />
-    <ClInclude Include="XControl_Network.h" />
     <ClInclude Include="XControl_Process.h" />
-    <ClInclude Include="XControl_RPCTask.h" />
-    <ClInclude Include="XControl_RPCTask\RPCTask_MethodCal.h" />
-    <ClInclude Include="XControl_RPCTask\RPCTask_MethodMessage.h" />
     <ClInclude Include="XControl_Task.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

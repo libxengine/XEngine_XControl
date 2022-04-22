@@ -6,10 +6,6 @@ XLOG xhLog = NULL;
 SOCKET hTCPSocket = 0;
 SOCKET hUDPSocket = 0;
 int m_nTaskSerial = 0;
-XHANDLE xhRPCPacket = NULL;
-XNETHANDLE xhRPCPool = 0;
-XNETHANDLE xhRPCSocket = 0;
-XNETHANDLE xhRPCHeart = 0;
 
 shared_ptr<std::thread> pSTDThread_Http = NULL;
 shared_ptr<std::thread> pSTDThread_TCP = NULL;
@@ -42,11 +38,6 @@ void ServiceApp_Stop(int signo)
 		{
 			pSTDThread_App->join();
 		}
-		RfcComponents_HttpServer_DestroyEx(xhRPCPacket);
-		ManagePool_Thread_NQDestroy(xhRPCPool);
-		NetCore_TCPXCore_DestroyEx(xhRPCSocket);
-		SocketOpt_HeartBeat_DestoryEx(xhRPCHeart);
-
 		XClient_TCPSelect_Close(hTCPSocket);
 		XClient_UDPSelect_Close(hUDPSocket);
 		HelpComponents_XLog_Destroy(xhLog);
@@ -62,9 +53,6 @@ int main(int argc, char** argv)
 	LPCSTR lpszWndName = "XEngine_XControlApp";
 #endif
 	bIsRun = TRUE;
-	LPCSTR lpszHTTPCode = "./XControl_Config/HttpCode.types";
-	LPCSTR lpszHTTPMime = "./XControl_Config/HttpMime.types";
-	THREADPOOL_PARAMENT** ppSt_ListRPCParam;
 	HELPCOMPONENTS_XLOG_CONFIGURE st_XLogConfig;
 
 	memset(&st_XLogConfig, '\0', sizeof(HELPCOMPONENTS_XLOG_CONFIGURE));
@@ -260,53 +248,6 @@ int main(int argc, char** argv)
 	{
 		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, "启动服务中，客户端被设置为不自动连接");
 	}
-	//RPC服务
-	xhRPCPacket = RfcComponents_HttpServer_InitEx(lpszHTTPCode, lpszHTTPMime, st_ServiceConfig.st_XRpc.nThread);
-	if (NULL == xhRPCPacket)
-	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动服务器中，初始化HTTP组包失败，错误：%lX", HttpServer_GetLastError());
-		goto NETSERVICE_APPEXIT;
-	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，初始化HTTP组包成功，IO线程个数:%d", st_ServiceConfig.st_XRpc.nThread);
-
-	if (st_ServiceConfig.st_XRpc.nTimeCheck > 0)
-	{
-		if (!SocketOpt_HeartBeat_InitEx(&xhRPCHeart, st_ServiceConfig.st_XRpc.nTimeOut, st_ServiceConfig.st_XRpc.nTimeCheck, XControl_Callback_RPCHeart))
-		{
-			XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "初始化RPC心跳服务失败，错误：%lX", NetCore_GetLastError());
-			goto NETSERVICE_APPEXIT;
-		}
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，初始化RPC心跳服务成功,句柄:%llu,时间:%d,次数:%d", xhRPCHeart, st_ServiceConfig.st_XRpc.nTimeOut, st_ServiceConfig.st_XRpc.nTimeCheck);
-	}
-	else
-	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_WARN, "启动服务中，心跳服务被设置为不启用");
-	}
-
-	if (!NetCore_TCPXCore_StartEx(&xhRPCSocket, st_ServiceConfig.st_XRpc.nPort, st_ServiceConfig.st_XRpc.nClient, st_ServiceConfig.st_XRpc.nThread))
-	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动RPC网络服务器失败，错误：%lX", NetCore_GetLastError());
-		goto NETSERVICE_APPEXIT;
-	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，启动RPC网络服务器成功,RPC端口:%d,IO:%d", st_ServiceConfig.st_XRpc.nPort, st_ServiceConfig.st_XRpc.nThread);
-	NetCore_TCPXCore_RegisterCallBackEx(xhRPCSocket, XControl_Callback_RPCLogin, XControl_Callback_RPCRecv, XControl_Callback_RPCLeave);
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，注册RPC网络事件成功");
-
-	BaseLib_OperatorMemory_Malloc((XPPPMEM)&ppSt_ListRPCParam, st_ServiceConfig.st_XRpc.nThread, sizeof(THREADPOOL_PARAMENT));
-	for (int i = 0; i < st_ServiceConfig.st_XRpc.nThread; i++)
-	{
-		int* pInt_Pos = new int;
-
-		*pInt_Pos = i;
-		ppSt_ListRPCParam[i]->lParam = pInt_Pos;
-		ppSt_ListRPCParam[i]->fpCall_ThreadsTask = XControl_RPCThread;
-	}
-	if (!ManagePool_Thread_NQCreate(&xhRPCPool, &ppSt_ListRPCParam, st_ServiceConfig.st_XRpc.nThread))
-	{
-		XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_ERROR, "启动RPC线程池服务失败，错误：%lX", ManagePool_GetLastError());
-		goto NETSERVICE_APPEXIT;
-	}
-	XLOG_PRINT(xhLog, XENGINE_HELPCOMPONENTS_XLOG_IN_LOGLEVEL_INFO, "启动服务中，启动RPC线程池服务成功,启动个数:%d", st_ServiceConfig.st_XRpc.nThread);
 	//创建任务线程
 	pSTDThread_Http = make_shared<std::thread>(XControl_Thread_HttpTask);
 	if (!pSTDThread_Http->joinable())
@@ -355,11 +296,6 @@ NETSERVICE_APPEXIT:
 		{
 			pSTDThread_App->join();
 		}
-		RfcComponents_HttpServer_DestroyEx(xhRPCPacket);
-		ManagePool_Thread_NQDestroy(xhRPCPool);
-		NetCore_TCPXCore_DestroyEx(xhRPCSocket);
-		SocketOpt_HeartBeat_DestoryEx(xhRPCHeart);
-
 		XClient_TCPSelect_Close(hTCPSocket);
 		XClient_UDPSelect_Close(hUDPSocket);
 		HelpComponents_XLog_Destroy(xhLog);

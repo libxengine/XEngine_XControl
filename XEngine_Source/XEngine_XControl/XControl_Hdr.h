@@ -22,28 +22,12 @@ using namespace std;
 #include <XEngine_Include/XEngine_ProtocolHdr.h>
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Define.h>
 #include <XEngine_Include/XEngine_BaseLib/BaseLib_Error.h>
-#include <XEngine_Include/XEngine_Core/NetCore_Define.h>
-#include <XEngine_Include/XEngine_Core/NetCore_Error.h>
-#include <XEngine_Include/XEngine_Core/ManagePool_Define.h>
-#include <XEngine_Include/XEngine_Core/ManagePool_Error.h>
 #include <XEngine_Include/XEngine_Core/OPenSsl_Define.h>
 #include <XEngine_Include/XEngine_Core/OPenSsl_Error.h>
-#include <XEngine_Include/XEngine_Core/NetXApi_Define.h>
-#include <XEngine_Include/XEngine_Core/NetXApi_Error.h>
 #include <XEngine_Include/XEngine_Client/XClient_Define.h>
 #include <XEngine_Include/XEngine_Client/XClient_Error.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Define.h>
 #include <XEngine_Include/XEngine_HelpComponents/XLog_Error.h>
-#ifdef _T
-#undef  _T
-#define _T(x)      x
-#include <XEngine_Include/XEngine_RfcComponents/HttpServer_Define.h>
-#include <XEngine_Include/XEngine_RfcComponents/HttpServer_Error.h>
-#undef  _T
-#ifdef _MSC_BUILD
-#define _T(x)       __T(x)
-#endif
-#endif
 #include <XEngine_Include/XEngine_RfcComponents/EmailClient_Define.h>
 #include <XEngine_Include/XEngine_RfcComponents/EmailClient_Error.h>
 #include <XEngine_Include/XEngine_DownLoad/DownLoad_Define.h>
@@ -77,10 +61,6 @@ extern XLOG xhLog;
 extern SOCKET hTCPSocket;
 extern SOCKET hUDPSocket;
 extern int m_nTaskSerial;
-extern XHANDLE xhRPCPacket;
-extern XNETHANDLE xhRPCPool;
-extern XNETHANDLE xhRPCSocket;
-extern XNETHANDLE xhRPCHeart;
 
 extern shared_ptr<std::thread> pSTDThread_Http;
 extern shared_ptr<std::thread> pSTDThread_TCP;
@@ -93,24 +73,15 @@ extern XENGIEN_EMAILCONFIG st_EMailConfig;
 #include "XControl_Config.h"
 #include "XControl_Handle.h"
 #include "XControl_Task.h"
-#include "XControl_Network.h"
 #include "XControl_Process.h"
-#include "XControl_RPCTask.h"
-
-#include "XControl_RPCTask/RPCTask_MethodCal.h"
-#include "XControl_RPCTask/RPCTask_MethodMessage.h"
 
 #ifdef _MSC_BUILD
 #pragma comment(lib,"Ws2_32.lib")
 #pragma comment(lib,"XEngine_BaseLib/XEngine_BaseLib.lib")
 #pragma comment(lib,"XEngine_Core/XEngine_OPenSsl.lib")
-#pragma comment(lib,"XEngine_Core/XEngine_Core.lib")
-#pragma comment(lib,"XEngine_Core/XEngine_ManagePool.lib")
-#pragma comment(lib,"XEngine_Core/XEngine_NetXApi.lib")
 #pragma comment(lib,"XEngine_Client/XClient_Socket.lib")
 #pragma comment(lib,"XEngine_HelpComponents/HelpComponents_XLog.lib")
 #pragma comment(lib,"XEngine_RfcComponents/RfcComponents_EmailClient.lib")
-#pragma comment(lib,"XEngine_RfcComponents/RfcComponents_HttpServer.lib")
 #pragma comment(lib,"XEngine_NetHelp/NetHelp_APIHelp.lib")
 #pragma comment(lib,"XEngine_SystemSdk/XEngine_SystemApi.lib")
 #pragma comment(lib,"XEngine_DownLoad/XEngine_DownLoad.lib")
