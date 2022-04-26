@@ -1,4 +1,6 @@
-# XContral
+[中文](README.md) ||  [English](README.en.md)  
+# XEngine_XControl
+本仓库有开发和主分支,如果要使用,请使用master分支下的代码
 
 #### 开发语言
 c c++  
@@ -15,7 +17,6 @@ c c++
 5. 支持HTTP任务接受处理  
 6. 支持TCP,UDP连接协议控制  
 7. 支持守护本地服务和程序以及策略控制  
-8. 支持用户编写PRC来处理事件  
 
 ## 安装教程
 
@@ -30,7 +31,6 @@ GITHUB:https://github.com/libxengine/xengine
 
 #### Windows
 使用VS打开并且编译  
-你需要按照下面的方式配置环境,不然你可能需要自己在项目中设置库目录  
 
 #### Linux
 Linux使用Makefile编译  
@@ -48,9 +48,7 @@ make FLAGS=CleanAll 清理编译
 2.  下载代码
 3.  编译
 4.  安装
-5.  修改配置文件和电子邮件配置XControl_EMail.ini  
-6.  -c 参数创建加密邮件信息  
-7.  运行  
+5.  运行  
 
 ## 目录结构
 - XEngine_Docment   文档目录结构  
@@ -71,6 +69,7 @@ make FLAGS=CleanAll 清理编译
 远程关闭计算机  
 执行命令  
 连接  
+信息报告  
 用户自定义开始  
 
 ## 开发计划
