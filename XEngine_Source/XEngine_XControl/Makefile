@@ -1,23 +1,31 @@
-CC = g++ -Wall
+CC = g++ -Wall -std=c++17
 RELEASE = 0
 UNICODE = 0  
 INCLUDE = -I ./ -I ../XEngine_ThirdPart/jsoncpp
-LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_Core -L /usr/local/lib/XEngine_Release/XEngine_Client -L /usr/local/lib/XEngine_Release/XEngine_HelpComponents -L /usr/local/lib/XEngine_Release/XEngine_SystemSdk -L /usr/local/lib/XEngine_Release/XEngine_RfcComponents -L /usr/local/lib/XEngine_Release/XEngine_NetHelp -L /usr/local/lib/XEngine_Release/XEngine_DownLoad \
-          -L ../XControl_Infomation -L ../XControl_Configure -L ../XControl_Protocol \
-		  -L ../XEngine_ThirdPart/jsoncpp
+LOADBIN = 0
 LIB = -lXEngine_BaseLib -lXEngine_Algorithm -lXEngine_OPenSsl -lXClient_Socket -lHelpComponents_XLog -lXEngine_ProcFile -lXEngine_SystemApi -lRfcComponents_EmailClient -lNetHelp_APIHelp -lXEngine_Download \
       -lXControl_Infomation -lXControl_Configure -lXControl_Protocol \
 	  -ljsoncpp
-LIBEX = -static-libgcc -ldl -lrt -lpthread 
+LIBEX = -ldl -lpthread 
 LOADSO = -Wl,-rpath=./,--disable-new-dtags
 LIBINCLUDE = XControl_Config.o XControl_Handle.o XControl_Task.o XControl_Process.o XEngine_XControl.o
+
+ifeq ($(shell uname),Darwin)
+	LOADBIN = -L ../XControl_Infomation -L ../XControl_Configure -L ../XControl_Protocol \
+			  -L ../XEngine_ThirdPart/jsoncpp
+	LOADSO = 
+else
+	LOADBIN = -L /usr/local/lib/XEngine_Release/XEngine_BaseLib -L /usr/local/lib/XEngine_Release/XEngine_Core -L /usr/local/lib/XEngine_Release/XEngine_Client -L /usr/local/lib/XEngine_Release/XEngine_HelpComponents -L /usr/local/lib/XEngine_Release/XEngine_SystemSdk -L /usr/local/lib/XEngine_Release/XEngine_RfcComponents -L /usr/local/lib/XEngine_Release/XEngine_NetHelp -L /usr/local/lib/XEngine_Release/XEngine_DownLoad \
+	          -L ../XControl_Infomation -L ../XControl_Configure -L ../XControl_Protocol \
+			  -L ../XEngine_ThirdPart/jsoncpp
+endif
 
 ifeq ($(RELEASE),1)
 FLAGS = -c -O2 
 DEBUG = 
 else
-FLAGS = -c -lc_p
-DEBUG = -g -pg 
+FLAGS = -c 
+DEBUG = -g
 endif
 
 ifeq ($(UNICODE),1)
