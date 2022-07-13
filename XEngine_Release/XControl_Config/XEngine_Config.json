@@ -1,6 +1,5 @@
 {
   "tszTaskUrl": "http://127.0.0.1:5580/Api/task/GetTask",
-  "tszTmpFile": "./XControl_Temp/XEngine_File.dat",
   "tszAPPDeamon": "./XEngine_XControl.exe",
   "bAutoStart": 0,
   "bHideWnd": 0,
@@ -11,19 +10,6 @@
     "nTCPThreadTime": 1,
     "nUDPThreadTime": 1
   },
-  "ClientConfig": {
-    "bEnable": 0,
-    "nIPType": 6,
-    "nPort": 5001,
-    "tszIPAddr": "127.0.0.1"
-  },
-  "RPCConfig": {
-    "nPort": 5002,
-    "nThread": 2,
-    "nClient": 10000,
-    "nTimeCheck": 3,
-    "nTimeOut": 5
-  },
   "LogConfig": {
     "nMaxSize": 1024000,
     "nMaxCount": 10,
@@ -31,6 +17,7 @@
     "tszLogFile": "./XControl_Log/XEngien_Control.log"
   },
   "VersionList": [
+    "3.3.0.1001 Build20220715",
     "3.2.0.1001 Build20220419",
     "3.1.0.1001 Build20211228",
     "3.0.0.1001",
