@@ -236,7 +236,8 @@ BOOL XControl_Task_ProtocolParse(LPCSTR lpszMsgBuffer, int nMsgLen)
 		else
 		{
 			XClient_UDPSelect_Close(hUDPSocket);
-			XClient_UDPSelect_Create(&hUDPSocket, st_JsonRoot["tszIPAddr"].asCString(), st_JsonRoot["nPort"].asInt());
+			XClient_UDPSelect_Create(&hUDPSocket);
+			XClient_UDPSelect_Bind(hUDPSocket, st_JsonRoot["nPort"].asInt());
 		}
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_REPORT:
