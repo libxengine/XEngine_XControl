@@ -20,21 +20,27 @@ Lightweight background service management tool,control your computer with HTTP o
 
 #### Installation
 
-#### Requirements  
-support system above windows 7sp1 and linux(ubuntu20.04,centos8)  
-XEngine need V7.20 or above  
-
-#### XEngine Env
-install XEngine can be refer to xengine Readme docment  
-GITEE:https://gitee.com/xyry/libxengine
+#### XEngine Evn
+you must install XEngine,need V7.38 or above,install XEngine can be refer to xengine Readme docment  
+GITEE:https://gitee.com/xyry/libxengine  
 GITHUB:https://github.com/libxengine/xengine
 
+##### fast to deployment 
+git clone https://gitee.com/xyry/libxengine.git or git clone https://github.com/libxengine/xengine.git  
+window Exection XEngine_WINEnv.bat   
+Linux Exection:sudo ./XEngine_LINEnv.sh -i 3  
+Macos Exection:./XEngine_LINEnv.sh -i 3
+
 #### Windows
-use vs open and complie  
+use vs open and complie,support windows 7sp1 and above   
+Just Run it.
 
 #### Linux
 Linux use Makefile to complie  
-supproted ubuntu x64 or centos x64     
+supproted ubuntu x64 or centos x64  
+
+#### MacOS
+Linux use Makefile to complie,terminal exection,Requires mac 12 and above  
 
 ##### complie
 execute command in XEngine_Source path
@@ -54,7 +60,6 @@ make FLAGS=CleanAll clear
 - XEngine_Docment   docment directory
 - XEngine_Release   install directory
 - XEngine_Source    code    directory
-- XEngine_APPClient example client
 
 ## system task list
 nothing to do...   
