@@ -17,8 +17,6 @@ public:
     CProtocol_Packet();
     ~CProtocol_Packet();
 public:
-    BOOL Protocol_Packet_RPCResponse(LPCSTR lpszFuncName, LPCSTR lpszValue, int nMsgLen, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE enXRPC_ParamType, CHAR* ptszMsgBuffer, int* pInt_MsgLen);
-    BOOL Protocol_Packet_RPCRequest(LPCSTR lpszFuncName, ENUM_PROTOCOL_XRPC_PARAMETE_TYPE enRtnType, list<PROTOCOL_XRPCPARAMETE>* pStl_ListParament, CHAR* ptszMsgBuffer, int* pInt_MsgLen);
 protected:
 private:
 };

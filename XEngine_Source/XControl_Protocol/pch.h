@@ -21,8 +21,6 @@
 #include <XEngine_Include/XEngine_CommHdr.h>
 #include <XEngine_Include/XEngine_Types.h>
 #include <XEngine_Include/XEngine_ProtocolHdr.h>
-#include <XEngine_Include/XEngine_Core/OPenSsl_Define.h>
-#include <XEngine_Include/XEngine_Core/OPenSsl_Error.h>
 #include "../XControl_Protocol.h"
 using namespace std;
 #include "Protocol_Define.h"
@@ -42,7 +40,6 @@ extern BOOL Protocol_IsErrorOccur;
 extern DWORD Protocol_dwErrorCode;
 
 #ifdef _MSC_BUILD
-#pragma comment(lib,"XEngine_Core/XEngine_OPenSsl")
 #ifdef _DEBUG
 #ifdef _WIN64
 #pragma comment(lib,"../x64/Debug/jsoncpp")

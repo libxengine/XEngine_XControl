@@ -83,7 +83,6 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	}
 
 	strcpy(pSt_FileConfig->tszTaskUrl, st_JsonRoot["tszTaskUrl"].asCString());
-	strcpy(pSt_FileConfig->tszTmpFile, st_JsonRoot["tszTmpFile"].asCString());
 	strcpy(pSt_FileConfig->tszAPPDeamon, st_JsonRoot["tszAPPDeamon"].asCString());
 	pSt_FileConfig->bAutoStart = st_JsonRoot["bAutoStart"].asInt();
 	pSt_FileConfig->bHideWnd = st_JsonRoot["bHideWnd"].asInt();
@@ -100,31 +99,6 @@ BOOL CConfigure_Json::Config_Json_File(LPCSTR lpszConfigFile, XENGINE_SERVERCONF
 	pSt_FileConfig->st_Time.nHTTPThreadTime = st_JsonTime["nHTTPThreadTime"].asInt();
 	pSt_FileConfig->st_Time.nTCPThreadTime = st_JsonTime["nTCPThreadTime"].asInt();
 	pSt_FileConfig->st_Time.nUDPThreadTime = st_JsonTime["nUDPThreadTime"].asInt();
-
-	if (st_JsonRoot["ClientConfig"].empty() || (4 != st_JsonRoot["ClientConfig"].size()))
-	{
-		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_CLIENT;
-		return FALSE;
-	}
-	Json::Value st_JsonClient = st_JsonRoot["ClientConfig"];
-	pSt_FileConfig->st_Client.bEnable = st_JsonClient["bEnable"].asInt();
-	pSt_FileConfig->st_Client.nIPType = st_JsonClient["nIPType"].asInt();
-	pSt_FileConfig->st_Client.nPort = st_JsonClient["nPort"].asInt();
-	strcpy(pSt_FileConfig->st_Client.tszIPAddr, st_JsonClient["tszIPAddr"].asCString());
-
-	if (st_JsonRoot["RPCConfig"].empty() || (5 != st_JsonRoot["RPCConfig"].size()))
-	{
-		Config_IsErrorOccur = TRUE;
-		Config_dwErrorCode = ERROR_XCONTROL_MODULE_CONFIG_JSON_RPC;
-		return FALSE;
-	}
-	Json::Value st_JsonRPC = st_JsonRoot["RPCConfig"];
-	pSt_FileConfig->st_XRpc.nPort = st_JsonRPC["nPort"].asInt();
-	pSt_FileConfig->st_XRpc.nThread = st_JsonRPC["nThread"].asInt();
-	pSt_FileConfig->st_XRpc.nClient = st_JsonRPC["nClient"].asInt();
-	pSt_FileConfig->st_XRpc.nTimeCheck = st_JsonRPC["nTimeCheck"].asInt();
-	pSt_FileConfig->st_XRpc.nTimeOut = st_JsonRPC["nTimeOut"].asInt();
 
 	if (st_JsonRoot["LogConfig"].empty() || (4 != st_JsonRoot["LogConfig"].size()))
 	{

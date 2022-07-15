@@ -1,3 +1,19 @@
+XEngine_XControl V3.3.0.1001
+
+增加:http提交信息到服务器
+更新:匹配xengine v7.38版本
+修改:支持macos系统
+删除:RPC相关代码
+删除:电子邮件代码
+删除:没有使用的代码
+
+added:http post information to server
+update:match xengine 7.38 version
+modify:support macos now
+delete:rpc functions
+delete:email functions
+delete:unused code
+======================================================================================
 XEngine_XControl V3.2.0.1001
 
 增加:JSONCPP模块

@@ -14,8 +14,8 @@ XHTHREAD XControl_Thread_HttpTask()
 		if (APIHelp_HttpRequest_Get(st_ServiceConfig.tszTaskUrl, &ptszMsgBody, &nBLen, NULL, NULL, NULL, &st_HTTPParam))
 	    {
 			XControl_Task_ProtocolParse(ptszMsgBody, nBLen);
+			BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBody);
 		}
-		BaseLib_OperatorMemory_FreeCStyle((XPPMEM)&ptszMsgBody);
 		std::this_thread::sleep_for(std::chrono::milliseconds(st_ServiceConfig.st_Time.nHTTPThreadTime));
 	}
 	return 0;
@@ -236,8 +236,33 @@ BOOL XControl_Task_ProtocolParse(LPCSTR lpszMsgBuffer, int nMsgLen)
 		else
 		{
 			XClient_UDPSelect_Close(hUDPSocket);
-			XClient_UDPSelect_Create(&hUDPSocket, st_JsonRoot["tszIPAddr"].asCString(), st_JsonRoot["nPort"].asInt());
+			XClient_UDPSelect_Create(&hUDPSocket);
+			XClient_UDPSelect_Bind(hUDPSocket, st_JsonRoot["nPort"].asInt());
 		}
+		break;
+	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_REPORT:
+	{
+		APIHELP_HTTPPARAMENT st_HTTPParam;
+		memset(&st_HTTPParam, '\0', sizeof(APIHELP_HTTPPARAMENT));
+
+		st_HTTPParam.nTimeConnect = 2;
+		if (0 == st_JsonRoot["nType"].asInt())
+		{
+			int nHWLen = 4096;
+			CHAR tszHWBuffer[4096];
+			memset(tszHWBuffer, '\0', sizeof(tszHWBuffer));
+			XControl_Info_HardWare(tszHWBuffer, &nHWLen);
+			APIHelp_HttpRequest_Post(st_JsonRoot["tszIPAddr"].asCString(), tszHWBuffer, NULL, NULL, NULL, NULL, NULL, &st_HTTPParam);
+		}
+		else
+		{
+			int nSWLen = 4096;
+			CHAR tszSWBuffer[4096];
+			memset(tszSWBuffer, '\0', sizeof(tszSWBuffer));
+			XControl_Info_SoftWare(tszSWBuffer, &nSWLen);
+			APIHelp_HttpRequest_Post(st_JsonRoot["tszIPAddr"].asCString(), tszSWBuffer, NULL, NULL, NULL, NULL, NULL, &st_HTTPParam);
+		}
+	}
 		break;
 	case XENGINE_COMMUNICATION_PROTOCOL_OPERATOR_CODE_BS_USER:
 		break;
